@@ -3,4 +3,11 @@
     <string name="app_name">WLANAudit</string>
     <string name="autoscan_enabled">Autoscan enabled</string>
     <string name="autoscan_disabled">Autoscan disabled</string>
+    <string name="network_bssid_label">MAC Address:</string>
+    <string name="network_encryption_label">Encryption:</string>
+    <string name="network_frequency">Frequency:</string>
+    <string name="signal_level_label">Intensity:</string>
+    <string name="default_password_label">Default pass:</string>
+    <string name="connect_button">Connect</string>
+    <string name="copy_pass_button">Copy password</string>
 </resources>
