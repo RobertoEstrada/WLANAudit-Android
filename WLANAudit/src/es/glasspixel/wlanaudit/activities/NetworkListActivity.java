@@ -51,19 +51,28 @@ public class NetworkListActivity extends ListActivity {
      * Broadcast receiver to control the completion of a scan
      */
     private BroadcastReceiver mCallBackReceiver;
+    /**
+     * Handle to the action bar's autoscan action to activate or deactivate the
+     * autoscan on lifecycle events that require it
+     */
+    private AutoScanAction mAutoScanAction;
 
     /**
      * Lifecycle management: Activity creation
      */
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.network_list_layout);
-        setupNetworkScanCallBack();
 
         // Action bar initialization
         mActionBar = (ActionBar) findViewById(R.id.actionBar);
-        mActionBar.addAction(new AutoScanAction(this));
+        if (savedInstanceState != null && savedInstanceState.getBoolean("autoscan_state")) {
+            mAutoScanAction = new AutoScanAction(this, true);
+        } else {
+            mAutoScanAction = new AutoScanAction(this);
+        }
+        mActionBar.addAction(mAutoScanAction);
         mActionBar.addAction(new RefreshAction(this));
 
         // WifiManager initialization
@@ -73,24 +82,42 @@ public class NetworkListActivity extends ListActivity {
     /**
      * Lifecycle management: Activity is about to be shown
      */
-    public void onStart() {
+    protected void onStart() {
         super.onStart();
+        setupNetworkScanCallBack();
         mWifiManager.startScan();
     }
 
     /**
-     * Lifecycle management: Activity is beig resumed, we need to refresh its
+     * Lifecycle management: Activity is being resumed, we need to refresh its
      * contents
      */
-    public void onResume() {
+    protected void onResume() {
         super.onResume();
         mWifiManager.startScan();
     }
 
-    public void onStop() {
+    /**
+     * Lifecycle management: Activity is being stopped, we need to unregister
+     * the broadcast receiver
+     */
+    protected void onStop() {
         super.onStop();
-        // Unsubscribing from receiving updates about changes of the WiFi networks
+        // Unsubscribing from receiving updates about changes of the WiFi
+        // networks
         unregisterReceiver(mCallBackReceiver);
+    }
+
+    /**
+     * Lifecycle management: Activity state is saved to be restored later
+     */
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean("autoscan_state", mAutoScanAction.isAutoScanEnabled());
+    }
+
+    protected void onDestroy() {
+        super.onDestroy();
+        mAutoScanAction.stopAutoScan();
     }
 
     /**

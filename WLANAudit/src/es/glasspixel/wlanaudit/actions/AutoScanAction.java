@@ -21,7 +21,9 @@ import java.util.TimerTask;
 
 import android.content.Context;
 import android.net.wifi.WifiManager;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.Toast;
 
 import com.markupartist.android.widget.ActionBar.Action;
 
@@ -50,23 +52,78 @@ public class AutoScanAction implements Action {
      */
     private Timer mAutoScanTimer;
 
+    /**
+     * Constructor
+     * 
+     * @param context
+     */
     public AutoScanAction(Context context) {
         mContext = context;
-        mAutoScanTimer = new Timer();
     }
 
+    /**
+     * Constructor meant for restoring the state of this action when the app
+     * state is recovered.
+     * 
+     * @param context Activity context
+     * @param autoScanInitialState The state of the autoscan
+     */
+    public AutoScanAction(Context context, boolean autoScanInitialState) {
+        this(context);
+        mIsAutoScanEnabled = autoScanInitialState;
+        scheduleScan();
+    }
+
+    public boolean isAutoScanEnabled() {
+        return mIsAutoScanEnabled;
+    }
+
+    /**
+     * Initiates autoscan
+     */
+    public void scheduleScan() {
+        mIsAutoScanEnabled = true;
+        mAutoScanTimer = new Timer();
+        mAutoScanTimer.scheduleAtFixedRate(new AutoScanTask(), TIME_BEFORE_START, 5000);
+    }
+
+    /**
+     * Stops autoscan
+     */
+    public void stopAutoScan() {
+        mIsAutoScanEnabled = false;
+        mAutoScanTimer.cancel();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public int getDrawable() {
         return R.drawable.ic_action_autoscan;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void performAction(View view) {
-        if(!mIsAutoScanEnabled) {
-            mIsAutoScanEnabled = true;
-            mAutoScanTimer.scheduleAtFixedRate(new AutoScanTask(), TIME_BEFORE_START, 5000);
-        }else {
-            mIsAutoScanEnabled = false;
-            mAutoScanTimer.cancel();
+        if (!mIsAutoScanEnabled) {
+            scheduleScan();
+            showToast(mContext.getString(R.string.autoscan_enabled));
+        } else {
+            stopAutoScan();
+            showToast(mContext.getString(R.string.autoscan_disabled));
         }
+    }
+
+    /**
+     * Displays a notification toast with the specified message
+     * 
+     * @param message The message to display
+     */
+    private void showToast(String message) {
+        Toast notificationToast = Toast.makeText(mContext, message, Toast.LENGTH_SHORT);
+        notificationToast.setGravity(Gravity.CENTER, 0, 0);
+        notificationToast.show();
     }
 
     /**
