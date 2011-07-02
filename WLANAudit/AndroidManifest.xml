@@ -2,15 +2,16 @@
 <manifest android:versionCode="1" android:versionName="1.0"
     package="es.glasspixel.wlanaudit" xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="8"/>
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"></uses-permission>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"></uses-permission>
-    <application android:icon="@drawable/icon" android:label="@string/app_name" android:theme="@android:style/Theme.NoTitleBar">
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <application android:icon="@drawable/icon"
+        android:label="@string/app_name" android:theme="@android:style/Theme.NoTitleBar">
         <activity android:name=".activities.NetworkListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
-                
             </intent-filter>
         </activity>
+        <activity android:name="es.glasspixel.wlanaudit.activities.NetworkDetailsActivity"/>
     </application>
 </manifest>

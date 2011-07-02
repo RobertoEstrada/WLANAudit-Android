@@ -21,8 +21,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ListView;
 
 import com.markupartist.android.widget.ActionBar;
 
@@ -118,6 +121,16 @@ public class NetworkListActivity extends ListActivity {
     protected void onDestroy() {
         super.onDestroy();
         mAutoScanAction.stopAutoScan();
+    }
+    
+    /**
+     * Handles the event of clicking on a list element. This method opens the
+     * detail view associated to the clicked element.
+     */
+    protected void onListItemClick(ListView l, View v, int position, long id){
+        Intent i = new Intent(this, NetworkDetailsActivity.class);
+        i.putExtra(NetworkDetailsActivity.SCAN_RESULT_KEY, (ScanResult)getListView().getItemAtPosition(position));
+        startActivity(i);
     }
 
     /**

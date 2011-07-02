@@ -10,4 +10,5 @@
     <string name="default_password_label">Default pass:</string>
     <string name="connect_button">Connect</string>
     <string name="copy_pass_button">Copy password</string>
+    <string name="no_default_key">No default key</string>
 </resources>

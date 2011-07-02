@@ -92,7 +92,9 @@ public class AutoScanAction implements Action {
      */
     public void stopAutoScan() {
         mIsAutoScanEnabled = false;
-        mAutoScanTimer.cancel();
+        if (mAutoScanTimer != null) {
+            mAutoScanTimer.cancel();
+        }
     }
 
     /**
