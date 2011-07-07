@@ -11,4 +11,8 @@
     <string name="connect_button">Connect</string>
     <string name="copy_pass_button">Copy password</string>
     <string name="no_default_key">No default key</string>
+    <string name="key_copy_warn_title">Unsafe AP</string>
+    <string name="key_copy_warn_text">The default key of this AP could be guessed, hence this AP is unsafe. If this AP isn\'t yours, warn the owner about this security issue.</string>
+    <string name="ok_button">Ok</string>
+    <string name="key_copy_success">Password copied successfully</string>
 </resources>

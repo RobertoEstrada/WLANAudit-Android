@@ -39,7 +39,6 @@
     </TableLayout>
     <View android:layout_width="fill_parent" android:layout_height="1dp" android:background="@drawable/layout_divider" android:id="@+id/divider" android:layout_marginTop="5dip"></View>
     <LinearLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:gravity="right" android:paddingTop="10dip" android:layout_marginLeft="20dip" android:layout_marginRight="20dip" android:paddingBottom="10dip" android:id="@+id/buttonsLayout">
-        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/connectButton" android:text="@string/connect_button" android:enabled="false"></Button>
         <Button android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/copyPasswordButton" android:text="@string/copy_pass_button"></Button>
     </LinearLayout>
     
