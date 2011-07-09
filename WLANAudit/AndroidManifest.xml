@@ -13,5 +13,6 @@
             </intent-filter>
         </activity>
         <activity android:name="es.glasspixel.wlanaudit.activities.NetworkDetailsActivity"/>
+        <activity android:name="es.glasspixel.wlanaudit.activities.WLANAuditPreferencesActivity"/>
     </application>
 </manifest>

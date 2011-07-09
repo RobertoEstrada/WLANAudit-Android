@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <resources>
-    <string name="app_name">WLANAudit</string>
     <string name="autoscan_enabled">Autoscan enabled</string>
     <string name="autoscan_disabled">Autoscan disabled</string>
     <string name="network_bssid_label">MAC Address:</string>
@@ -8,11 +7,25 @@
     <string name="network_frequency">Frequency:</string>
     <string name="signal_level_label">Intensity:</string>
     <string name="default_password_label">Default pass:</string>
-    <string name="connect_button">Connect</string>
     <string name="copy_pass_button">Copy password</string>
     <string name="no_default_key">No default key</string>
     <string name="key_copy_warn_title">Unsafe AP</string>
     <string name="key_copy_warn_text">The default key of this AP could be guessed, hence this AP is unsafe. If this AP isn\'t yours, warn the owner about this security issue.</string>
     <string name="ok_button">Ok</string>
     <string name="key_copy_success">Password copied successfully</string>
+    <string name="scan_pref_group_name">Scan preferences</string>
+    <string name="menu_preferences_label">Preferences</string>
+    <string name="menu_dialog_label">Dialog Picker</string>
+    <string name="dialog_set_number">Set</string>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="dialog_picker_title">Choose a number</string>
+    <string name="autoscan_preference_title">Autoscan interval</string>
+    <string name="autoscan_preference_summary">Sets the time in seconds between scans when autoscan is enabled.</string>
+    <string name="about_app">About WLANAudit</string>
+    <string name="about_app_summary">Displays application info</string>
+    <string name="app_info_pref_group_name">Application information</string>
+    <string name="about_menu_btn">About...</string>
+    <string name="preferences_menu_btn">Settings</string>
+    <string name="app_name">WLANAudit</string>
+    <string name="time_unit"> seconds</string>
 </resources>

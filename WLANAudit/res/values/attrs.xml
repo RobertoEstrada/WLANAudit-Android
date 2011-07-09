@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<declare-styleable name="WifiEncryptionState">
-		<attr format="boolean" name="state_encrypted"/>
+		<attr format="boolean" name="state_encrypted" />
+	</declare-styleable>
+	<declare-styleable name="numberpicker">
+		<attr name="startRange" format="integer" />
+		<attr name="endRange" format="integer" />
+		<attr name="defaultValue" format="integer" />
+		<attr name="maxValue" format="integer" />
 	</declare-styleable>
 </resources>

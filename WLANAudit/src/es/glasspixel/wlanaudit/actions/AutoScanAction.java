@@ -20,7 +20,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.wifi.WifiManager;
+import android.preference.PreferenceManager;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Toast;
@@ -65,7 +67,7 @@ public class AutoScanAction implements Action {
      * Constructor meant for restoring the state of this action when the app
      * state is recovered.
      * 
-     * @param context Activity context
+     * @param activity Activity context
      * @param autoScanInitialState The state of the autoscan
      */
     public AutoScanAction(Context context, boolean autoScanInitialState) {
@@ -84,7 +86,8 @@ public class AutoScanAction implements Action {
     public void scheduleScan() {
         mIsAutoScanEnabled = true;
         mAutoScanTimer = new Timer();
-        mAutoScanTimer.scheduleAtFixedRate(new AutoScanTask(), TIME_BEFORE_START, 5000);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+        mAutoScanTimer.scheduleAtFixedRate(new AutoScanTask(), TIME_BEFORE_START, prefs.getInt("autoscan_interval", 5)*1000);
     }
 
     /**
