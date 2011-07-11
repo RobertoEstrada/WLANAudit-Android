@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res/es.glasspixel.wlanaudit"
+  android:orientation="vertical"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent">
+    <com.markupartist.android.widget.ActionBar android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/actionBar" app:title="@string/app_name" style="@style/ActionBar">
+    </com.markupartist.android.widget.ActionBar>
+    <LinearLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/linearLayout1" android:paddingLeft="10dip" android:paddingTop="10dip">
+        <ImageView android:src="@drawable/icon" android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/about_app_icon"></ImageView>
+        <TextView android:layout_width="wrap_content" android:textAppearance="?android:attr/textAppearanceLarge" android:text="@string/app_name" android:layout_height="wrap_content" android:id="@+id/about_app_name" android:layout_marginTop="10dip" android:layout_marginLeft="5dip"></TextView>
+    </LinearLayout>
+    <View android:id="@+id/divider" android:layout_height="1dp" android:layout_width="fill_parent" android:background="@drawable/layout_divider" android:layout_marginTop="5dip"></View>
+    <TableLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/buildDataTable" android:layout_marginTop="10dip" android:layout_marginLeft="17dip">
+        <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/versionRow" android:paddingBottom="5dip">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceMedium" android:text="@string/about_version_number" android:id="@+id/versionLabel" android:layout_marginRight="5dip"></TextView>
+            <TextView android:layout_width="wrap_content" android:text="TextView" android:id="@+id/versionValue" android:layout_height="wrap_content"></TextView>
+        </TableRow>
+        <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/releaseRow" android:paddingBottom="5dip">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceMedium" android:text="@string/about_release_number" android:layout_marginRight="5dip" android:id="@+id/releaseLabel"></TextView>
+            <TextView android:layout_width="wrap_content" android:text="TextView" android:id="@+id/releaseValue" android:layout_height="wrap_content"></TextView>
+        </TableRow>
+    </TableLayout>
+    <View android:layout_marginTop="5dip" android:layout_height="1dp" android:background="@drawable/layout_divider" android:layout_width="fill_parent" android:id="@+id/divider2" android:paddingBottom="5dip"></View>
+    <ScrollView android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/disclaimerScroll">
+        <LinearLayout android:id="@+id/linearLayout2" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_marginLeft="15dip">
+            <TextView android:textAppearance="?android:attr/textAppearanceSmall" android:layout_height="fill_parent" android:layout_width="fill_parent" android:text="@string/disclaimer_text" android:layout_marginLeft="17dip" android:layout_marginRight="15dip" android:layout_marginTop="10dip" android:layout_marginBottom="15dip" android:id="@+id/disclaimerText"></TextView>
+        </LinearLayout>
+    </ScrollView>
+    
+</LinearLayout>

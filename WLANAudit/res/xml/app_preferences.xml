@@ -5,6 +5,6 @@
 			android:dialogLayout="@layout/number_picker_pref" android:key="autoscan_interval" android:positiveButtonText="@string/ok_button" android:summary="@string/autoscan_preference_summary" android:text="@string/time_unit" android:negativeButtonText="@string/dialog_cancel" android:title="@string/autoscan_preference_title" android:max="300" android:defaultValue="5" android:dialogTitle="@string/autoscan_preference_title"/>
 	</PreferenceCategory>
 	<PreferenceCategory android:key="about_app_prefs" android:title="@string/app_info_pref_group_name">
-		<Preference android:title="@string/about_app" android:summary="@string/about_app_summary"></Preference>
+		<Preference android:title="@string/about_app" android:summary="@string/about_app_summary"><intent android:action="com.glasspixel.wlanaudit.ABOUT"></intent></Preference>
 	</PreferenceCategory>
 </PreferenceScreen>

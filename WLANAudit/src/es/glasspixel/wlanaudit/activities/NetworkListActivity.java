@@ -106,13 +106,16 @@ public class NetworkListActivity extends ListActivity {
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		Intent i;
 		// Handle item selection
-		switch (item.getItemId()) {
+		switch (item.getItemId()) {		
 		case R.id.preferenceOption:
-			Intent i = new Intent(this, WLANAuditPreferencesActivity.class);
+			i = new Intent(this, WLANAuditPreferencesActivity.class);
 			startActivity(i);
 			return true;
 		case R.id.aboutOption:
+			i = new Intent(this, AboutActivity.class);
+			startActivity(i);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
