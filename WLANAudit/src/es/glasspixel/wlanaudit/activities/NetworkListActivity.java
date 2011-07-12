@@ -28,14 +28,19 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.google.ads.AdRequest;
+import com.google.ads.AdSize;
+import com.google.ads.AdView;
 import com.markupartist.android.widget.ActionBar;
 
 import es.glasspixel.wlanaudit.R;
 import es.glasspixel.wlanaudit.actions.AutoScanAction;
 import es.glasspixel.wlanaudit.actions.RefreshAction;
 import es.glasspixel.wlanaudit.adapters.WifiNetworkAdapter;
+import es.glasspixel.wlanaudit.ads.Key;
 
 /**
  * Application main activity. Shows the user a list of the surrounding WiFi
@@ -62,6 +67,10 @@ public class NetworkListActivity extends ListActivity {
 	 * autoscan on lifecycle events that require it
 	 */
 	private AutoScanAction mAutoScanAction;
+	/**
+	 * Advertisement
+	 */
+	private AdView mAd;
 
 	/**
 	 * Lifecycle management: Activity creation
@@ -72,9 +81,9 @@ public class NetworkListActivity extends ListActivity {
 		setContentView(R.layout.network_list_layout);
 
 		// Action bar initialization
-		mActionBar = (ActionBar) findViewById(R.id.actionBar);		
+		mActionBar = (ActionBar) findViewById(R.id.actionBar);
 		if (savedInstanceState != null
-				&& savedInstanceState.getBoolean("autoscan_state")) {			
+				&& savedInstanceState.getBoolean("autoscan_state")) {
 			mAutoScanAction = new AutoScanAction(this, true);
 		} else {
 			mAutoScanAction = new AutoScanAction(this);
@@ -84,11 +93,16 @@ public class NetworkListActivity extends ListActivity {
 
 		// WifiManager initialization
 		mWifiManager = (WifiManager) this.getSystemService(WIFI_SERVICE);
-		
+
 		// If WiFi is disabled, enable it
-		if(!mWifiManager.isWifiEnabled()) {
+		if (!mWifiManager.isWifiEnabled()) {
 			mWifiManager.setWifiEnabled(true);
 		}
+
+		// Ads Initialization
+		LinearLayout layout = (LinearLayout) findViewById(R.id.adLayout);
+		mAd = new AdView(this, AdSize.BANNER, Key.ADMOB_KEY);
+		layout.addView(mAd);		
 	}
 
 	/**
@@ -108,7 +122,7 @@ public class NetworkListActivity extends ListActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Intent i;
 		// Handle item selection
-		switch (item.getItemId()) {		
+		switch (item.getItemId()) {
 		case R.id.preferenceOption:
 			i = new Intent(this, WLANAuditPreferencesActivity.class);
 			startActivity(i);
@@ -129,6 +143,7 @@ public class NetworkListActivity extends ListActivity {
 		super.onStart();
 		setupNetworkScanCallBack();
 		mWifiManager.startScan();
+		mAd.loadAd(new AdRequest());
 	}
 
 	/**
@@ -138,6 +153,7 @@ public class NetworkListActivity extends ListActivity {
 	protected void onResume() {
 		super.onResume();
 		mWifiManager.startScan();
+		mAd.loadAd(new AdRequest());
 	}
 
 	/**

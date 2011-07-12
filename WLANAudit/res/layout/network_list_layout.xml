@@ -4,9 +4,10 @@
   xmlns:app="http://schemas.android.com/apk/res/es.glasspixel.wlanaudit"
   android:orientation="vertical"
   android:layout_width="fill_parent"
-  android:layout_height="fill_parent">
+  android:layout_height="fill_parent" android:id="@+id/networkListActivityLayout">
     <com.markupartist.android.widget.ActionBar android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/actionBar" app:title="@string/app_name" style="@style/ActionBar"></com.markupartist.android.widget.ActionBar>
-    <ListView android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@android:id/list">
+    <LinearLayout android:layout_height="wrap_content" android:id="@+id/adLayout" android:orientation="vertical" android:layout_gravity="clip_horizontal" android:layout_width="fill_parent" android:gravity="center_horizontal"></LinearLayout>
+    <ListView android:layout_width="fill_parent" android:id="@android:id/list" android:layout_height="fill_parent">
         <!-- Preview: listitem=@layout/network_list_element_layout -->
     </ListView>
     

@@ -1,5 +1,8 @@
 .settings
 
+#Binary directory
+WLANAudit/bin
+
 #built application files
 *.apk
 *.ap_
@@ -12,3 +15,6 @@
 
 # generated GUI files
 *R.java
+
+#Api key files
+Key.java
