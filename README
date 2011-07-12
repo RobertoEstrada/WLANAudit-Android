@@ -1,0 +1,5 @@
+To build the code just build it normally with Eclipse + Android tools.
+Rename the file Key.java.public in WLANAudit/src/es/glasspixel/wlanaudit/ads
+to Key.java to build the application.
+
+You have to import the two projects in the repository to build the application

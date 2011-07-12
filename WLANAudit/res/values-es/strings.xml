@@ -6,9 +6,9 @@
     <string name="network_encryption_label">Cifrado:</string>
     <string name="network_frequency">Frecuencia:</string>
     <string name="signal_level_label">Intensidad:</string>
-    <string name="default_password_label">Clave por defecto:</string>
+    <string name="default_password_label">Posible clave:</string>
     <string name="copy_pass_button">Copiar clave</string>
-    <string name="no_default_key">No se encuentra la clave por defecto</string>
+    <string name="no_default_key">No se encontró</string>
     <string name="key_copy_warn_title">AP Inseguro</string>
     <string name="key_copy_warn_text">Se pudo calcular una posible clave por defecto a traves de los datos publicos.\n\nSi no se trata de tu AP, avisa a su propietario de que cambie la clave de su red.</string>
     <string name="ok_button">Aceptar</string>
