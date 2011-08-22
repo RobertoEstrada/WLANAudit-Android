@@ -1,0 +1,123 @@
+/*
+ * Copyright (C) 2011 Roberto Estrada
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package es.glasspixel.wlanaudit.activities;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import android.app.ListActivity;
+import android.os.Bundle;
+import android.text.ClipboardManager;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import com.google.ads.AdRequest;
+import com.google.ads.AdSize;
+import com.google.ads.AdView;
+
+import es.glasspixel.wlanaudit.R;
+import es.glasspixel.wlanaudit.ads.Key;
+
+public class KeyListActivity extends ListActivity {
+
+	/**
+	 * Unique identifier of the scan result inside the intent extra or the
+	 * savedInstanceState bundle.
+	 */
+	public static final String KEY_LIST_KEY = "key_list";
+
+	/**
+	 * The list of keys to be displayed
+	 */
+	private List<String> mKeyList;
+
+	/**
+	 * Advertisement
+	 */
+	private AdView mAd;
+
+	/**
+	 * @see android.app.Activity#onCreate(Bundle)
+	 */
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		setContentView(R.layout.key_list_layout);
+
+		// If a previous instance state was saved
+		if (savedInstanceState != null
+				&& savedInstanceState.get(KEY_LIST_KEY) != null) {
+			// Load the state
+			mKeyList = (List<String>) savedInstanceState
+					.getStringArrayList(KEY_LIST_KEY);
+		} else {
+			// Read the network from the intent extra passed to this activity
+			mKeyList = (List<String>) getIntent().getExtras()
+					.getStringArrayList(KEY_LIST_KEY);
+		}
+
+		// Ads Initialization
+		LinearLayout layout = (LinearLayout) findViewById(R.id.keyListAdLayout);
+		mAd = new AdView(this, AdSize.BANNER, Key.ADMOB_KEY);
+		layout.addView(mAd);
+
+		// List display
+		setListAdapter(new ArrayAdapter<String>(this,
+				R.layout.key_list_element_layout, R.id.keyString, mKeyList));
+	}
+
+	/**
+	 * Lifecycle management: Activity is about to be shown
+	 */
+	protected void onStart() {
+		super.onStart();
+		mAd.loadAd(new AdRequest());
+	}
+	
+	/**
+	 * Lifecycle management: Activity state is saved to be restored later
+	 */
+	protected void onSaveInstanceState(Bundle outState) {
+		outState.putStringArrayList(KeyListActivity.KEY_LIST_KEY, (ArrayList<String>) mKeyList);
+	}
+	
+	/**
+	 * Handles the event of clicking on a list element. 
+	 */
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		// Clipboard copy
+		ClipboardManager clipBoard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+		clipBoard.setText(mKeyList.get(position));
+		// Copy notification
+		Toast notificationToast = Toast.makeText(this,
+				getResources().getString(
+						R.string.key_copy_success),
+				Toast.LENGTH_SHORT);
+		notificationToast.setGravity(Gravity.CENTER, 0,
+				0);
+		notificationToast.show();
+		// Mark as copied
+		CheckBox chkBox = (CheckBox) v.findViewById(R.id.keyCheckBox);
+		chkBox.setChecked(true);
+	}
+}

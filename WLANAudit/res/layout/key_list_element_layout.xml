@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent">
+    <CheckBox android:text="" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_alignParentTop="true" android:layout_alignParentLeft="true" android:id="@+id/keyCheckBox" android:paddingTop="5dip" android:layout_alignBottom="@+id/networkDetails" android:paddingLeft="10dip" android:paddingBottom="5dip" android:layout_marginLeft="10dip"></CheckBox>
+    <TextView android:textAppearance="?android:attr/textAppearanceLarge" android:layout_height="wrap_content" android:text="TextView" android:layout_alignParentTop="true" android:layout_toRightOf="@+id/keyCheckBox" android:layout_width="fill_parent" android:paddingLeft="10dip" android:layout_marginTop="10dip" android:paddingTop="2dip" android:id="@+id/keyString"></TextView>    
+</RelativeLayout>

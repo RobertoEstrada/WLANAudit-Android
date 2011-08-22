@@ -16,14 +16,14 @@
 
 package es.glasspixel.wlanaudit.activities;
 
-import es.glasspixel.wlanaudit.R;
-import es.glasspixel.wlanaudit.adapters.WifiNetworkAdapter;
-import es.glasspixel.wlanaudit.util.IKeyCalculator;
-import es.glasspixel.wlanaudit.util.WLANXXXXKeyCalculator;
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -35,6 +35,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import es.glasspixel.wlanaudit.R;
+import es.glasspixel.wlanaudit.adapters.WifiNetworkAdapter;
+import es.glasspixel.wlanaudit.util.IKeyCalculator;
+import es.glasspixel.wlanaudit.util.WLANXXXXKeyCalculator;
+import es.glasspixel.wlanaudit.util.WiFiXXXXXXKeyCalculator;
 
 /**
  * Activity to show the details of a given network previously scanned.
@@ -84,6 +89,10 @@ public class NetworkDetailsActivity extends Activity {
 	 * Copy button
 	 */
 	private Button mCopyButton;
+	/**
+	 * List of possible default keys
+	 */
+	private List<String> mKeyList;
 
 	/**
 	 * Lifecycle method: Activity creation
@@ -141,25 +150,30 @@ public class NetworkDetailsActivity extends Activity {
 
 							@Override
 							public void onClick(DialogInterface dialog, int unkn) {
-								// Clipboard copy
-								ClipboardManager clipBoard = (ClipboardManager) NetworkDetailsActivity.this
-										.getSystemService(CLIPBOARD_SERVICE);
-								clipBoard.setText(mDefaultPassValue.getText());
-								// Dialog dismissing
-								dialog.dismiss();
-								// Copy notification
-								Toast notificationToast = Toast.makeText(
-										NetworkDetailsActivity.this,
-										getResources().getString(
-												R.string.key_copy_success),
-										Toast.LENGTH_SHORT);
-								notificationToast.setGravity(Gravity.CENTER, 0,
-										0);
-								notificationToast.show();
+								if(mKeyList.size() == 1){
+									// Clipboard copy
+									ClipboardManager clipBoard = (ClipboardManager) NetworkDetailsActivity.this
+											.getSystemService(CLIPBOARD_SERVICE);
+									clipBoard.setText(mDefaultPassValue.getText());
+									// Dialog dismissing
+									dialog.dismiss();
+									// Copy notification
+									Toast notificationToast = Toast.makeText(
+											NetworkDetailsActivity.this,
+											getResources().getString(
+													R.string.key_copy_success),
+											Toast.LENGTH_SHORT);
+									notificationToast.setGravity(Gravity.CENTER, 0,
+											0);
+									notificationToast.show();
+								}else if(mKeyList.size() > 1) {
+									Intent i = new Intent(NetworkDetailsActivity.this, KeyListActivity.class);
+									i.putStringArrayListExtra(KeyListActivity.KEY_LIST_KEY, (ArrayList<String>) mKeyList);									
+									startActivity(i);
+								}
 							}
 						});
 				dialogBuilder.show();
-
 			}
 		});
 	}
@@ -190,8 +204,13 @@ public class NetworkDetailsActivity extends Activity {
 		// Calculating key
 		if (mScannedNetwork.SSID.matches("WLAN_....|JAZZTEL_....")) {
 			IKeyCalculator keyCalculator = new WLANXXXXKeyCalculator();
-			mDefaultPassValue.setText(keyCalculator.getKey(mScannedNetwork));
-		} else {
+			mKeyList = keyCalculator.getKey(mScannedNetwork);
+			mDefaultPassValue.setText(mKeyList.get(0));
+		}else if (mScannedNetwork.SSID.matches("WLAN......|YACOM......|WiFi......")) {
+			IKeyCalculator keyCalculator = new WiFiXXXXXXKeyCalculator();
+			mKeyList = keyCalculator.getKey(mScannedNetwork);
+			mDefaultPassValue.setText(String.valueOf(mKeyList.size()) +" "+ getText(R.string.number_of_keys_found));
+		}else {
 			mDefaultPassValue.setText(getString(R.string.no_default_key));
 			mCopyButton.setEnabled(false);
 		}
