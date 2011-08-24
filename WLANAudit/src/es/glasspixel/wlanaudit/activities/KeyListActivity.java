@@ -25,7 +25,6 @@ import android.text.ClipboardManager;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -116,8 +115,5 @@ public class KeyListActivity extends ListActivity {
 		notificationToast.setGravity(Gravity.CENTER, 0,
 				0);
 		notificationToast.show();
-		// Mark as copied
-		CheckBox chkBox = (CheckBox) v.findViewById(R.id.keyCheckBox);
-		chkBox.setChecked(true);
 	}
 }
