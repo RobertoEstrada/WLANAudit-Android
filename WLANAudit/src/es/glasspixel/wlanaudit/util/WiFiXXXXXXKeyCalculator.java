@@ -47,22 +47,33 @@ public class WiFiXXXXXXKeyCalculator implements IKeyCalculator {
 		String essid = trimSSID(network.SSID);
 		String bssid = network.BSSID.replaceAll(":", "").toUpperCase();
 		
+		// Data preparation
+		char[] essid_c = essid.toCharArray();
+		char[] bssid_c = bssid.toCharArray();
+		
+		for(int i=0; i<essid_c.length;i++){
+			if(essid_c[i] >= 65) {
+				essid_c[i] -= 55;
+			}
+		}
+		
+		for(int i=0; i<bssid_c.length;i++){
+			if(bssid_c[i] >= 65) {
+				bssid_c[i] -= 55;
+			}
+		}
+		
 		// Serial data (derived from public data)
 		char S8, S9, S10, M9, M10, M11, M12;
-		S8 = (char) hex2dec(essid.charAt(3));
-		S9 = (char) hex2dec(essid.charAt(4));
-		S10 = (char) hex2dec(essid.charAt(5));
+		S8 = (char) (essid_c[3]&15);
+		S9 = (char) (essid_c[4]&15);
+		S10 = (char)(essid_c[5]&15);
 		
 		// M values (MAC) obtained from BSSID and ESSID
-		M9 = essid.charAt(1);
-		M10 = (char) hex2dec(essid.charAt(2));
-		M11 = bssid.charAt(10);
-		M12 = bssid.charAt(11);
-		
-		if(M11 >= 'A')
-			M11 -= 55;
-		if(M12 >= 'A')
-			M12 -= 55;
+		M9 = essid_c[1];
+		M10 = (char) (essid_c[2]&15);
+		M11 = bssid_c[10];
+		M12 = bssid_c[11];
 
 		// Key derivation
 		for (int S7 = 0; S7 < 10; S7++) {
@@ -114,15 +125,6 @@ public class WiFiXXXXXXKeyCalculator implements IKeyCalculator {
 			result = ssid.replace("WiFi", "").toUpperCase();
 		}
 		return result;
-	}
-
-	private int hex2dec(char hex) {
-		return hex2dec(String.valueOf(hex));
-	}
-
-	private int hex2dec(String hex) {
-		int ret = Integer.parseInt(hex, 16);
-		return ret;
 	}
 
 	private String dec2hex(int dec) {
