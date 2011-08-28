@@ -21,9 +21,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -94,8 +96,17 @@ public class NetworkListActivity extends ListActivity {
 		// WifiManager initialization
 		mWifiManager = (WifiManager) this.getSystemService(WIFI_SERVICE);
 
-		// If WiFi is disabled, enable it
-		if (!mWifiManager.isWifiEnabled()) {
+		
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        // If preference does not exist
+        if(!prefs.contains("wifi_autostart")){
+        	SharedPreferences.Editor editor = prefs.edit();
+        	editor.putBoolean("wifi_autostart", true);
+        	editor.commit();
+        }
+		
+        // If WiFi is disabled, enable it
+		if (!mWifiManager.isWifiEnabled() && prefs.getBoolean("wifi_autostart", true)) {
 			mWifiManager.setWifiEnabled(true);
 		}
 
@@ -123,6 +134,14 @@ public class NetworkListActivity extends ListActivity {
 		Intent i;
 		// Handle item selection
 		switch (item.getItemId()) {
+		case R.id.scanOption:
+			RefreshAction ra = new RefreshAction(this);
+			ra.performAction(null);
+			return true;
+		case R.id.toggleAutoscanOption:
+			AutoScanAction aa = new AutoScanAction(this);
+			aa.performAction(null);
+			return true;
 		case R.id.preferenceOption:
 			i = new Intent(this, WLANAuditPreferencesActivity.class);
 			startActivity(i);

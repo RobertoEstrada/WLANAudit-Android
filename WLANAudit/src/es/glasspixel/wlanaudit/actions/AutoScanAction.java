@@ -44,7 +44,7 @@ public class AutoScanAction implements Action {
     /**
      * Status of the autoscan feature
      */
-    private boolean mIsAutoScanEnabled = false;
+    private static boolean mIsAutoScanEnabled = false;
     /**
      * Context for the action
      */
@@ -52,7 +52,7 @@ public class AutoScanAction implements Action {
     /**
      * Clock to manage the interval between scan requests
      */
-    private Timer mAutoScanTimer;
+    private static Timer mAutoScanTimer;
 
     /**
      * Constructor
