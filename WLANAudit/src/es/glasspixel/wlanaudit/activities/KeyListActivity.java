@@ -36,6 +36,7 @@ import com.google.ads.AdView;
 import es.glasspixel.wlanaudit.R;
 import es.glasspixel.wlanaudit.ads.Key;
 
+@SuppressWarnings("deprecation")
 public class KeyListActivity extends ListActivity {
 
 	/**

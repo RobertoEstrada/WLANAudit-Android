@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<manifest android:versionCode="2" android:versionName="1.1"
+<manifest android:versionCode="3" android:versionName="1.1.1"
     package="es.glasspixel.wlanaudit" xmlns:android="http://schemas.android.com/apk/res/android">
-    <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="8"/>
+    <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="13"/>
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -22,7 +22,9 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
-        <activity android:name="com.google.ads.AdActivity"/>
+        <activity
+            android:name="com.google.ads.AdActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
         <activity android:name="es.glasspixel.wlanaudit.activities.KeyListActivity"/>
     </application>
 </manifest>

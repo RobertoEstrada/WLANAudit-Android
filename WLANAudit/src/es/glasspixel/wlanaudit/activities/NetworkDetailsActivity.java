@@ -46,6 +46,7 @@ import es.glasspixel.wlanaudit.util.WiFiXXXXXXKeyCalculator;
  * 
  * @author Roberto Estrada
  */
+@SuppressWarnings("deprecation")
 public class NetworkDetailsActivity extends Activity {
 
 	/**
