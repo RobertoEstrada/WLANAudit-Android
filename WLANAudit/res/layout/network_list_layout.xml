@@ -10,5 +10,12 @@
     <ListView android:layout_width="fill_parent" android:id="@android:id/list" android:layout_height="fill_parent">
         <!-- Preview: listitem=@layout/network_list_element_layout -->
     </ListView>
-    
+
+    <TextView
+        android:id="@id/android:empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center|center_vertical"
+        android:text="@string/no_networks_found" />
+
 </LinearLayout>

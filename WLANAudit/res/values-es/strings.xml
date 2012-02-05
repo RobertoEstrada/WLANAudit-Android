@@ -37,4 +37,5 @@
     <string name="wifi_autostart_inactive_summary">Si el WiFi estaba inactivo al inicio de la aplicación no se activará automáticamente</string>
     <string name="wifi_autostart_active_summary">Si el WiFi estaba inactivo al inicio de la aplicación se activará automáticamente</string>
     <string name="wifi_autostart">Encendido automático del WiFi</string>
+    <string name="no_networks_found">No se encontraron redes inalámbricas</string>
 </resources>
