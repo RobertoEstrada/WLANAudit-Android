@@ -5,7 +5,6 @@
   android:orientation="vertical"
   android:layout_width="fill_parent"
   android:layout_height="fill_parent">
-    <com.markupartist.android.widget.ActionBar android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/actionBar" app:title="@string/app_name" style="@style/ActionBar"></com.markupartist.android.widget.ActionBar>
     <LinearLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/viewHeaderLayout">
         <ImageView android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_marginLeft="10dip" android:layout_marginTop="15dip" android:id="@+id/networkIcon" android:layout_marginBottom="10dip" android:src="@drawable/wifi_signal"></ImageView>
         <TextView android:paddingLeft="5dip" android:text="TextView" android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/networkName" android:textAppearance="?android:attr/textAppearanceLarge" android:paddingTop="3dip" android:layout_marginTop="15dip" android:layout_marginBottom="10dip"></TextView>

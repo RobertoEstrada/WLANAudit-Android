@@ -17,7 +17,12 @@
     </TableLayout>
     <View android:layout_marginTop="5dip" android:layout_height="1dp" android:background="@drawable/layout_divider" android:layout_width="fill_parent" android:id="@+id/divider2" android:paddingBottom="5dip"></View>
     <ScrollView android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/disclaimerScroll">
-        <LinearLayout android:id="@+id/linearLayout2" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_marginLeft="15dip">
+
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+
             <TextView android:textAppearance="?android:attr/textAppearanceSmall" android:layout_height="fill_parent" android:layout_width="fill_parent" android:text="@string/disclaimer_text" android:layout_marginLeft="17dip" android:layout_marginRight="15dip" android:layout_marginTop="10dip" android:layout_marginBottom="15dip" android:id="@+id/disclaimerText"></TextView>
         </LinearLayout>
     </ScrollView>

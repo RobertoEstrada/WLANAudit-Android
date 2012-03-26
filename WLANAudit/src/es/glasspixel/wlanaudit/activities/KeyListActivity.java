@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 Roberto Estrada
+ * Copyright (C) 2012 Roberto Estrada
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,16 @@
 
 package es.glasspixel.wlanaudit.activities;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.actionbarsherlock.app.SherlockListActivity;
+import com.actionbarsherlock.view.MenuItem;
+import com.google.ads.AdRequest;
+import com.google.ads.AdSize;
+import com.google.ads.AdView;
 
-import android.app.ListActivity;
+import es.glasspixel.wlanaudit.R;
+import es.glasspixel.wlanaudit.ads.Key;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.ClipboardManager;
 import android.view.Gravity;
@@ -29,15 +35,11 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.ads.AdRequest;
-import com.google.ads.AdSize;
-import com.google.ads.AdView;
-
-import es.glasspixel.wlanaudit.R;
-import es.glasspixel.wlanaudit.ads.Key;
+import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings("deprecation")
-public class KeyListActivity extends ListActivity {
+public class KeyListActivity extends SherlockListActivity {
 
 	/**
 	 * Unique identifier of the scan result inside the intent extra or the
@@ -117,4 +119,18 @@ public class KeyListActivity extends ListActivity {
 				0);
 		notificationToast.show();
 	}
+	
+	@Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // app icon in action bar clicked; go home
+                Intent intent = new Intent(this,  NetworkListActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }

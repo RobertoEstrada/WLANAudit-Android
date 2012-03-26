@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 Roberto Estrada
+ * Copyright (C) 2012 Roberto Estrada
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,15 @@
 
 package es.glasspixel.wlanaudit.activities;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.MenuItem;
 
-import android.app.Activity;
+import es.glasspixel.wlanaudit.R;
+import es.glasspixel.wlanaudit.adapters.WifiNetworkAdapter;
+import es.glasspixel.wlanaudit.util.IKeyCalculator;
+import es.glasspixel.wlanaudit.util.WLANXXXXKeyCalculator;
+import es.glasspixel.wlanaudit.util.WiFiXXXXXXKeyCalculator;
+
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
@@ -35,11 +40,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import es.glasspixel.wlanaudit.R;
-import es.glasspixel.wlanaudit.adapters.WifiNetworkAdapter;
-import es.glasspixel.wlanaudit.util.IKeyCalculator;
-import es.glasspixel.wlanaudit.util.WLANXXXXKeyCalculator;
-import es.glasspixel.wlanaudit.util.WiFiXXXXXXKeyCalculator;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Activity to show the details of a given network previously scanned.
@@ -47,7 +50,7 @@ import es.glasspixel.wlanaudit.util.WiFiXXXXXXKeyCalculator;
  * @author Roberto Estrada
  */
 @SuppressWarnings("deprecation")
-public class NetworkDetailsActivity extends Activity {
+public class NetworkDetailsActivity extends SherlockActivity {
 
 	/**
 	 * Unique identifier of the scan result inside the intent extra or the
@@ -226,5 +229,19 @@ public class NetworkDetailsActivity extends Activity {
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putParcelable(SCAN_RESULT_KEY, mScannedNetwork);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	        case android.R.id.home:
+	            // app icon in action bar clicked; go home
+	            Intent intent = new Intent(this,  NetworkListActivity.class);
+	            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+	            startActivity(intent);
+	            return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
 	}
 }
