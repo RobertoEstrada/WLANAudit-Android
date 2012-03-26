@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 Roberto Estrada
+ * Copyright (C) 2012 Roberto Estrada
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,12 @@
  */
 package es.glasspixel.wlanaudit.activities;
 
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.MenuItem;
+
 import es.glasspixel.wlanaudit.R;
-import android.app.Activity;
+
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -24,7 +28,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
-public class AboutActivity extends Activity {
+public class AboutActivity extends SherlockActivity {
 	/**
 	 * Label which shows current version number
 	 */
@@ -54,6 +58,20 @@ public class AboutActivity extends Activity {
 		mVersionValueLabel.setText(getVersion());
 		mReleaseValueLabel.setText(String.valueOf(getRelease()));
 	}
+	
+	@Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // app icon in action bar clicked; go home
+                Intent intent = new Intent(this,  NetworkListActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
 	private int getRelease() {
 		int release = -1;
