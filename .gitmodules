@@ -1,3 +1,6 @@
 [submodule "ActionBarSherlock"]
 	path = ActionBarSherlock
 	url = https://github.com/JakeWharton/ActionBarSherlock.git
+[submodule "NumberPicker"]
+	path = NumberPicker
+	url = https://github.com/mrn/numberpicker.git
