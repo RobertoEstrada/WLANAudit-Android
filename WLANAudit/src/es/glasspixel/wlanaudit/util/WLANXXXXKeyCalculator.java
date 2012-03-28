@@ -34,28 +34,79 @@ public class WLANXXXXKeyCalculator implements IKeyCalculator {
 	private static final String HEXES = "0123456789ABCDEF";
 
 	/**
+	 * Router kinds to use the appropiate default key
+	 * generarion algorithm.
+	 */
+	private static enum RouterKind {
+		COM_KIND, ZYX_KIND, UNK_KIND
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public List<String> getKey(ScanResult network) {
-		String trimmedBSSID = network.BSSID.replaceAll(":", "").toUpperCase();
 		String formattedESSID = null;
 		if (network.SSID.contains("JAZZTEL_")) {
 			formattedESSID = network.SSID.replace("JAZZTEL_", "").toUpperCase();
 		} else if (network.SSID.contains("WLAN_")) {
 			formattedESSID = network.SSID.replace("WLAN_", "").toUpperCase();
 		}
-		// Key calculation
-		String stringToHash = "bcgbghgg" + trimmedBSSID.substring(0, 8)
-				+ formattedESSID + trimmedBSSID;
+
+		RouterKind kind = getRouterKind(network.BSSID.toUpperCase());
+		String stringToHash = null;
+		String trimmedBSSID = null;
+
+		// Key calculation based on router kind
+		switch (kind) {
+		case COM_KIND:
+			trimmedBSSID = network.BSSID.replaceAll(":", "").toUpperCase();
+			stringToHash = "bcgbghgg" + trimmedBSSID.substring(0, 8)
+					+ formattedESSID + trimmedBSSID;
+			break;
+		case ZYX_KIND:
+			formattedESSID.toLowerCase();
+			trimmedBSSID = network.BSSID.replaceAll(":", "").toLowerCase();
+			stringToHash = (trimmedBSSID.substring(0, 8) + formattedESSID).toLowerCase();
+			break;
+		case UNK_KIND:
+			return null;
+		}
+
+		List<String> keyList = new ArrayList<String>();
+		keyList.add(hashString(stringToHash));
+
+		return keyList;
+	}
+
+	/**
+	 * Returns the appropiate router kind based on its bssid
+	 * to generate the right default key
+	 * @param bssid The BSSID of the AP being audited
+	 * @return The kind of the router.
+	 */
+	private RouterKind getRouterKind(String bssid) {
+		if (bssid.matches("(64:68:0C:[0-9A-Fa-f:]{8})")) {
+			return RouterKind.COM_KIND;
+		} else if (bssid.matches("(00:1D:20:[0-9A-Fa-f:]{8})")) {
+			return RouterKind.COM_KIND;
+		} else if (bssid.matches("(00:1B:20:[0-9A-Fa-f:]{8})")) {
+			return RouterKind.COM_KIND;
+		} else if (bssid.matches("(00:23:F8:[0-9A-Fa-f:]{8})")) {
+			return RouterKind.COM_KIND;
+		} else if (bssid.matches("(00:1F:A4:[0-9A-Fa-f:]{8})")) {
+			return RouterKind.ZYX_KIND;
+		}
+		return RouterKind.UNK_KIND;
+	}
+
+	private String hashString(String stringToHash) {
 		// Hashing
 		MessageDigest hasher;
 		try {
 			hasher = MessageDigest.getInstance("MD5");
-			List<String> result = new ArrayList<String>();
-			result.add(getHex(hasher.digest(stringToHash.getBytes("UTF-8")))
+			return (getHex(hasher.digest(stringToHash.getBytes("UTF-8")))
 					.substring(0, 20).toLowerCase());
-			return result;
 		} catch (NoSuchAlgorithmException e) {
 		} catch (UnsupportedEncodingException e) {
 		}

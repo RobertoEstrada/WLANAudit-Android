@@ -1,25 +1,166 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res/es.glasspixel.wlanaudit"
-  android:orientation="vertical"
-  android:layout_width="fill_parent"
-  android:layout_height="fill_parent">
-    <TableLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/buildDataTable" android:layout_marginTop="10dip" android:layout_marginLeft="17dip">
-        <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/versionRow" android:paddingBottom="5dip">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceMedium" android:text="@string/about_version_number" android:id="@+id/versionLabel" android:layout_marginRight="5dip"></TextView>
-            <TextView android:layout_width="wrap_content" android:text="TextView" android:id="@+id/versionValue" android:layout_height="wrap_content"></TextView>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/es.glasspixel.wlanaudit"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <TableLayout
+        android:id="@+id/buildDataTable"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="17dip"
+        android:layout_marginTop="10dip" >
+
+        <TableRow
+            android:id="@+id/versionRow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5dip" >
+
+            <TextView
+                android:id="@+id/versionLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dip"
+                android:text="@string/about_version_number"
+                android:textAppearance="?android:attr/textAppearanceMedium" >
+            </TextView>
+
+            <TextView
+                android:id="@+id/versionValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView" >
+            </TextView>
         </TableRow>
-        <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/releaseRow" android:paddingBottom="5dip">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceMedium" android:text="@string/about_release_number" android:layout_marginRight="5dip" android:id="@+id/releaseLabel"></TextView>
-            <TextView android:layout_width="wrap_content" android:text="TextView" android:id="@+id/releaseValue" android:layout_height="wrap_content"></TextView>
+
+        <TableRow
+            android:id="@+id/releaseRow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5dip" >
+
+            <TextView
+                android:id="@+id/releaseLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dip"
+                android:text="@string/about_release_number"
+                android:textAppearance="?android:attr/textAppearanceMedium" >
+            </TextView>
+
+            <TextView
+                android:id="@+id/releaseValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView" >
+            </TextView>
         </TableRow>
     </TableLayout>
-    <View android:layout_marginTop="5dip" android:layout_height="1dp" android:background="@drawable/layout_divider" android:layout_width="fill_parent" android:id="@+id/divider2" android:paddingBottom="5dip"></View>
-    <ScrollView android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/disclaimerScroll">
-        <LinearLayout android:id="@+id/linearLayout2" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_marginLeft="15dip">
-            <TextView android:textAppearance="?android:attr/textAppearanceSmall" android:layout_height="fill_parent" android:layout_width="fill_parent" android:text="@string/disclaimer_text" android:layout_marginLeft="17dip" android:layout_marginRight="15dip" android:layout_marginTop="10dip" android:layout_marginBottom="15dip" android:id="@+id/disclaimerText"></TextView>
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="5dip"
+        android:background="@drawable/layout_divider"
+        android:paddingBottom="5dip" >
+    </View>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="17dip"
+        android:layout_marginRight="15dip"
+        android:layout_marginTop="5dip" >
+
+        <ImageButton
+            android:id="@+id/fbButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/social_facebook" />
+
+        <ImageButton
+            android:id="@+id/twitterButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/social_twitter" />
+
+        <ImageButton
+            android:id="@+id/gPlusButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/social_google" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/View01"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="5dip"
+        android:background="@drawable/layout_divider"
+        android:paddingBottom="5dip" />
+
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <ScrollView
+                android:id="@+id/disclaimerScroll"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+
+                <LinearLayout
+                    android:id="@+id/linearLayout2"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_marginLeft="15dip" >
+
+                    <TextView
+                        android:id="@+id/disclaimerText"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_marginLeft="17dip"
+                        android:layout_marginRight="15dip"
+                        android:layout_marginTop="10dip"
+                        android:linksClickable="true"
+                        android:text="@string/disclaimer_text"
+                        android:textAppearance="?android:attr/textAppearanceSmall" />
+                </LinearLayout>
+            </ScrollView>
+
+            <View
+                android:id="@+id/divider3"
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/layout_divider"
+                android:paddingBottom="5dip" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="17dip"
+                android:layout_marginRight="15dip"
+                android:layout_marginTop="10dip"
+                android:orientation="vertical" >
+
+                <Button
+                    android:id="@+id/oss_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/oss_licenses_show_button" />
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
-    
+
 </LinearLayout>

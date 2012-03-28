@@ -154,11 +154,12 @@ public class NetworkDetailsActivity extends SherlockActivity {
 
 							@Override
 							public void onClick(DialogInterface dialog, int unkn) {
-								if(mKeyList.size() == 1){
+								if (mKeyList.size() == 1) {
 									// Clipboard copy
 									ClipboardManager clipBoard = (ClipboardManager) NetworkDetailsActivity.this
 											.getSystemService(CLIPBOARD_SERVICE);
-									clipBoard.setText(mDefaultPassValue.getText());
+									clipBoard.setText(mDefaultPassValue
+											.getText());
 									// Dialog dismissing
 									dialog.dismiss();
 									// Copy notification
@@ -167,12 +168,16 @@ public class NetworkDetailsActivity extends SherlockActivity {
 											getResources().getString(
 													R.string.key_copy_success),
 											Toast.LENGTH_SHORT);
-									notificationToast.setGravity(Gravity.CENTER, 0,
-											0);
+									notificationToast.setGravity(
+											Gravity.CENTER, 0, 0);
 									notificationToast.show();
-								}else if(mKeyList.size() > 1) {
-									Intent i = new Intent(NetworkDetailsActivity.this, KeyListActivity.class);
-									i.putStringArrayListExtra(KeyListActivity.KEY_LIST_KEY, (ArrayList<String>) mKeyList);									
+								} else if (mKeyList.size() > 1) {
+									Intent i = new Intent(
+											NetworkDetailsActivity.this,
+											KeyListActivity.class);
+									i.putStringArrayListExtra(
+											KeyListActivity.KEY_LIST_KEY,
+											(ArrayList<String>) mKeyList);
 									startActivity(i);
 								}
 							}
@@ -206,15 +211,22 @@ public class NetworkDetailsActivity extends SherlockActivity {
 		mFrequencyValue.setText(mScannedNetwork.frequency + " MHz");
 		mIntensityValue.setText(mScannedNetwork.level + " dBm");
 		// Calculating key
-		if (mScannedNetwork.SSID.matches("WLAN_....|JAZZTEL_....")) {
+		if (mScannedNetwork.SSID.matches("(?:WLAN|JAZZTEL)_([0-9a-fA-F]{4})")) {
 			IKeyCalculator keyCalculator = new WLANXXXXKeyCalculator();
 			mKeyList = keyCalculator.getKey(mScannedNetwork);
-			mDefaultPassValue.setText(mKeyList.get(0));
-		}else if (mScannedNetwork.SSID.matches("WLAN......|YACOM......|WiFi......")) {
+			if (mKeyList != null) {
+				mDefaultPassValue.setText(mKeyList.get(0));
+			} else {
+				mDefaultPassValue.setText(getString(R.string.no_default_key));
+				mCopyButton.setEnabled(false);
+			}
+		} else if (mScannedNetwork.SSID
+				.matches("(?:WLAN|YACOM|WiFi)([0-9a-fA-F]{6})")) {
 			IKeyCalculator keyCalculator = new WiFiXXXXXXKeyCalculator();
 			mKeyList = keyCalculator.getKey(mScannedNetwork);
-			mDefaultPassValue.setText(String.valueOf(mKeyList.size()) +" "+ getText(R.string.number_of_keys_found));
-		}else {
+			mDefaultPassValue.setText(String.valueOf(mKeyList.size()) + " "
+					+ getText(R.string.number_of_keys_found));
+		} else {
 			mDefaultPassValue.setText(getString(R.string.no_default_key));
 			mCopyButton.setEnabled(false);
 		}
@@ -230,18 +242,18 @@ public class NetworkDetailsActivity extends SherlockActivity {
 		super.onSaveInstanceState(outState);
 		outState.putParcelable(SCAN_RESULT_KEY, mScannedNetwork);
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-	    switch (item.getItemId()) {
-	        case android.R.id.home:
-	            // app icon in action bar clicked; go home
-	            Intent intent = new Intent(this,  NetworkListActivity.class);
-	            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-	            startActivity(intent);
-	            return true;
-	        default:
-	            return super.onOptionsItemSelected(item);
-	    }
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			// app icon in action bar clicked; go home
+			Intent intent = new Intent(this, NetworkListActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
 }
