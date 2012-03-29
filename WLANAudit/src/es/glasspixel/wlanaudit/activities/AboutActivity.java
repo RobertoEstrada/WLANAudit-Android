@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 Roberto Estrada
+ * Copyright (C) 2012 Roberto Estrada
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,16 +15,27 @@
  */
 package es.glasspixel.wlanaudit.activities;
 
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.MenuItem;
+
 import es.glasspixel.wlanaudit.R;
-import android.app.Activity;
+
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.webkit.WebView;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
-public class AboutActivity extends Activity {
+public class AboutActivity extends SherlockActivity {
 	/**
 	 * Label which shows current version number
 	 */
@@ -33,6 +44,22 @@ public class AboutActivity extends Activity {
 	 * Label which shows current release number
 	 */
 	private TextView mReleaseValueLabel;
+	/**
+	 * Button to display OSS License dialog
+	 */
+	private Button mOssLicensesButton;
+	/**
+	 * Button to open Facebook official page
+	 */
+	private ImageButton mFacebookButton;
+	/**
+	 * Button to open official Twitter page
+	 */
+	private ImageButton mTwitterButton;
+	/**
+	 * Button to open official G+ page
+	 */
+	private ImageButton mGplusButton;
 
 	/**
 	 * @see android.app.Activity#onCreate(Bundle)
@@ -43,6 +70,10 @@ public class AboutActivity extends Activity {
 		setContentView(R.layout.about_layout);
 		mVersionValueLabel = (TextView) findViewById(R.id.versionValue);
 		mReleaseValueLabel = (TextView) findViewById(R.id.releaseValue);
+		mOssLicensesButton = (Button) findViewById(R.id.oss_button);
+		mFacebookButton = (ImageButton) findViewById(R.id.fbButton);
+		mTwitterButton = (ImageButton) findViewById(R.id.twitterButton);
+		mGplusButton = (ImageButton) findViewById(R.id.gPlusButton);
 	}
 
 	/**
@@ -53,6 +84,60 @@ public class AboutActivity extends Activity {
 		super.onStart();
 		mVersionValueLabel.setText(getVersion());
 		mReleaseValueLabel.setText(String.valueOf(getRelease()));
+		mOssLicensesButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				AlertDialog.Builder alert = new AlertDialog.Builder(
+						AboutActivity.this);
+
+				alert.setTitle(getText(R.string.oss_licenses_dialog_title));
+				WebView wv = new WebView(AboutActivity.this);
+
+				wv.loadUrl("file:///android_asset/licenses.html");
+				alert.setView(wv);
+				alert.show();
+			}
+		});
+		mFacebookButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri
+						.parse("https://www.facebook.com/wlanaudit"));
+				startActivity(browserIntent);
+			}
+		});
+		mTwitterButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri
+						.parse("https://twitter.com/#!/TitoXamps"));
+				startActivity(browserIntent);
+			}
+		});
+		mGplusButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent browserIntent = new Intent(
+						Intent.ACTION_VIEW,
+						Uri.parse("https://plus.google.com/b/113060827862322417267/113060827862322417267"));
+				startActivity(browserIntent);
+			}
+		});
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			// app icon in action bar clicked; go home
+			Intent intent = new Intent(this, NetworkListActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
 
 	private int getRelease() {

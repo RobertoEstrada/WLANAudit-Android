@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 Roberto Estrada
+ * Copyright (C) 2012 Roberto Estrada
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,20 +16,17 @@
 
 package es.glasspixel.wlanaudit.actions;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import es.glasspixel.wlanaudit.R;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.wifi.WifiManager;
 import android.preference.PreferenceManager;
 import android.view.Gravity;
-import android.view.View;
 import android.widget.Toast;
 
-import com.markupartist.android.widget.ActionBar.Action;
-
-import es.glasspixel.wlanaudit.R;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Implements the action bar autoscan toggle logic
@@ -104,19 +101,12 @@ public class AutoScanAction implements Action {
         if (mAutoScanTimer != null) {
             mAutoScanTimer.cancel();
         }
-    }
+    }    
 
     /**
      * {@inheritDoc}
      */
-    public int getDrawable() {
-        return R.drawable.ic_action_autoscan;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void performAction(View view) {
+    public void performAction() {
         if (!mIsAutoScanEnabled) {
             scheduleScan();
             showToast(mContext.getString(R.string.autoscan_enabled));

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu
   xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/scanOption" android:title="@string/scan_now" android:icon="@android:drawable/ic_menu_search"></item><item android:id="@+id/toggleAutoscanOption" android:title="@string/autoscan_toggle" android:icon="@android:drawable/ic_menu_view"></item><item android:id="@+id/preferenceOption" android:title="@string/preferences_menu_btn" android:icon="@android:drawable/ic_menu_preferences"></item>
-    <item android:id="@+id/aboutOption" android:title="@string/about_menu_btn" android:icon="@android:drawable/ic_menu_info_details"></item>
+    <item android:id="@+id/scanOption" android:title="@string/scan_now" android:icon="@drawable/ic_refresh" android:showAsAction="ifRoom"></item><item android:id="@+id/toggleAutoscanOption" android:title="@string/autoscan_toggle" android:icon="@drawable/ic_autoscan" android:showAsAction="ifRoom"></item><item android:id="@+id/preferenceOption" android:title="@string/preferences_menu_btn" android:icon="@drawable/ic_settings" android:showAsAction="ifRoom"></item>
+    <item android:id="@+id/aboutOption" android:title="@string/about_menu_btn" android:icon="@drawable/ic_about" android:showAsAction="ifRoom"></item>
     
     
     

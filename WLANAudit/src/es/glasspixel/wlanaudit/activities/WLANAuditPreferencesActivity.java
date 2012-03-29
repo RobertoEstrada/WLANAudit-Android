@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 Roberto Estrada
+ * Copyright (C) 2012 Roberto Estrada
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,13 @@
 
 package es.glasspixel.wlanaudit.activities;
 
-import android.os.Bundle;
-import android.preference.PreferenceActivity;
+import com.actionbarsherlock.app.SherlockPreferenceActivity;
+import com.actionbarsherlock.view.MenuItem;
 
 import es.glasspixel.wlanaudit.R;
+
+import android.content.Intent;
+import android.os.Bundle;
 
 /***
  * PreferenceActivity is a built-in Activity for preferences management
@@ -32,11 +35,26 @@ import es.glasspixel.wlanaudit.R;
  * <Preference Type> preferenceValue = sharedPreferences.get<Preference
  * Type>("<Preference Key>",<default value>);
  */
-public class WLANAuditPreferencesActivity extends PreferenceActivity {
+public class WLANAuditPreferencesActivity extends SherlockPreferenceActivity {
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.app_preferences);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			// app icon in action bar clicked; go home
+			Intent intent = new Intent(this, NetworkListActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
 }
