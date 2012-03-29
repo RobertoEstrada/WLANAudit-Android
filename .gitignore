@@ -1,7 +1,13 @@
 .settings
 
-#Binary directory
-WLANAudit/bin
+#Android generated
+bin
+gen
+lint.xml
+
+#Eclipse
+.settings
+.checkstyle
 
 #built application files
 *.apk
