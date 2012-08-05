@@ -112,7 +112,7 @@ public class NetworkListActivity extends SherlockListActivity {
 
         // Ads Initialization
         LinearLayout layout = (LinearLayout) findViewById(R.id.adLayout);
-        mAd = new AdView(this, AdSize.BANNER, Key.ADMOB_KEY);
+        mAd = new AdView(this, AdSize.SMART_BANNER, Key.ADMOB_KEY);
         layout.addView(mAd);
     }
 
