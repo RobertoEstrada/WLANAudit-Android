@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<manifest android:versionCode="5" android:versionName="2.0.1"
+<manifest android:versionCode="6" android:versionName="2.0.2"
     package="es.glasspixel.wlanaudit" xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="auto">
     <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="13"/>
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
@@ -16,7 +16,7 @@
         </activity>
         <activity android:name="es.glasspixel.wlanaudit.activities.NetworkDetailsActivity"/>
         <activity android:name="es.glasspixel.wlanaudit.activities.WLANAuditPreferencesActivity"/>
-        <activity android:name="es.glasspixel.wlanaudit.activities.AboutActivity">
+        <activity android:name="es.glasspixel.wlanaudit.activities.AboutActivity" android:exported="false">
             <intent-filter>
                 <action android:name="com.glasspixel.wlanaudit.ABOUT"/>
                 <category android:name="android.intent.category.DEFAULT"/>

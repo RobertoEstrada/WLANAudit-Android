@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res/es.glasspixel.wlanaudit"
-  android:orientation="vertical"
-  android:layout_width="fill_parent"
-  android:layout_height="fill_parent" android:id="@+id/networkListActivityLayout">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/networkListActivityLayout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
 
     <LinearLayout
         android:id="@+id/adLayout"
@@ -14,7 +13,11 @@
         android:orientation="vertical" >
     </LinearLayout>
 
-    <ListView android:layout_width="fill_parent" android:id="@android:id/list" android:layout_height="fill_parent">
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
         <!-- Preview: listitem=@layout/network_list_element_layout -->
     </ListView>
 

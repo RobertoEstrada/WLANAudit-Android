@@ -1,11 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:orientation="vertical"
-  android:layout_width="fill_parent"
-  android:layout_height="fill_parent">
-    <ImageView android:layout_height="wrap_content" android:src="@drawable/wifi_signal" android:layout_width="wrap_content" android:layout_alignParentTop="true" android:layout_alignParentLeft="true" android:id="@+id/networkSecurityIcon" android:paddingTop="5dip" android:layout_alignBottom="@+id/networkDetails" android:paddingLeft="10dip" android:paddingBottom="5dip"></ImageView>
-    <TextView android:textAppearance="?android:attr/textAppearanceLarge" android:layout_height="wrap_content" android:text="TextView" android:layout_alignParentTop="true" android:layout_toRightOf="@+id/networkSecurityIcon" android:id="@+id/networkName" android:layout_width="fill_parent" android:paddingTop="5dip" android:paddingLeft="10dip"></TextView>
-    <TextView android:layout_height="wrap_content" android:text="TextView" android:layout_below="@+id/networkName" android:layout_alignLeft="@+id/networkName" android:id="@+id/networkDetails" android:layout_width="fill_parent" android:paddingLeft="12dip" android:paddingBottom="5dip"></TextView>
-    
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    tools:ignore="HardcodedText" >
+
+    <ImageView
+        android:id="@+id/networkSecurityIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/networkDetails"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:paddingBottom="5dip"
+        android:paddingLeft="10dip"
+        android:paddingTop="5dip"
+        android:src="@drawable/wifi_signal" >
+    </ImageView>
+
+    <TextView
+        android:id="@+id/networkName"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/networkSecurityIcon"
+        android:paddingLeft="10dip"
+        android:paddingTop="5dip"
+        android:text="TextView"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        tools:ignore="HardcodedText" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/networkDetails"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/networkName"
+        android:layout_below="@+id/networkName"
+        android:paddingBottom="5dip"
+        android:paddingLeft="12dip"
+        android:text="TextView" >
+    </TextView>
+
 </RelativeLayout>

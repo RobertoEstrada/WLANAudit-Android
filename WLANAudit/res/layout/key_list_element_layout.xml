@@ -1,9 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:orientation="vertical"
-  android:layout_width="fill_parent"
-  android:layout_height="fill_parent">
-    <ImageView android:layout_width="wrap_content" android:paddingLeft="10dip" android:paddingBottom="5dip" android:layout_height="wrap_content" android:src="@android:drawable/ic_lock_lock" android:layout_marginTop="10dip" android:id="@+id/keyIcon"></ImageView>
-    <TextView android:text="TextView" android:layout_height="wrap_content" android:id="@+id/keyString" android:layout_width="fill_parent" android:paddingLeft="10dip" android:textAppearance="?android:attr/textAppearanceLarge" android:layout_alignTop="@+id/keyIcon" android:layout_toRightOf="@+id/keyIcon" android:paddingTop="5dip"></TextView>    
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:id="@+id/keyIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dip"
+        android:paddingBottom="5dip"
+        android:paddingLeft="10dip"
+        android:src="@android:drawable/ic_lock_lock" >
+    </ImageView>
+
+    <TextView
+        android:id="@+id/keyString"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/keyIcon"
+        android:layout_toRightOf="@+id/keyIcon"
+        android:paddingLeft="10dip"
+        android:paddingTop="5dip"
+        android:text="TextView"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        tools:ignore="HardcodedText" >
+    </TextView>
+
 </RelativeLayout>

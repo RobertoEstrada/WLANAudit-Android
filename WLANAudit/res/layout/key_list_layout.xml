@@ -1,13 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res/es.glasspixel.wlanaudit"
-  android:orientation="vertical"
-  android:layout_width="fill_parent"
-  android:layout_height="fill_parent" android:id="@+id/networkListActivityLayout">
-    <LinearLayout android:layout_height="wrap_content" android:orientation="vertical" android:layout_gravity="clip_horizontal" android:layout_width="fill_parent" android:gravity="center_horizontal" android:id="@+id/keyListAdLayout"></LinearLayout>
-    <ListView android:layout_width="fill_parent" android:id="@android:id/list" android:layout_height="fill_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/networkListActivityLayout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/keyListAdLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="clip_horizontal"
+        android:gravity="center_horizontal"
+        android:orientation="vertical" >
+    </LinearLayout>
+
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
         <!-- Preview: listitem=@layout/key_list_element_layout -->
     </ListView>
-    
+
 </LinearLayout>

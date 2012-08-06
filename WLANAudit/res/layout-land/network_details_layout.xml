@@ -1,36 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res/es.glasspixel.wlanaudit"
-  android:orientation="vertical"
-  android:layout_width="fill_parent"
-  android:layout_height="fill_parent">
-    <LinearLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/viewHeaderLayout">
-        <ImageView android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_marginLeft="10dip" android:layout_marginTop="15dip" android:id="@+id/networkIcon" android:layout_marginBottom="10dip" android:src="@drawable/wifi_signal"></ImageView>
-        <TextView android:paddingLeft="5dip" android:text="TextView" android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/networkName" android:textAppearance="?android:attr/textAppearanceLarge" android:paddingTop="3dip" android:layout_marginTop="15dip" android:layout_marginBottom="10dip"></TextView>
-        <LinearLayout android:layout_height="wrap_content" android:layout_marginTop="10dip" android:layout_marginRight="20dip" android:layout_width="fill_parent" android:layout_marginLeft="20dip" android:id="@+id/buttonsLayout" android:gravity="right">
-            <Button android:layout_height="wrap_content" android:layout_width="wrap_content" android:text="@string/copy_pass_button" android:id="@+id/copyPasswordButton"></Button>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/viewHeaderLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <ImageView
+            android:id="@+id/networkIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dip"
+            android:layout_marginLeft="10dip"
+            android:layout_marginTop="15dip"
+            android:src="@drawable/wifi_signal" >
+        </ImageView>
+
+        <TextView
+            android:id="@+id/networkName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dip"
+            android:layout_marginTop="15dip"
+            android:paddingLeft="5dip"
+            android:paddingTop="3dip"
+            android:text="TextView"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            tools:ignore="HardcodedText" >
+        </TextView>
+
+        <LinearLayout
+            android:id="@+id/buttonsLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dip"
+            android:layout_marginRight="20dip"
+            android:layout_marginTop="10dip"
+            android:gravity="right" >
+
+            <Button
+                android:id="@+id/copyPasswordButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/copy_pass_button" >
+            </Button>
         </LinearLayout>
     </LinearLayout>
-
+
     <LinearLayout
         android:id="@+id/detail_contents"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
-
+
         <View
             android:id="@+id/divider"
             android:layout_width="fill_parent"
             android:layout_height="1dp"
             android:background="@drawable/layout_divider" />
-
+
         <ScrollView
             android:id="@+id/scrollView1"
             android:layout_width="match_parent"
             android:layout_height="0dip"
             android:layout_weight="1"
-            android:scrollbarAlwaysDrawVerticalTrack="true">
+            android:scrollbarAlwaysDrawVerticalTrack="true" >
 
             <TableLayout
                 android:id="@+id/networkParamsLayout"
@@ -57,7 +95,8 @@
                         android:id="@+id/bssid_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="TextView" />
+                        android:text="TextView"
+                        tools:ignore="HardcodedText" />
                 </TableRow>
 
                 <TableRow
@@ -79,7 +118,8 @@
                         android:id="@+id/encryption_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="TextView" />
+                        android:text="TextView"
+                        tools:ignore="HardcodedText" />
                 </TableRow>
 
                 <TableRow
@@ -101,7 +141,8 @@
                         android:id="@+id/frequency_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="TextView" />
+                        android:text="TextView"
+                        tools:ignore="HardcodedText" />
                 </TableRow>
 
                 <TableRow
@@ -110,7 +151,7 @@
                     android:layout_height="wrap_content"
                     android:paddingBottom="10dip"
                     android:paddingLeft="20dip" >
-
+
                     <TextView
                         android:id="@+id/channel_label"
                         android:layout_width="wrap_content"
@@ -118,13 +159,13 @@
                         android:paddingRight="5dip"
                         android:text="@string/network_channel"
                         android:textAppearance="?android:attr/textAppearanceMedium" />
-
+
                     <TextView
                         android:id="@+id/channel_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="TextView" />
-
+                        android:text="TextView"
+                        tools:ignore="HardcodedText" />
                 </TableRow>
 
                 <TableRow
@@ -146,7 +187,8 @@
                         android:id="@+id/intensity_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="TextView" />
+                        android:text="TextView"
+                        tools:ignore="HardcodedText" />
                 </TableRow>
 
                 <TableRow
@@ -169,19 +211,18 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="2dip"
-                        android:text="TextView" />
+                        android:text="TextView"
+                        tools:ignore="HardcodedText" />
                 </TableRow>
             </TableLayout>
-
         </ScrollView>
-
+
         <View
-            android:id="@+id/divider"
+            android:id="@+id/divider2"
             android:layout_width="fill_parent"
             android:layout_height="1dp"
             android:layout_marginTop="5dip"
             android:background="@drawable/layout_divider" />
-
     </LinearLayout>
-    
+
 </LinearLayout>

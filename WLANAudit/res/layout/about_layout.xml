@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res/es.glasspixel.wlanaudit"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
@@ -31,7 +31,8 @@
                 android:id="@+id/versionValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TextView" >
+                android:text="TextView"
+                tools:ignore="HardcodedText" >
             </TextView>
         </TableRow>
 
@@ -54,7 +55,8 @@
                 android:id="@+id/releaseValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TextView" >
+                android:text="TextView"
+                tools:ignore="HardcodedText" >
             </TextView>
         </TableRow>
     </TableLayout>
@@ -112,18 +114,19 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical" >
 
             <ScrollView
                 android:id="@+id/disclaimerScroll"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                tools:ignore="NestedScrolling" >
 
                 <LinearLayout
                     android:id="@+id/linearLayout2"
                     android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="15dip" >
 
                     <TextView
