@@ -12,33 +12,176 @@
             <Button android:layout_height="wrap_content" android:layout_width="wrap_content" android:text="@string/copy_pass_button" android:id="@+id/copyPasswordButton"></Button>
         </LinearLayout>
     </LinearLayout>
-    <View android:id="@+id/divider"
-    android:background="@drawable/layout_divider"
-    android:layout_width="fill_parent"
-    android:layout_height="1dp"/>
-    <TableLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_marginTop="15dip" android:id="@+id/networkParamsLayout">
-        
-        <TableRow android:paddingLeft="20dip" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/bssidRow" android:paddingBottom="10dip">
-            <TextView android:textAppearance="?android:attr/textAppearanceMedium" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/network_bssid_label" android:paddingRight="5dip" android:id="@+id/bssid_label"></TextView>
-            <TextView android:text="TextView" android:id="@+id/bssid_value" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-        </TableRow>
-        <TableRow android:paddingLeft="20dip" android:paddingBottom="10dip" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/encryptionRow">
-            <TextView android:paddingRight="5dip" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/network_encryption_label" android:id="@+id/encryption_label"></TextView>
-            <TextView android:text="TextView" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/encryption_value"></TextView>
-        </TableRow>
-        <TableRow android:paddingLeft="20dip" android:paddingBottom="10dip" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/frequencyRow">
-            <TextView android:paddingRight="5dip" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/network_frequency" android:id="@+id/frequency_label"></TextView>
-            <TextView android:text="TextView" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/frequency_value"></TextView>
-        </TableRow>
-        <TableRow android:paddingLeft="20dip" android:paddingBottom="10dip" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/intensityRow">
-            <TextView android:paddingRight="5dip" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/signal_level_label" android:id="@+id/intensity_label"></TextView>
-            <TextView android:text="TextView" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/intensity_value"></TextView>
-        </TableRow>
-        <TableRow android:paddingLeft="18dip" android:paddingBottom="10dip" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/defaultPasswordRow">
-            <TextView android:paddingRight="5dip" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/default_password_label" android:id="@+id/password_label"></TextView>
-            <TextView android:text="TextView" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="2dip" android:id="@+id/password_value"></TextView>
-        </TableRow>
-    </TableLayout>
-    <View android:layout_width="fill_parent" android:layout_height="1dp" android:background="@drawable/layout_divider" android:id="@+id/divider" android:layout_marginTop="5dip"></View>
+
+    <LinearLayout
+        android:id="@+id/detail_contents"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@drawable/layout_divider" />
+
+        <ScrollView
+            android:id="@+id/scrollView1"
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1"
+            android:scrollbarAlwaysDrawVerticalTrack="true">
+
+            <TableLayout
+                android:id="@+id/networkParamsLayout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dip" >
+
+                <TableRow
+                    android:id="@+id/bssidRow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="10dip"
+                    android:paddingLeft="20dip" >
+
+                    <TextView
+                        android:id="@+id/bssid_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingRight="5dip"
+                        android:text="@string/network_bssid_label"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    <TextView
+                        android:id="@+id/bssid_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="TextView" />
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/encryptionRow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="10dip"
+                    android:paddingLeft="20dip" >
+
+                    <TextView
+                        android:id="@+id/encryption_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingRight="5dip"
+                        android:text="@string/network_encryption_label"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    <TextView
+                        android:id="@+id/encryption_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="TextView" />
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/frequencyRow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="10dip"
+                    android:paddingLeft="20dip" >
+
+                    <TextView
+                        android:id="@+id/frequency_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingRight="5dip"
+                        android:text="@string/network_frequency"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    <TextView
+                        android:id="@+id/frequency_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="TextView" />
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/TableRow01"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="10dip"
+                    android:paddingLeft="20dip" >
+
+                    <TextView
+                        android:id="@+id/channel_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingRight="5dip"
+                        android:text="@string/network_channel"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    <TextView
+                        android:id="@+id/channel_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="TextView" />
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/intensityRow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="10dip"
+                    android:paddingLeft="20dip" >
+
+                    <TextView
+                        android:id="@+id/intensity_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingRight="5dip"
+                        android:text="@string/signal_level_label"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    <TextView
+                        android:id="@+id/intensity_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="TextView" />
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/defaultPasswordRow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="10dip"
+                    android:paddingLeft="18dip" >
+
+                    <TextView
+                        android:id="@+id/password_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingRight="5dip"
+                        android:text="@string/default_password_label"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    <TextView
+                        android:id="@+id/password_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="2dip"
+                        android:text="TextView" />
+                </TableRow>
+            </TableLayout>
+
+        </ScrollView>
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="5dip"
+            android:background="@drawable/layout_divider" />
+
+    </LinearLayout>
     
 </LinearLayout>

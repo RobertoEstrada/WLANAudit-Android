@@ -15,6 +15,7 @@
  */
 package es.glasspixel.wlanaudit.activities;
 
+import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.MenuItem;
 
@@ -68,6 +69,8 @@ public class AboutActivity extends SherlockActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.about_layout);
+		ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 		mVersionValueLabel = (TextView) findViewById(R.id.versionValue);
 		mReleaseValueLabel = (TextView) findViewById(R.id.releaseValue);
 		mOssLicensesButton = (Button) findViewById(R.id.oss_button);

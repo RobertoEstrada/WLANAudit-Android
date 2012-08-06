@@ -8,7 +8,7 @@
     <string name="signal_level_label">Intensity:</string>
     <string name="default_password_label">Default pass:</string>
     <string name="copy_pass_button">Copy password</string>
-    <string name="no_default_key">No default key</string>
+    <string name="no_default_key">Impossible to calculate</string>
     <string name="key_copy_warn_title">Unsafe AP</string>
     <string name="key_copy_warn_text">The default key of this AP could be guessed, hence this AP is unsafe. If this AP isn\'t yours, warn the owner about this security issue.</string>
     <string name="ok_button">Ok</string>
@@ -40,4 +40,5 @@
     <string name="no_networks_found">No WiFi networks found</string>
     <string name="oss_licenses_show_button">Show software licenses</string>
     <string name="oss_licenses_dialog_title">Software licenses</string>
+    <string name="network_channel">Channel:</string>
 </resources>

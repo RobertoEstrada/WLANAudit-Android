@@ -16,6 +16,7 @@
 
 package es.glasspixel.wlanaudit.activities;
 
+import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.ads.AdRequest;
@@ -65,6 +66,8 @@ public class KeyListActivity extends SherlockListActivity {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.key_list_layout);
+		ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
 		// If a previous instance state was saved
 		if (savedInstanceState != null

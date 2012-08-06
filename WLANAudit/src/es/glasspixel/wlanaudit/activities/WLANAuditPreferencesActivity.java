@@ -16,6 +16,7 @@
 
 package es.glasspixel.wlanaudit.activities;
 
+import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockPreferenceActivity;
 import com.actionbarsherlock.view.MenuItem;
 
@@ -41,6 +42,8 @@ public class WLANAuditPreferencesActivity extends SherlockPreferenceActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 		addPreferencesFromResource(R.xml.app_preferences);
 	}
 	

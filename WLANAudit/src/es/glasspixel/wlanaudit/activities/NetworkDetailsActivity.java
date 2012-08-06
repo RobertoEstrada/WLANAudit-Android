@@ -16,11 +16,13 @@
 
 package es.glasspixel.wlanaudit.activities;
 
+import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.MenuItem;
 
 import es.glasspixel.wlanaudit.R;
 import es.glasspixel.wlanaudit.adapters.WifiNetworkAdapter;
+import es.glasspixel.wlanaudit.util.ChannelCalculator;
 import es.glasspixel.wlanaudit.util.IKeyCalculator;
 import es.glasspixel.wlanaudit.util.WLANXXXXKeyCalculator;
 import es.glasspixel.wlanaudit.util.WiFiXXXXXXKeyCalculator;
@@ -82,6 +84,10 @@ public class NetworkDetailsActivity extends SherlockActivity {
 	 */
 	private TextView mFrequencyValue;
 	/**
+     * Widget to display network's channel number
+     */
+	private TextView mChannelValue;
+	/**
 	 * Widget to display network's signal strength
 	 */
 	private TextView mIntensityValue;
@@ -121,6 +127,8 @@ public class NetworkDetailsActivity extends SherlockActivity {
 
 		// Setting content view
 		setContentView(R.layout.network_details_layout);
+		ActionBar actionBar = getSupportActionBar();
+	    actionBar.setDisplayHomeAsUpEnabled(true);
 
 		// Obtaining handles to the widgets
 		mNetworkIcon = (ImageView) findViewById(R.id.networkIcon);
@@ -128,6 +136,7 @@ public class NetworkDetailsActivity extends SherlockActivity {
 		mBssidValue = (TextView) findViewById(R.id.bssid_value);
 		mEncryptionValue = (TextView) findViewById(R.id.encryption_value);
 		mFrequencyValue = (TextView) findViewById(R.id.frequency_value);
+		mChannelValue = (TextView) findViewById(R.id.channel_value);
 		mIntensityValue = (TextView) findViewById(R.id.intensity_value);
 		mDefaultPassValue = (TextView) findViewById(R.id.password_value);
 		mCopyButton = (Button) findViewById(R.id.copyPasswordButton);
@@ -209,6 +218,8 @@ public class NetworkDetailsActivity extends SherlockActivity {
 		mBssidValue.setText(mScannedNetwork.BSSID);
 		mEncryptionValue.setText(mScannedNetwork.capabilities);
 		mFrequencyValue.setText(mScannedNetwork.frequency + " MHz");
+        mChannelValue.setText(String.valueOf(ChannelCalculator
+                .getChannelNumber(mScannedNetwork.frequency)));
 		mIntensityValue.setText(mScannedNetwork.level + " dBm");
 		// Calculating key
 		if (mScannedNetwork.SSID.matches("(?:WLAN|JAZZTEL)_([0-9a-fA-F]{4})")) {
