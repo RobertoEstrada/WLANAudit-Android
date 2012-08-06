@@ -14,7 +14,7 @@
         </CheckBoxPreference>
 
         <com.michaelnovakjr.numberpicker.NumberPickerPreference
-            android:defaultValue="5"
+            android:defaultValue="30"
             android:dialogLayout="@layout/pref_number_picker"
             android:dialogTitle="@string/autoscan_preference_title"
             android:key="autoscan_interval"

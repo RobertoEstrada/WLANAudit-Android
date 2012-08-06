@@ -104,6 +104,12 @@ public class NetworkListActivity extends SherlockListActivity {
             editor.putBoolean("wifi_autostart", true);
             editor.commit();
         }
+        
+        if(!prefs.contains("autoscan_interval")) {
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putInt("autoscan_interval", 30);
+            editor.commit();
+        }
 
         // If WiFi is disabled, enable it
         if (!mWifiManager.isWifiEnabled() && prefs.getBoolean("wifi_autostart", true)) {
