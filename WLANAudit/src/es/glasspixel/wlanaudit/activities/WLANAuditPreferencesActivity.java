@@ -34,7 +34,7 @@ import android.os.Bundle;
  * SharedPreferences sharedPreferences =
  * PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
  * <Preference Type> preferenceValue = sharedPreferences.get<Preference
- * Type>("<Preference Key>",<default value>);
+ * Type>("<Preference SavedKey>",<default value>);
  */
 public class WLANAuditPreferencesActivity extends SherlockPreferenceActivity {
 

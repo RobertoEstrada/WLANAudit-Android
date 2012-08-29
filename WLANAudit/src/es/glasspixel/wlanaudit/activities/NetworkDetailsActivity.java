@@ -22,15 +22,19 @@ import com.actionbarsherlock.view.MenuItem;
 
 import es.glasspixel.wlanaudit.R;
 import es.glasspixel.wlanaudit.adapters.WifiNetworkAdapter;
+import es.glasspixel.wlanaudit.database.KeysSQliteHelper;
 import es.glasspixel.wlanaudit.util.ChannelCalculator;
 import es.glasspixel.wlanaudit.util.IKeyCalculator;
 import es.glasspixel.wlanaudit.util.WLANXXXXKeyCalculator;
 import es.glasspixel.wlanaudit.util.WiFiXXXXXXKeyCalculator;
 
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -84,8 +88,8 @@ public class NetworkDetailsActivity extends SherlockActivity {
 	 */
 	private TextView mFrequencyValue;
 	/**
-     * Widget to display network's channel number
-     */
+	 * Widget to display network's channel number
+	 */
 	private TextView mChannelValue;
 	/**
 	 * Widget to display network's signal strength
@@ -128,7 +132,7 @@ public class NetworkDetailsActivity extends SherlockActivity {
 		// Setting content view
 		setContentView(R.layout.network_details_layout);
 		ActionBar actionBar = getSupportActionBar();
-	    actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.setDisplayHomeAsUpEnabled(true);
 
 		// Obtaining handles to the widgets
 		mNetworkIcon = (ImageView) findViewById(R.id.networkIcon);
@@ -161,14 +165,53 @@ public class NetworkDetailsActivity extends SherlockActivity {
 				dialogBuilder.setPositiveButton(R.string.ok_button,
 						new DialogInterface.OnClickListener() {
 
+							@TargetApi(11)
 							@Override
 							public void onClick(DialogInterface dialog, int unkn) {
 								if (mKeyList.size() == 1) {
 									// Clipboard copy
-									ClipboardManager clipBoard = (ClipboardManager) NetworkDetailsActivity.this
-											.getSystemService(CLIPBOARD_SERVICE);
-									clipBoard.setText(mDefaultPassValue
-											.getText());
+									int sdk = android.os.Build.VERSION.SDK_INT;
+									if (sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
+										android.text.ClipboardManager clipboard = (android.text.ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+										clipboard.setText(mDefaultPassValue
+												.getText());
+									} else {
+										android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+										android.content.ClipData clip = android.content.ClipData
+												.newPlainText("text label",
+														mDefaultPassValue
+																.getText());
+										clipboard.setPrimaryClip(clip);
+									}
+
+									KeysSQliteHelper usdbh = new KeysSQliteHelper(
+											NetworkDetailsActivity.this,
+											"DBKeys", null, 1);
+
+									SQLiteDatabase db = usdbh
+											.getWritableDatabase();
+
+									// Si hemos abierto correctamente la base de
+									// datos
+									if (db != null) {
+
+										// Insertamos los datos en la tabla
+										db.execSQL("INSERT INTO Keys (nombre, key) "
+												+ "VALUES ('"
+												+ mNetworkName.getText()
+												+ "', '"
+												+ mDefaultPassValue.getText()
+												+ "')");
+
+										// Cerramos la base de datos
+										db.close();
+									}
+
+									// ClipboardManager clipboard =
+									// (ClipboardManager)
+									// getSystemService(Context.CLIPBOARD_SERVICE);
+									// clipboard.setText(mDefaultPassValue
+									// .getText());
 									// Dialog dismissing
 									dialog.dismiss();
 									// Copy notification
@@ -218,8 +261,8 @@ public class NetworkDetailsActivity extends SherlockActivity {
 		mBssidValue.setText(mScannedNetwork.BSSID);
 		mEncryptionValue.setText(mScannedNetwork.capabilities);
 		mFrequencyValue.setText(mScannedNetwork.frequency + " MHz");
-        mChannelValue.setText(String.valueOf(ChannelCalculator
-                .getChannelNumber(mScannedNetwork.frequency)));
+		mChannelValue.setText(String.valueOf(ChannelCalculator
+				.getChannelNumber(mScannedNetwork.frequency)));
 		mIntensityValue.setText(mScannedNetwork.level + " dBm");
 		// Calculating key
 		if (mScannedNetwork.SSID.matches("(?:WLAN|JAZZTEL)_([0-9a-fA-F]{4})")) {

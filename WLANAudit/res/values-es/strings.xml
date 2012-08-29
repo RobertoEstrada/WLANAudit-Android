@@ -40,4 +40,6 @@
     <string name="no_networks_found">No se encontraron redes inalámbricas</string>
     <string name="oss_licenses_show_button">Mostrar licencias de software</string>
     <string name="oss_licenses_dialog_title">Licencias de software</string><string name="network_channel">Canal:</string>
+    <string name="action1">Escanear</string>
+    <string name="action2">Claves almacenadas</string>
 </resources>

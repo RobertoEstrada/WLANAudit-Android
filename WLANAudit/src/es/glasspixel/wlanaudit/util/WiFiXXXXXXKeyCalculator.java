@@ -75,9 +75,9 @@ public class WiFiXXXXXXKeyCalculator implements IKeyCalculator {
 		M11 = bssid_c[10];
 		M12 = bssid_c[11];
 
-		// Key derivation
+		// SavedKey derivation
 		for (int S7 = 0; S7 < 10; S7++) {
-			// Key values
+			// SavedKey values
 			int X1, X2, X3, Y1, Y2, Y3, Z1, Z2, Z3, W1, W2, W3, W4;
 
 			// S7+S8+M11+M12

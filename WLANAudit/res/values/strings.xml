@@ -41,4 +41,6 @@
     <string name="oss_licenses_show_button">Show software licenses</string>
     <string name="oss_licenses_dialog_title">Software licenses</string>
     <string name="network_channel">Channel:</string>
+    <string name="action1">Scan</string>
+    <string name="action2">Saved keys</string>
 </resources>

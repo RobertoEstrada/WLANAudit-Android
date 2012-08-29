@@ -58,7 +58,7 @@ public class WLANXXXXKeyCalculator implements IKeyCalculator {
 		String stringToHash = null;
 		String trimmedBSSID = null;
 
-		// Key calculation based on router kind
+		// SavedKey calculation based on router kind
 		switch (kind) {
 		case COM_KIND:
 			trimmedBSSID = network.BSSID.replaceAll(":", "").toUpperCase();
