@@ -161,7 +161,7 @@ public class NetworkListActivity extends SherlockListActivity {
 					}
 				});
 
-		initScan();
+		
 
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		// If preference does not exist
@@ -176,6 +176,8 @@ public class NetworkListActivity extends SherlockListActivity {
 			editor.putInt("autoscan_interval", 30);
 			editor.commit();
 		}
+		
+		initScan();
 
 		// Ads Initialization
 		LinearLayout layout = (LinearLayout) findViewById(R.id.adLayout);
