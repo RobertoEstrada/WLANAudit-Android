@@ -43,4 +43,6 @@
     <string name="network_channel">Channel:</string>
     <string name="action1">Scan</string>
     <string name="action2">Saved keys</string>
+    <string name="delete">Delete</string>
+    <string name="copy">Copy</string>
 </resources>

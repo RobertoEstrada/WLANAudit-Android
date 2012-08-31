@@ -49,8 +49,16 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.SparseBooleanArray;
+import android.view.ActionMode;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.AbsListView.MultiChoiceModeListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -63,6 +71,7 @@ import android.widget.Toast;
  * 
  * @author Roberto Estrada
  */
+@SuppressLint({ "NewApi", "NewApi" })
 public class NetworkListActivity extends SherlockListActivity {
 
 	/**
@@ -101,6 +110,7 @@ public class NetworkListActivity extends SherlockListActivity {
 
 	private MenuItem refreshScan;
 	private MenuItem automaticScan;
+	private ActionMode mActionMode;
 
 	/**
 	 * Lifecycle management: Activity creation
@@ -142,11 +152,11 @@ public class NetworkListActivity extends SherlockListActivity {
 								// Do nothing, just avoid that activity crashes
 							}
 
-							
 							if (mAutoScanAction.isAutoScanEnabled() == true)
 								mAutoScanAction.stopAutoScan();
 							refreshScan.setEnabled(false);
 							automaticScan.setEnabled(false);
+
 							getListView()
 									.setAdapter(
 											new KeysSavedAdapter(
@@ -154,14 +164,125 @@ public class NetworkListActivity extends SherlockListActivity {
 													R.layout.network_list_element_layout,
 													android.R.layout.simple_list_item_1,
 													getSavedKeys()));
+							// getListView().setOnItemLongClickListener(
+							// new OnItemLongClickListener() {
+							//
+							// @Override
+							// public boolean onItemLongClick(
+							// AdapterView<?> arg0, View arg1,
+							// int arg2, long arg3) {
+							// if (mActionMode != null) {
+							// return false;
+							// }
+							// // Start the CAB using the
+							// // ActionMode.Callback defined above
+							// mActionMode = NetworkListActivity.this
+							// .startActionMode(mActionModeCallback);
+							//
+							// return true;
+							//
+							// }
+							// });
+							getListView().setChoiceMode(
+									ListView.CHOICE_MODE_MULTIPLE_MODAL);
+							getListView().setMultiChoiceModeListener(
+									new MultiChoiceModeListener() {
+
+										@Override
+										public boolean onActionItemClicked(
+												ActionMode mode,
+												android.view.MenuItem item) {
+
+											switch (item.getItemId()) {
+											case R.id.delete_context_menu:
+												SparseBooleanArray i = getListView()
+														.getCheckedItemPositions();
+												KeysSQliteHelper usdbh = new KeysSQliteHelper(
+														NetworkListActivity.this,
+														"DBKeys", null, 1);
+												SQLiteDatabase db = usdbh
+														.getWritableDatabase();
+												for (int j = 0; j < getListView()
+														.getCount(); j++) {
+													if (i.get(j) == true) {
+
+														String nombre_wlan, clave;
+														nombre_wlan = ((SavedKey) getListView()
+																.getAdapter()
+																.getItem(j))
+																.getWlan_name();
+														clave = ((SavedKey) getListView()
+																.getAdapter()
+																.getItem(j))
+																.getKey();
+														db.delete(
+																"keys",
+																"nombre like ? AND key like ?",
+																new String[] {
+																		nombre_wlan,
+																		clave });
+													}
+
+												}
+
+												mode.finish();
+												getListView()
+														.setAdapter(
+																new KeysSavedAdapter(
+																		NetworkListActivity.this,
+																		R.layout.network_list_element_layout,
+																		android.R.layout.simple_list_item_1,
+																		getSavedKeys()));
+												return true;
+											case R.id.copy_context_menu:
+												mode.finish();
+												return true;
+											default:
+												return false;
+											}
+										}
+
+										@Override
+										public boolean onCreateActionMode(
+												ActionMode mode,
+												android.view.Menu menu) {
+											android.view.MenuInflater inflater = mode
+													.getMenuInflater();
+											inflater.inflate(
+													R.menu.saved_keys_elements_context_menu,
+													menu);
+
+											return true;
+										}
+
+										@Override
+										public void onDestroyActionMode(
+												ActionMode mode) {
+											// TODO Auto-generated method stub
+
+										}
+
+										@Override
+										public boolean onPrepareActionMode(
+												ActionMode mode,
+												android.view.Menu menu) {
+											// TODO Auto-generated method stub
+											return false;
+										}
+
+										@Override
+										public void onItemCheckedStateChanged(
+												ActionMode mode, int position,
+												long id, boolean checked) {
+
+										}
+									});
 
 						}
 						mPosition = itemPosition;
 						return false;
 					}
 				});
-
-		
 
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		// If preference does not exist
@@ -176,7 +297,7 @@ public class NetworkListActivity extends SherlockListActivity {
 			editor.putInt("autoscan_interval", 30);
 			editor.commit();
 		}
-		
+
 		initScan();
 
 		// Ads Initialization
@@ -184,6 +305,74 @@ public class NetworkListActivity extends SherlockListActivity {
 		mAd = new AdView(this, AdSize.SMART_BANNER, Key.ADMOB_KEY);
 		layout.addView(mAd);
 	}
+
+	// private ActionMode.Callback mActionModeCallback = new
+	// ActionMode.Callback() {
+	//
+	// // Called when the action mode is created; startActionMode() was called
+	// @SuppressLint("NewApi")
+	// @Override
+	// public boolean onCreateActionMode(ActionMode mode,
+	// android.view.Menu menu) {
+	// // Inflate a menu resource providing context menu items
+	// android.view.MenuInflater inflater = mode.getMenuInflater();
+	// inflater.inflate(R.menu.saved_keys_elements_context_menu, menu);
+	// return true;
+	// }
+	//
+	// // Called each time the action mode is shown. Always called after
+	// // onCreateActionMode, but
+	// // may be called multiple times if the mode is invalidated.
+	// @Override
+	// public boolean onPrepareActionMode(ActionMode mode,
+	// android.view.Menu menu) {
+	// return false; // Return false if nothing is done
+	// }
+	//
+	// // Called when the user selects a contextual menu item
+	// @SuppressLint({ "NewApi" })
+	// @Override
+	// public boolean onActionItemClicked(ActionMode mode,
+	// android.view.MenuItem item) {
+	// switch (item.getItemId()) {
+	// case R.id.copy_context_menu:
+	// String mDefaultPassValue = ((TextView) v
+	// .findViewById(R.id.networkKey)).getText().toString();
+	//
+	// int sdk = android.os.Build.VERSION.SDK_INT;
+	// if (sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
+	// android.text.ClipboardManager clipboard = (android.text.ClipboardManager)
+	// getSystemService(Context.CLIPBOARD_SERVICE);
+	// clipboard.setText(mDefaultPassValue);
+	// } else {
+	// android.content.ClipboardManager clipboard =
+	// (android.content.ClipboardManager)
+	// getSystemService(Context.CLIPBOARD_SERVICE);
+	// android.content.ClipData clip = android.content.ClipData
+	// .newPlainText("text label", mDefaultPassValue);
+	// clipboard.setPrimaryClip(clip);
+	// }
+	// Toast.makeText(NetworkListActivity.this,
+	// getResources().getString(R.string.key_copy_success),
+	// Toast.LENGTH_SHORT).show();
+	// mode.finish();
+	// return true;
+	// case R.id.delete_context_menu:
+	//
+	// mode.finish();
+	// return true;
+	// default:
+	// return false;
+	// }
+	// }
+	//
+	// // Called when the user exits the action mode
+	// @SuppressLint("NewApi")
+	// @Override
+	// public void onDestroyActionMode(ActionMode mode) {
+	// mActionMode = null;
+	// }
+	// };
 
 	protected List<SavedKey> getSavedKeys() {
 		List<SavedKey> mKeys = new ArrayList<SavedKey>();

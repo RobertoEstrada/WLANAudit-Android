@@ -42,4 +42,6 @@
     <string name="oss_licenses_dialog_title">Licencias de software</string><string name="network_channel">Canal:</string>
     <string name="action1">Escanear</string>
     <string name="action2">Claves almacenadas</string>
+    <string name="delete">Borrar</string>
+    <string name="copy">Copiar</string>
 </resources>
