@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <resources>
+
     <string name="autoscan_enabled">Búsqueda automática activa</string>
     <string name="autoscan_disabled">Búsqueda automática desactivada</string>
     <string name="network_bssid_label">Dirección MAC:</string>
@@ -12,6 +13,7 @@
     <string name="key_copy_warn_title">AP Inseguro</string>
     <string name="key_copy_warn_text">Se pudo calcular una posible clave por defecto a traves de los datos publicos.\n\nSi no se trata de tu AP, avisa a su propietario de que cambie la clave de su red.</string>
     <string name="ok_button">Aceptar</string>
+    <string name="error_saving_key">Ha ocurrido un error guardando la clave</string>
     <string name="key_copy_success">Clave copiada con éxito</string>
     <string name="scan_pref_group_name">Ajustes de búsqueda</string>
     <string name="menu_preferences_label">Preferencias</string>
@@ -39,7 +41,11 @@
     <string name="wifi_autostart">Encendido automático del WiFi</string>
     <string name="no_networks_found">No se encontraron redes inalámbricas</string>
     <string name="oss_licenses_show_button">Mostrar licencias de software</string>
-    <string name="oss_licenses_dialog_title">Licencias de software</string><string name="network_channel">Canal:</string>
+    <string name="oss_licenses_dialog_title">Licencias de software</string>
+    <string name="network_channel">Canal:</string>
     <string name="action1">Escanear</string>
     <string name="action2">Claves almacenadas</string>
+    <string name="delete">Borrar</string>
+    <string name="copy">Copiar</string>
+
 </resources>

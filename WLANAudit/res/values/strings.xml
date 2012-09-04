@@ -12,6 +12,7 @@
     <string name="key_copy_warn_title">Unsafe AP</string>
     <string name="key_copy_warn_text">The default key of this AP could be guessed, hence this AP is unsafe. If this AP isn\'t yours, warn the owner about this security issue.</string>
     <string name="ok_button">OK</string>
+    <string name="error_saving_key">There was an error saving the key</string>
     <string name="key_copy_success">Password copied successfully</string>
     <string name="scan_pref_group_name">Scan preferences</string>
     <string name="menu_preferences_label">Preferences</string>
@@ -43,4 +44,6 @@
     <string name="network_channel">Channel:</string>
     <string name="action1">Scan</string>
     <string name="action2">Saved keys</string>
+    <string name="delete">Delete</string>
+    <string name="copy">Copy</string>
 </resources>
