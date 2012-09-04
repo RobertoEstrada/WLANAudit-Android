@@ -496,7 +496,7 @@ public class NetworkListActivity extends SherlockFragmentActivity {
 	protected void onResume() {
 		super.onResume();
 		// mWifiManager.startScan();
-		mAd.loadAd(new AdRequest());
+		// mAd.loadAd(new AdRequest());
 	}
 
 	/**
@@ -518,13 +518,15 @@ public class NetworkListActivity extends SherlockFragmentActivity {
 	 * Lifecycle management: Activity state is saved to be restored later
 	 */
 	protected void onSaveInstanceState(Bundle outState) {
-		outState.putBoolean("autoscan_state",
-				mAutoScanAction.isAutoScanEnabled());
+		if (mAutoScanAction != null)
+			outState.putBoolean("autoscan_state",
+					mAutoScanAction.isAutoScanEnabled());
 	}
 
 	protected void onDestroy() {
 		super.onDestroy();
-		mAutoScanAction.stopAutoScan();
+		if (mAutoScanAction != null)
+			mAutoScanAction.stopAutoScan();
 	}
 
 	/**

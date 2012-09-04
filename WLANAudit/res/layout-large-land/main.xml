@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dkgray"
+    android:background="@color/white"
     android:baselineAligned="false"
     android:orientation="horizontal" >
 
@@ -19,9 +19,12 @@
             android:id="@+id/textView1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="4dp"
             android:background="@drawable/header_bg_cal_widget_holo"
+            android:gravity="center"
+            android:padding="6dp"
             android:text="@string/action1"
-            android:textColor="@color/black" />
+            android:textColor="@color/white" />
 
         <fragment
             android:id="@+id/scan_fragment"
@@ -45,9 +48,12 @@
             android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="4dp"
             android:background="@drawable/header_bg_cal_widget_holo"
+            android:gravity="center"
+            android:padding="6dp"
             android:text="@string/action2"
-            android:textColor="@color/black" />
+            android:textColor="@color/white" />
 
         <fragment
             android:id="@+id/saved_keys_fragment"
