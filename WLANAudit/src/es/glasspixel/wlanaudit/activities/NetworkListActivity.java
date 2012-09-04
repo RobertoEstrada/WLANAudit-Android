@@ -21,6 +21,7 @@ import java.util.List;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.OnNavigationListener;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -43,6 +44,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.wifi.ScanResult;
@@ -58,6 +60,7 @@ import android.view.View;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
@@ -72,7 +75,8 @@ import android.widget.Toast;
  * @author Roberto Estrada
  */
 @SuppressLint({ "NewApi", "NewApi" })
-public class NetworkListActivity extends SherlockListActivity {
+public class NetworkListActivity extends SherlockFragmentActivity implements
+		OnItemClickListener {
 
 	/**
 	 * Manager of the wifi network interface
@@ -110,7 +114,14 @@ public class NetworkListActivity extends SherlockListActivity {
 
 	private MenuItem refreshScan;
 	private MenuItem automaticScan;
-	private ActionMode mActionMode;
+
+	boolean screenIsLarge;
+
+	boolean orientationIsPortrait;
+
+	private Resources res;
+
+	private ListView mListView;
 
 	/**
 	 * Lifecycle management: Activity creation
@@ -118,192 +129,201 @@ public class NetworkListActivity extends SherlockListActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.network_list_layout);
-		actions[0] = getResources().getString(R.string.action1);
-		actions[1] = getResources().getString(R.string.action2);
-		// Action bar actions initialization
-		if (savedInstanceState != null
-				&& savedInstanceState.getBoolean("autoscan_state")) {
-			mAutoScanAction = new AutoScanAction(this, true);
-		} else {
-			mAutoScanAction = new AutoScanAction(this);
-		}
+		setContentView(R.layout.main);
 
-		mActionBar = getSupportActionBar();
-		mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+		res = getResources();
+		screenIsLarge = res.getBoolean(R.bool.screen_large);
+		orientationIsPortrait = res.getBoolean(R.bool.portrait);
+		if (screenIsLarge == false) {
+			mListView = (ListView) findViewById(R.id.network_listview);
+			mListView.setOnItemClickListener(this);
+			actions[0] = getResources().getString(R.string.action1);
+			actions[1] = getResources().getString(R.string.action2);
+			// Action bar actions initialization
+			if (savedInstanceState != null
+					&& savedInstanceState.getBoolean("autoscan_state")) {
+				mAutoScanAction = new AutoScanAction(this, true);
+			} else {
+				mAutoScanAction = new AutoScanAction(this);
+			}
 
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-				getBaseContext(),
-				android.R.layout.simple_spinner_dropdown_item, actions);
+			mActionBar = getSupportActionBar();
+			mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 
-		mActionBar.setListNavigationCallbacks(adapter,
-				new OnNavigationListener() {
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+					getBaseContext(),
+					android.R.layout.simple_spinner_dropdown_item, actions);
 
-					@Override
-					public boolean onNavigationItemSelected(int itemPosition,
-							long itemId) {
-						if (itemPosition == 0) {
-							initScan();
+			mActionBar.setListNavigationCallbacks(adapter,
+					new OnNavigationListener() {
 
-						} else if (itemPosition == 1) {
-							try {
-								unregisterReceiver(mCallBackReceiver);
-							} catch (IllegalArgumentException e) {
-								// Do nothing, just avoid that activity crashes
-							}
+						@Override
+						public boolean onNavigationItemSelected(
+								int itemPosition, long itemId) {
+							if (itemPosition == 0) {
+								initScan();
 
-							if (mAutoScanAction.isAutoScanEnabled() == true)
-								mAutoScanAction.stopAutoScan();
-							refreshScan.setEnabled(false);
-							automaticScan.setEnabled(false);
+							} else if (itemPosition == 1) {
+								try {
+									unregisterReceiver(mCallBackReceiver);
+								} catch (IllegalArgumentException e) {
+									// Do nothing, just avoid that activity
+									// crashes
+								}
 
-							getListView()
-									.setAdapter(
-											new KeysSavedAdapter(
-													NetworkListActivity.this,
-													R.layout.network_list_element_layout,
-													android.R.layout.simple_list_item_1,
-													getSavedKeys()));
-							// getListView().setOnItemLongClickListener(
-							// new OnItemLongClickListener() {
-							//
-							// @Override
-							// public boolean onItemLongClick(
-							// AdapterView<?> arg0, View arg1,
-							// int arg2, long arg3) {
-							// if (mActionMode != null) {
-							// return false;
-							// }
-							// // Start the CAB using the
-							// // ActionMode.Callback defined above
-							// mActionMode = NetworkListActivity.this
-							// .startActionMode(mActionModeCallback);
-							//
-							// return true;
-							//
-							// }
-							// });
-							getListView().setChoiceMode(
-									ListView.CHOICE_MODE_MULTIPLE_MODAL);
-							getListView().setMultiChoiceModeListener(
-									new MultiChoiceModeListener() {
+								if (mAutoScanAction.isAutoScanEnabled() == true)
+									mAutoScanAction.stopAutoScan();
+								refreshScan.setEnabled(false);
+								automaticScan.setEnabled(false);
 
-										@Override
-										public boolean onActionItemClicked(
-												ActionMode mode,
-												android.view.MenuItem item) {
+								mListView.setAdapter(new KeysSavedAdapter(
+										NetworkListActivity.this,
+										R.layout.network_list_element_layout,
+										android.R.layout.simple_list_item_1,
+										getSavedKeys()));
+								// getListView().setOnItemLongClickListener(
+								// new OnItemLongClickListener() {
+								//
+								// @Override
+								// public boolean onItemLongClick(
+								// AdapterView<?> arg0, View arg1,
+								// int arg2, long arg3) {
+								// if (mActionMode != null) {
+								// return false;
+								// }
+								// // Start the CAB using the
+								// // ActionMode.Callback defined above
+								// mActionMode = NetworkListActivity.this
+								// .startActionMode(mActionModeCallback);
+								//
+								// return true;
+								//
+								// }
+								// });
+								mListView
+										.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+								mListView
+										.setMultiChoiceModeListener(new MultiChoiceModeListener() {
 
-											switch (item.getItemId()) {
-											case R.id.delete_context_menu:
-												SparseBooleanArray i = getListView()
-														.getCheckedItemPositions();
-												KeysSQliteHelper usdbh = new KeysSQliteHelper(
-														NetworkListActivity.this,
-														"DBKeys", null, 1);
-												SQLiteDatabase db = usdbh
-														.getWritableDatabase();
-												for (int j = 0; j < getListView()
-														.getCount(); j++) {
-													if (i.get(j) == true) {
+											@Override
+											public boolean onActionItemClicked(
+													ActionMode mode,
+													android.view.MenuItem item) {
 
-														String nombre_wlan, clave;
-														nombre_wlan = ((SavedKey) getListView()
-																.getAdapter()
-																.getItem(j))
-																.getWlan_name();
-														clave = ((SavedKey) getListView()
-																.getAdapter()
-																.getItem(j))
-																.getKey();
-														db.delete(
-																"keys",
-																"nombre like ? AND key like ?",
-																new String[] {
-																		nombre_wlan,
-																		clave });
+												switch (item.getItemId()) {
+												case R.id.delete_context_menu:
+													SparseBooleanArray i = mListView
+															.getCheckedItemPositions();
+													KeysSQliteHelper usdbh = new KeysSQliteHelper(
+															NetworkListActivity.this,
+															"DBKeys", null, 1);
+													SQLiteDatabase db = usdbh
+															.getWritableDatabase();
+													for (int j = 0; j < mListView
+															.getCount(); j++) {
+														if (i.get(j) == true) {
+
+															String nombre_wlan, clave;
+															nombre_wlan = ((SavedKey) mListView
+																	.getAdapter()
+																	.getItem(j))
+																	.getWlan_name();
+															clave = ((SavedKey) mListView
+																	.getAdapter()
+																	.getItem(j))
+																	.getKey();
+															db.delete(
+																	"keys",
+																	"nombre like ? AND key like ?",
+																	new String[] {
+																			nombre_wlan,
+																			clave });
+														}
+
 													}
 
+													mode.finish();
+													mListView
+															.setAdapter(new KeysSavedAdapter(
+																	NetworkListActivity.this,
+																	R.layout.network_list_element_layout,
+																	android.R.layout.simple_list_item_1,
+																	getSavedKeys()));
+													return true;
+												case R.id.copy_context_menu:
+													mode.finish();
+													return true;
+												default:
+													return false;
 												}
+											}
 
-												mode.finish();
-												getListView()
-														.setAdapter(
-																new KeysSavedAdapter(
-																		NetworkListActivity.this,
-																		R.layout.network_list_element_layout,
-																		android.R.layout.simple_list_item_1,
-																		getSavedKeys()));
+											@Override
+											public boolean onCreateActionMode(
+													ActionMode mode,
+													android.view.Menu menu) {
+												android.view.MenuInflater inflater = mode
+														.getMenuInflater();
+												inflater.inflate(
+														R.menu.saved_keys_elements_context_menu,
+														menu);
+
 												return true;
-											case R.id.copy_context_menu:
-												mode.finish();
-												return true;
-											default:
+											}
+
+											@Override
+											public void onDestroyActionMode(
+													ActionMode mode) {
+												// TODO Auto-generated method
+												// stub
+
+											}
+
+											@Override
+											public boolean onPrepareActionMode(
+													ActionMode mode,
+													android.view.Menu menu) {
+												// TODO Auto-generated method
+												// stub
 												return false;
 											}
-										}
 
-										@Override
-										public boolean onCreateActionMode(
-												ActionMode mode,
-												android.view.Menu menu) {
-											android.view.MenuInflater inflater = mode
-													.getMenuInflater();
-											inflater.inflate(
-													R.menu.saved_keys_elements_context_menu,
-													menu);
+											@Override
+											public void onItemCheckedStateChanged(
+													ActionMode mode,
+													int position, long id,
+													boolean checked) {
 
-											return true;
-										}
+											}
+										});
 
-										@Override
-										public void onDestroyActionMode(
-												ActionMode mode) {
-											// TODO Auto-generated method stub
-
-										}
-
-										@Override
-										public boolean onPrepareActionMode(
-												ActionMode mode,
-												android.view.Menu menu) {
-											// TODO Auto-generated method stub
-											return false;
-										}
-
-										@Override
-										public void onItemCheckedStateChanged(
-												ActionMode mode, int position,
-												long id, boolean checked) {
-
-										}
-									});
-
+							}
+							mPosition = itemPosition;
+							return false;
 						}
-						mPosition = itemPosition;
-						return false;
-					}
-				});
+					});
 
-		prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		// If preference does not exist
-		if (!prefs.contains("wifi_autostart")) {
-			SharedPreferences.Editor editor = prefs.edit();
-			editor.putBoolean("wifi_autostart", true);
-			editor.commit();
+			prefs = PreferenceManager.getDefaultSharedPreferences(this);
+			// If preference does not exist
+			if (!prefs.contains("wifi_autostart")) {
+				SharedPreferences.Editor editor = prefs.edit();
+				editor.putBoolean("wifi_autostart", true);
+				editor.commit();
+			}
+
+			if (!prefs.contains("autoscan_interval")) {
+				SharedPreferences.Editor editor = prefs.edit();
+				editor.putInt("autoscan_interval", 30);
+				editor.commit();
+			}
+
+			initScan();
+			// Ads Initialization
+			LinearLayout layout = (LinearLayout) findViewById(R.id.adLayout);
+			mAd = new AdView(this, AdSize.SMART_BANNER, Key.ADMOB_KEY);
+			layout.addView(mAd);
 		}
 
-		if (!prefs.contains("autoscan_interval")) {
-			SharedPreferences.Editor editor = prefs.edit();
-			editor.putInt("autoscan_interval", 30);
-			editor.commit();
-		}
-
-		initScan();
-
-		// Ads Initialization
-		LinearLayout layout = (LinearLayout) findViewById(R.id.adLayout);
-		mAd = new AdView(this, AdSize.SMART_BANNER, Key.ADMOB_KEY);
-		layout.addView(mAd);
 	}
 
 	// private ActionMode.Callback mActionModeCallback = new
@@ -469,7 +489,7 @@ public class NetworkListActivity extends SherlockListActivity {
 	protected void onStart() {
 		super.onStart();
 
-		mAd.loadAd(new AdRequest());
+		// mAd.loadAd(new AdRequest());
 	}
 
 	/**
@@ -511,15 +531,35 @@ public class NetworkListActivity extends SherlockListActivity {
 	}
 
 	/**
-	 * Handles the event of clicking on a list element. This method opens the
-	 * detail view associated to the clicked element.
+	 * Sets up the logic to execute when a scan is complete. This is done this
+	 * way because the SCAN_RESULTS_AVAILABLE_ACTION must be caught by a
+	 * BroadCastReceiver.
 	 */
-	@SuppressLint({ "NewApi", "NewApi", "NewApi", "NewApi" })
-	protected void onListItemClick(ListView l, View v, int position, long id) {
+	private void setupNetworkScanCallBack() {
+		IntentFilter i = new IntentFilter(
+				WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
+		mCallBackReceiver = new BroadcastReceiver() {
+
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				// Network scan complete, datasource needs to be updated and
+				// ListView refreshed
+				if (mPosition == 0)
+					mListView.setAdapter(new WifiNetworkAdapter(
+							NetworkListActivity.this,
+							R.layout.network_list_element_layout, mWifiManager
+									.getScanResults()));
+			}
+		};
+		registerReceiver(mCallBackReceiver, i);
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> arg0, View v, int position, long arg3) {
 		if (mPosition == 0) {
 			Intent i = new Intent(this, NetworkDetailsActivity.class);
 			i.putExtra(NetworkDetailsActivity.SCAN_RESULT_KEY,
-					(ScanResult) getListView().getItemAtPosition(position));
+					(ScanResult) mListView.getItemAtPosition(position));
 			startActivity(i);
 		} else {
 			String mDefaultPassValue = ((TextView) v
@@ -540,28 +580,6 @@ public class NetworkListActivity extends SherlockListActivity {
 					Toast.LENGTH_SHORT).show();
 
 		}
-	}
 
-	/**
-	 * Sets up the logic to execute when a scan is complete. This is done this
-	 * way because the SCAN_RESULTS_AVAILABLE_ACTION must be caught by a
-	 * BroadCastReceiver.
-	 */
-	private void setupNetworkScanCallBack() {
-		IntentFilter i = new IntentFilter(
-				WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
-		mCallBackReceiver = new BroadcastReceiver() {
-
-			@Override
-			public void onReceive(Context context, Intent intent) {
-				// Network scan complete, datasource needs to be updated and
-				// ListView refreshed
-				getListView().setAdapter(
-						new WifiNetworkAdapter(NetworkListActivity.this,
-								R.layout.network_list_element_layout,
-								mWifiManager.getScanResults()));
-			}
-		};
-		registerReceiver(mCallBackReceiver, i);
 	}
 }

@@ -34,6 +34,8 @@ import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
@@ -191,20 +193,47 @@ public class NetworkDetailsActivity extends SherlockActivity {
 									SQLiteDatabase db = usdbh
 											.getWritableDatabase();
 
-									// Si hemos abierto correctamente la base de
+									// Si hemos abierto correctamente la
+									// base de
 									// datos
 									if (db != null) {
+										Cursor c = db
+												.query("Keys",
+														new String[] {
+																"nombre", "key" },
+														"nombre like ?",
+														new String[] { mNetworkName
+																.getText()
+																.toString() },
+														null, null,
+														"nombre ASC");
+										if (c.getCount() > 0) {
 
-										// Insertamos los datos en la tabla
-										db.execSQL("INSERT INTO Keys (nombre, key) "
-												+ "VALUES ('"
-												+ mNetworkName.getText()
-												+ "', '"
-												+ mDefaultPassValue.getText()
-												+ "')");
+										} else {
 
-										// Cerramos la base de datos
-										db.close();
+											// Insertamos los datos en la tabla
+											try {
+												db.execSQL("INSERT INTO Keys (nombre, key) "
+														+ "VALUES ('"
+														+ mNetworkName
+																.getText()
+														+ "', '"
+														+ mDefaultPassValue
+																.getText()
+														+ "')");
+
+												// Cerramos la base de datos
+											} catch (SQLException e) {
+												Toast.makeText(
+														getApplicationContext(),
+														getResources()
+																.getString(
+																		R.string.error_saving_key),
+														Toast.LENGTH_LONG)
+														.show();
+											}
+											db.close();
+										}
 									}
 
 									// ClipboardManager clipboard =
