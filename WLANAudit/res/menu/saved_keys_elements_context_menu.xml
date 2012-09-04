@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/copy_context_menu"
+       android:icon="@drawable/ic_menu_copy_holo_dark"
+        android:title="@string/copy">
+    </item>
+    <!--  -->
+    <item
+        android:id="@+id/delete_context_menu"
+        android:icon="@drawable/ic_menu_delete"
+        android:title="@string/delete">
+    </item>
+
+</menu>
