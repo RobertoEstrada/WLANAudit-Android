@@ -521,13 +521,15 @@ public class NetworkListActivity extends SherlockFragmentActivity implements
 	 * Lifecycle management: Activity state is saved to be restored later
 	 */
 	protected void onSaveInstanceState(Bundle outState) {
-		outState.putBoolean("autoscan_state",
-				mAutoScanAction.isAutoScanEnabled());
+		if (mAutoScanAction != null)
+			outState.putBoolean("autoscan_state",
+					mAutoScanAction.isAutoScanEnabled());
 	}
 
 	protected void onDestroy() {
 		super.onDestroy();
-		mAutoScanAction.stopAutoScan();
+		if (mAutoScanAction != null)
+			mAutoScanAction.stopAutoScan();
 	}
 
 	/**
