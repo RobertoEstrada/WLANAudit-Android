@@ -499,7 +499,7 @@ public class NetworkListActivity extends SherlockFragmentActivity implements
 	protected void onResume() {
 		super.onResume();
 		// mWifiManager.startScan();
-		mAd.loadAd(new AdRequest());
+		// mAd.loadAd(new AdRequest());
 	}
 
 	/**
