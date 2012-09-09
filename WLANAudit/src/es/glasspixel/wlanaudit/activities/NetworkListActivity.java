@@ -532,6 +532,7 @@ public class NetworkListActivity extends SherlockFragmentActivity implements
 			mAutoScanAction.stopAutoScan();
 	}
 
+
 	/**
 	 * Sets up the logic to execute when a scan is complete. This is done this
 	 * way because the SCAN_RESULTS_AVAILABLE_ACTION must be caught by a
@@ -547,10 +548,12 @@ public class NetworkListActivity extends SherlockFragmentActivity implements
 				// Network scan complete, datasource needs to be updated and
 				// ListView refreshed
 				if (mPosition == 0)
+				{
 					mListView.setAdapter(new WifiNetworkAdapter(
 							NetworkListActivity.this,
 							R.layout.network_list_element_layout, mWifiManager
 									.getScanResults()));
+				}
 			}
 		};
 		registerReceiver(mCallBackReceiver, i);
@@ -582,6 +585,5 @@ public class NetworkListActivity extends SherlockFragmentActivity implements
 					Toast.LENGTH_SHORT).show();
 
 		}
-
 	}
 }

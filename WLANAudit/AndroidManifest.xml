@@ -7,8 +7,8 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <application android:icon="@drawable/icon"
-        android:label="@string/app_name" android:theme="@style/Theme.Sherlock">
-        <activity android:name=".activities.NetworkListActivity" android:theme="@style/Theme.Sherlock.ForceOverflow">
+        android:label="@string/app_name" android:theme="@style/Theme.wlanaudit">
+        <activity android:name=".activities.NetworkListActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
