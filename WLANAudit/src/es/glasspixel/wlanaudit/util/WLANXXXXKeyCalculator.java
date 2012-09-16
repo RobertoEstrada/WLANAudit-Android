@@ -104,7 +104,9 @@ public class WLANXXXXKeyCalculator implements IKeyCalculator {
 			return RouterKind.ZYX_KIND;
 		} else if (bssid.matches("(F4:3E:61:[0-9A-Fa-f:]{8})")) {
 			return RouterKind.ZYX_KIND;
-		}
+		} else if (bssid.matches("(40:4A:03:[0-9A-Fa-f:]{8})")) {
+            return RouterKind.ZYX_KIND;
+        }
 		return RouterKind.UNK_KIND;
 	}
 
