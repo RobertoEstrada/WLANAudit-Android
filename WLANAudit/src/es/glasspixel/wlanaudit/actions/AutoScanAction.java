@@ -36,7 +36,7 @@ public class AutoScanAction implements Action {
     /**
      * Time before first scan
      */
-    private static final int TIME_BEFORE_START = 500;
+    private static final int TIME_BEFORE_START = 1000;
 
     /**
      * Status of the autoscan feature
@@ -84,13 +84,7 @@ public class AutoScanAction implements Action {
         mIsAutoScanEnabled = true;
         mAutoScanTimer = new Timer();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
-        // If preference does not exist
-        if(!prefs.contains("autoscan_interval")){
-        	SharedPreferences.Editor editor = prefs.edit();
-        	editor.putInt("autoscan_interval", 5);
-        	editor.commit();
-        }
-        mAutoScanTimer.scheduleAtFixedRate(new AutoScanTask(), TIME_BEFORE_START, prefs.getInt("autoscan_interval", 5)*1000);        
+        mAutoScanTimer.scheduleAtFixedRate(new AutoScanTask(), TIME_BEFORE_START, prefs.getInt("autoscan_interval", 30)*1000);        
     }
 
     /**
