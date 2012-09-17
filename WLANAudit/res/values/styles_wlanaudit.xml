@@ -19,22 +19,24 @@
 
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="Theme.wlanaudit" parent="@style/Theme.Sherlock">
-        <item name="actionBarItemBackground">@drawable/selectable_background_wlanaudit</item>
-        <item name="popupMenuStyle">@style/wlanaudit_PopupMenu</item>
-        <item name="dropDownListViewStyle">@style/wlanaudit_DropDownListView</item>
-        <item name="actionBarTabStyle">@style/wlanaudit_ActionBarTabStyle</item>
-        <item name="actionDropDownStyle">@style/wlanaudit_DropDownNav</item>
-        <item name="actionBarStyle">@style/wlanaudit_solid_ActionBar</item>
-        <item name="android:actionBarItemBackground">@drawable/selectable_background_wlanaudit</item>
-        <item name="android:popupMenuStyle">@style/wlanaudit_PopupMenu</item>
-        <item name="android:dropDownListViewStyle">@style/wlanaudit_DropDownListView</item>
-        <item name="android:actionBarTabStyle">@style/wlanaudit_ActionBarTabStyle</item>
-        <item name="android:actionDropDownStyle">@style/wlanaudit_DropDownNav</item>
-        <item name="android:actionBarStyle">@style/wlanaudit_solid_ActionBar</item>
-        <item name="android:panelBackground">@drawable/menu_hardkey_panel_wlanaudit</item>
-        <item name="android:actionOverflowButtonStyle">@style/Widget.Styled.ActionBar.MoreButton</item>
-        <item name="actionOverflowButtonStyle">@style/Widget.Styled.ActionBar.MoreButton</item>
+    <style name="Theme.wlanaudit" parent="@style/Theme.Sherlock.Light.DarkActionBar">
+
+        <!-- <item name="actionBarItemBackground">@drawable/selectable_background_wlanaudit</item> -->
+        <!-- <item name="popupMenuStyle">@style/wlanaudit_PopupMenu</item> -->
+        <!-- <item name="dropDownListViewStyle">@style/wlanaudit_DropDownListView</item> -->
+        <!-- <item name="actionBarTabStyle">@style/wlanaudit_ActionBarTabStyle</item> -->
+        <!-- <item name="actionDropDownStyle">@style/wlanaudit_DropDownNav</item> -->
+        <!-- <item name="actionBarStyle">@style/wlanaudit_solid_ActionBar</item> -->
+        <!-- <item name="android:actionBarItemBackground">@drawable/selectable_background_wlanaudit</item> -->
+        <!-- <item name="android:popupMenuStyle">@style/wlanaudit_PopupMenu</item> -->
+        <!-- <item name="android:dropDownListViewStyle">@style/wlanaudit_DropDownListView</item> -->
+        <!-- <item name="android:actionBarTabStyle">@style/wlanaudit_ActionBarTabStyle</item> -->
+        <!-- <item name="android:actionDropDownStyle">@style/wlanaudit_DropDownNav</item> -->
+        <!-- <item name="android:actionBarStyle">@style/wlanaudit_solid_ActionBar</item> -->
+        <!-- <item name="android:panelBackground">@drawable/menu_hardkey_panel_wlanaudit</item> -->
+        <!-- <item name="android:actionOverflowButtonStyle">@style/Widget.Styled.ActionBar.MoreButton</item> -->
+        <!-- <item name="actionOverflowButtonStyle">@style/Widget.Styled.ActionBar.MoreButton</item> -->
+
     </style>
 
     <style name="Widget.Styled.ActionBar.MoreButton" parent="Widget.Sherlock.Light.ActionButton.Overflow">

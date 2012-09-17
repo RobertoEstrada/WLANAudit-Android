@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dkgray"
+    android:background="@color/lightgray"
     android:baselineAligned="false"
     android:orientation="horizontal" >
 
@@ -11,8 +11,8 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="4dip"
         android:layout_weight="1"
-        android:background="@color/black"
         android:orientation="vertical" >
 
         <TextView
@@ -20,15 +20,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/header_bg_cal_widget_holo"
+            android:gravity="center"
+            android:padding="6dip"
             android:text="@string/action1"
-            android:textColor="@color/black" />
+            android:textColor="@color/white" />
 
         <fragment
             android:id="@+id/scan_fragment"
             android:name="es.glasspixel.wlanaudit.fragments.ScanFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="9dp"
+            android:layout_marginBottom="9dp"
+            android:layout_marginLeft="9dp"
+            android:layout_marginRight="9dp"
             android:background="@color/white"
             tools:layout="@layout/saved_keys_fragment" />
     </LinearLayout>
@@ -37,8 +41,8 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="4dip"
         android:layout_weight="2"
-        android:background="@color/black"
         android:orientation="vertical" >
 
         <TextView
@@ -46,15 +50,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/header_bg_cal_widget_holo"
+            android:gravity="center"
+            android:padding="6dp"
             android:text="@string/action2"
-            android:textColor="@color/black" />
+            android:textColor="@color/white" />
 
         <fragment
             android:id="@+id/saved_keys_fragment"
             android:name="es.glasspixel.wlanaudit.fragments.SavedKeysFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="9dp"
+            android:layout_marginBottom="9dp"
+            android:layout_marginLeft="9dp"
+            android:layout_marginRight="9dp"
             tools:layout="@layout/saved_keys_fragment" />
     </LinearLayout>
 
