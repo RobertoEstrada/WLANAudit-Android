@@ -34,7 +34,7 @@ public class KeyCalculatorFactory {
      * Map which associates the patterns which are vulnerable with the appropriate
      * calculator
      */
-    protected Map<VulnerablePattern, Class<? extends IKeyCalculator>> mCalculatorDict;
+    private final Map<VulnerablePattern, Class<? extends IKeyCalculator>> mCalculatorDict;
 
     private KeyCalculatorFactory() {
         mCalculatorDict = new HashMap<VulnerablePattern, Class<? extends IKeyCalculator>>();

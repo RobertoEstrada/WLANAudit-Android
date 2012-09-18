@@ -45,7 +45,7 @@ public class AutoScanAction implements Action {
     /**
      * Context for the action
      */
-    private Context mContext;
+    private final Context mContext;
     /**
      * Clock to manage the interval between scan requests
      */
@@ -63,13 +63,13 @@ public class AutoScanAction implements Action {
     /**
      * Constructor meant for restoring the state of this action when the app
      * state is recovered.
-     * 
-     * @param activity Activity context
+     *
+     * @param context Activity context
      * @param autoScanInitialState The state of the autoscan
      */
     public AutoScanAction(Context context, boolean autoScanInitialState) {
         this(context);
-        mIsAutoScanEnabled = autoScanInitialState;
+        mIsAutoScanEnabled = true;
         scheduleScan();
     }
 
@@ -80,7 +80,7 @@ public class AutoScanAction implements Action {
     /**
      * Initiates autoscan
      */
-    public void scheduleScan() {
+    void scheduleScan() {
         mIsAutoScanEnabled = true;
         mAutoScanTimer = new Timer();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);

@@ -56,7 +56,7 @@ public class WLANXXXXKeyCalculator implements IKeyCalculator {
 
 		RouterKind kind = getRouterKind(network.BSSID.toUpperCase());
 		String stringToHash = null;
-		String trimmedBSSID = null;
+		String trimmedBSSID;
 
 		// Key calculation based on router kind
 		switch (kind) {
@@ -117,8 +117,8 @@ public class WLANXXXXKeyCalculator implements IKeyCalculator {
 			hasher = MessageDigest.getInstance("MD5");
 			return (getHex(hasher.digest(stringToHash.getBytes("UTF-8")))
 					.substring(0, 20).toLowerCase());
-		} catch (NoSuchAlgorithmException e) {
-		} catch (UnsupportedEncodingException e) {
+		} catch (NoSuchAlgorithmException ignored) {
+		} catch (UnsupportedEncodingException ignored) {
 		}
 		return null;
 	}
@@ -131,7 +131,7 @@ public class WLANXXXXKeyCalculator implements IKeyCalculator {
 	 *            The array of bytes to encode
 	 * @return The encoded hex string
 	 */
-	public static String getHex(byte[] raw) {
+	private static String getHex(byte[] raw) {
 		if (raw == null) {
 			return null;
 		}

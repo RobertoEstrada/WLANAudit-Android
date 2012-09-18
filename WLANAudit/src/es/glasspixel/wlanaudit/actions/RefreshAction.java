@@ -42,7 +42,7 @@ public class RefreshAction implements Action {
     /**
      * A context for this action
      */
-    private Context mContext;
+    private final Context mContext;
 
     public RefreshAction(Context context) {
         mContext = context;

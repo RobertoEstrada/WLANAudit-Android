@@ -73,7 +73,7 @@ public class KeyListActivity extends SherlockListActivity {
 		if (savedInstanceState != null
 				&& savedInstanceState.get(KEY_LIST_KEY) != null) {
 			// Load the state
-			mKeyList = (List<String>) savedInstanceState
+			mKeyList = savedInstanceState
 					.getStringArrayList(KEY_LIST_KEY);
 		} else {
 			// Read the network from the intent extra passed to this activity

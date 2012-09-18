@@ -25,16 +25,16 @@ import android.net.wifi.ScanResult;
  * 
  * @author Roberto Estrada
  */
-public class VulnerablePattern {
+class VulnerablePattern {
     /**
      * Compiled SSID Pattern
      */
-    private Pattern mSsidPattern;
+    private final Pattern mSsidPattern;
 
     /**
      * Compiled BSSID Pattern
      */
-    private Pattern mBssidPattern;
+    private final Pattern mBssidPattern;
 
     public VulnerablePattern(String ssidPattern, String bssidPattern) {
         mSsidPattern = Pattern.compile(ssidPattern,Pattern.CASE_INSENSITIVE);
@@ -44,9 +44,6 @@ public class VulnerablePattern {
     public boolean isVulnerable(ScanResult network) {
         Matcher ssidMatcher = mSsidPattern.matcher(network.SSID);
         Matcher bssidMatcher = mBssidPattern.matcher(network.BSSID);
-        if (ssidMatcher.matches() && bssidMatcher.matches())
-            return true;
-        else
-            return false;
+        return ssidMatcher.matches() && bssidMatcher.matches();
     }
 }
