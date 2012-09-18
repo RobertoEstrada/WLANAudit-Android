@@ -3,6 +3,8 @@ package es.glasspixel.wlanaudit.fragments;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.actionbarsherlock.app.SherlockFragment;
+
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -12,6 +14,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.wifi.ScanResult;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -24,8 +27,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AbsListView.MultiChoiceModeListener;
 
-import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.app.SherlockListFragment;
+//import com.actionbarsherlock.app.SherlockFragment;
+//import com.actionbarsherlock.app.SherlockListFragment;
 
 import es.glasspixel.wlanaudit.R;
 import es.glasspixel.wlanaudit.activities.NetworkDetailsActivity;
@@ -38,17 +41,16 @@ public class SavedKeysFragment extends SherlockFragment {
 
 	View myFragmentView;
 
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	@SuppressLint("NewApi")
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		Intent launchingIntent = getActivity().getIntent();
+		Intent launchingIntent = getSherlockActivity().getIntent();
 		// String content = launchingIntent.getData().toString();
 		myFragmentView = inflater.inflate(R.layout.saved_keys_fragment,
 				container, false);
 		((ListView) myFragmentView.findViewById(R.id.listView1))
-				.setAdapter(new KeysSavedAdapter(getActivity(),
+				.setAdapter(new KeysSavedAdapter(getSherlockActivity(),
 						R.layout.network_list_element_layout,
 						android.R.layout.simple_list_item_1, getSavedKeys()));
 		((ListView) myFragmentView.findViewById(R.id.listView1))

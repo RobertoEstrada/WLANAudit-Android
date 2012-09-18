@@ -3,6 +3,9 @@ package es.glasspixel.wlanaudit.fragments;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockFragment;
+
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
@@ -22,10 +25,12 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -92,6 +97,8 @@ public class ScanFragment extends SherlockFragment implements
 
 	private TextView mDefaultPassValue;
 
+	// ActionBar mActionbar;
+
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	@SuppressLint("NewApi")
 	@Override
@@ -101,6 +108,7 @@ public class ScanFragment extends SherlockFragment implements
 
 		myFragmentView = inflater.inflate(R.layout.saved_keys_fragment,
 				container, false);
+		setHasOptionsMenu(true);
 
 		prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		// If preference does not exist
@@ -137,7 +145,7 @@ public class ScanFragment extends SherlockFragment implements
 		}
 
 		setupNetworkScanCallBack();
-		StartPassButtonListener();
+		// StartPassButtonListener();
 		mWifiManager.startScan();
 	}
 
@@ -203,7 +211,7 @@ public class ScanFragment extends SherlockFragment implements
 
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-		Context mContext = getSherlockActivity().getApplicationContext();
+		Context mContext = getActivity().getApplicationContext();
 		Dialog dialog = new Dialog(mContext);
 
 		dialog.setContentView(R.layout.network_details_dialog);
@@ -268,7 +276,7 @@ public class ScanFragment extends SherlockFragment implements
 					@Override
 					public void onClick(View arg0) {
 						AlertDialog.Builder dialogBuilder = new Builder(
-								getSherlockActivity());
+								getActivity());
 						dialogBuilder
 								.setIcon(android.R.drawable.ic_dialog_alert);
 						dialogBuilder.setTitle(getResources().getText(
@@ -286,14 +294,14 @@ public class ScanFragment extends SherlockFragment implements
 											// Clipboard copy
 											int sdk = android.os.Build.VERSION.SDK_INT;
 											if (sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
-												android.text.ClipboardManager clipboard = (android.text.ClipboardManager) getSherlockActivity()
+												android.text.ClipboardManager clipboard = (android.text.ClipboardManager) getActivity()
 														.getSystemService(
 																Context.CLIPBOARD_SERVICE);
 												clipboard
 														.setText(mDefaultPassValue
 																.getText());
 											} else {
-												android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getSherlockActivity()
+												android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getActivity()
 														.getSystemService(
 																Context.CLIPBOARD_SERVICE);
 												android.content.ClipData clip = android.content.ClipData
@@ -305,8 +313,8 @@ public class ScanFragment extends SherlockFragment implements
 											}
 
 											KeysSQliteHelper usdbh = new KeysSQliteHelper(
-													getSherlockActivity(),
-													"DBKeys", null, 1);
+													getActivity(), "DBKeys",
+													null, 1);
 
 											SQLiteDatabase db = usdbh
 													.getWritableDatabase();
@@ -348,7 +356,7 @@ public class ScanFragment extends SherlockFragment implements
 														// datos
 													} catch (SQLException e) {
 														Toast.makeText(
-																getSherlockActivity()
+																getActivity()
 																		.getApplicationContext(),
 																getResources()
 																		.getString(
@@ -370,7 +378,7 @@ public class ScanFragment extends SherlockFragment implements
 											// Copy notification
 											Toast notificationToast = Toast
 													.makeText(
-															getSherlockActivity(),
+															getActivity(),
 															getResources()
 																	.getString(
 																			R.string.key_copy_success),
@@ -380,7 +388,7 @@ public class ScanFragment extends SherlockFragment implements
 											notificationToast.show();
 										} else if (mKeyList.size() > 1) {
 											Intent i = new Intent(
-													getSherlockActivity(),
+													getActivity(),
 													KeyListActivity.class);
 											i.putStringArrayListExtra(
 													KeyListActivity.KEY_LIST_KEY,
@@ -393,5 +401,45 @@ public class ScanFragment extends SherlockFragment implements
 
 					}
 				});
+	}
+
+	/**
+	 * Lifecycle management: Activity is about to be shown
+	 */
+	public void onStart() {
+		super.onStart();
+
+		// mAd.loadAd(new AdRequest());
+	}
+
+	/**
+	 * Lifecycle management: Activity is being resumed, we need to refresh its
+	 * contents
+	 */
+	public void onResume() {
+		super.onResume();
+		mWifiManager.startScan();
+		// mAd.loadAd(new AdRequest());
+	}
+
+	/**
+	 * Lifecycle management: Activity is being stopped, we need to unregister
+	 * the broadcast receiver
+	 */
+	public void onStop() {
+		super.onStop();
+		// Unsubscribing from receiving updates about changes of the WiFi
+		// networks
+		try {
+			getSherlockActivity().unregisterReceiver(mCallBackReceiver);
+		} catch (IllegalArgumentException e) {
+			// Do nothing
+		}
+	}
+
+	public void onDestroy() {
+		super.onDestroy();
+		if (mAutoScanAction != null)
+			mAutoScanAction.stopAutoScan();
 	}
 }
