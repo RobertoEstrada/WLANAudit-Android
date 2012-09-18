@@ -70,6 +70,16 @@ public class KeyCalculatorFactory {
     }
     
     /**
+     * Registers a new vulnerable pattern in the system
+     * @param ssidPattern The vulnerable SSID
+     * @param bssidPattern The vulnerable BSSID
+     * @param calculator The calculator that can handle  the key calculation for the pattern
+     */
+    private void addPattern(String ssidPattern, String bssidPattern, Class<? extends IKeyCalculator> calculator) {
+        mCalculatorDict.put(new VulnerablePattern(ssidPattern, bssidPattern), calculator);
+    }
+    
+    /**
      * Add in this method the pattern-calculator combinations to instance the appropriate calculator
      */
     private void addPatterns() {
@@ -82,16 +92,43 @@ public class KeyCalculatorFactory {
         addPattern("(?:WLAN|JAZZTEL)_([0-9a-fA-F]{4})", "(00:1F:A4:[0-9A-Fa-f:]{8})", WLANXXXXKeyCalculator.class);
         addPattern("(?:WLAN|JAZZTEL)_([0-9a-fA-F]{4})", "(F4:3E:61:[0-9A-Fa-f:]{8})", WLANXXXXKeyCalculator.class);
         addPattern("(?:WLAN|JAZZTEL)_([0-9a-fA-F]{4})", "(40:4A:03:[0-9A-Fa-f:]{8})", WLANXXXXKeyCalculator.class);
+        
         //WiFi6X Patterns
         addPattern("(?:WLAN|YACOM|WiFi)([0-9a-fA-F]{6})","([0-9A-Fa-f:]{17})", WiFiXXXXXXKeyCalculator.class);
-    }
-    /**
-     * Registers a new vulnerable pattern in the system
-     * @param ssidPattern The vulnerable SSID
-     * @param bssidPattern The vulnerable BSSID
-     * @param calculator The calculator that can handle  the key calculation for the pattern
-     */
-    private void addPattern(String ssidPattern, String bssidPattern, Class<? extends IKeyCalculator> calculator) {
-        mCalculatorDict.put(new VulnerablePattern(ssidPattern, bssidPattern), calculator);
+        
+        //HWei Patterns
+        addPattern("(.*)", "(F4:C7:14:[0-9A-Fa-f:]{8})", HWeiKeyCalculator.class);
+        addPattern("(.*)", "(64:16:F0:[0-9A-Fa-f:]{8})", HWeiKeyCalculator.class);
+        addPattern("(.*)", "(5C:4C:A9:[0-9A-Fa-f:]{8})", HWeiKeyCalculator.class);
+        addPattern("(.*)", "(54:A5:1B:[0-9A-Fa-f:]{8})", HWeiKeyCalculator.class);
+        addPattern("(.*)", "(54:89:98:[0-9A-Fa-f:]{8})", HWeiKeyCalculator.class);
+        addPattern("(.*)", "(4C:54:99:[0-9A-Fa-f:]{8})", HWeiKeyCalculator.class);
+        addPattern("(.*)", "(4C:1F:CC:[0-9A-Fa-f:]{8})", HWeiKeyCalculator.class);
+        addPattern("(.*)", "(40:4D:8E:[0-9A-Fa-f:]{8})", HWeiKeyCalculator.class);
+        addPattern("(.*)", "(30:87:30:[0-9A-Fa-f:]{8})", HWeiKeyCalculator.class);
+        addPattern("(.*)", "(28:6E:D4:[0-9A-Fa-f:]{8})", HWeiKeyCalculator.class);
+        addPattern("(.*)", "(28:5F:DB:[0-9A-Fa-f:]{8})", HWeiKeyCalculator.class);
+        addPattern("(.*)", "(24:DB:AC:[0-9A-Fa-f:]{8})", HWeiKeyCalculator.class);
+        addPattern("(.*)", "(20:F3:A3:[0-9A-Fa-f:]{8})", HWeiKeyCalculator.class);
+        addPattern("(.*)", "(20:2B:C1:[0-9A-Fa-f:]{8})", HWeiKeyCalculator.class);
+        addPattern("(.*)", "(1C:1D:67:[0-9A-Fa-f:]{8})", HWeiKeyCalculator.class);
+        addPattern("(.*)", "(10:C6:1F:[0-9A-Fa-f:]{8})", HWeiKeyCalculator.class);
+        addPattern("(.*)", "(0C:37:DC:[0-9A-Fa-f:]{8})", HWeiKeyCalculator.class);
+        addPattern("(.*)", "(08:19:A6:[0-9A-Fa-f:]{8})", HWeiKeyCalculator.class);
+        addPattern("(.*)", "(04:C0:6F:[0-9A-Fa-f:]{8})", HWeiKeyCalculator.class);
+        addPattern("(.*)", "(00:25:9E:[0-9A-Fa-f:]{8})", HWeiKeyCalculator.class);
+        addPattern("(.*)", "(00:25:68:[0-9A-Fa-f:]{8})", HWeiKeyCalculator.class);
+        addPattern("(.*)", "(00:22:A1:[0-9A-Fa-f:]{8})", HWeiKeyCalculator.class);
+        addPattern("(.*)", "(00:1E:10:[0-9A-Fa-f:]{8})", HWeiKeyCalculator.class);
+        addPattern("(.*)", "(00:19:15:[0-9A-Fa-f:]{8})", HWeiKeyCalculator.class);
+        addPattern("(.*)", "(00:18:82:[0-9A-Fa-f:]{8})", HWeiKeyCalculator.class);
+        addPattern("(.*)", "(00:11:F5:[0-9A-Fa-f:]{8})", HWeiKeyCalculator.class);
+        addPattern("(.*)", "(00:0F:E2:[0-9A-Fa-f:]{8})", HWeiKeyCalculator.class);
+        
+        // Discus Patterns
+        addPattern("Discus--([0-9a-fA-F]{6})", "([0-9A-Fa-f:]{17})", DiscusCalculator.class);
+        
+        // DLink Patterns
+        addPattern("DLink-([0-9a-fA-F]{6})", "([0-9A-Fa-f:]{17})", DlinkKeyCalculator.class);
     }
 }
