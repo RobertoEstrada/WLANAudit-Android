@@ -16,16 +16,8 @@
 
 package es.glasspixel.wlanaudit.activities;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.MenuItem;
-
-import es.glasspixel.wlanaudit.R;
-import es.glasspixel.wlanaudit.adapters.WifiNetworkAdapter;
-import es.glasspixel.wlanaudit.util.ChannelCalculator;
-import es.glasspixel.wlanaudit.util.IKeyCalculator;
-import es.glasspixel.wlanaudit.util.WLANXXXXKeyCalculator;
-import es.glasspixel.wlanaudit.util.WiFiXXXXXXKeyCalculator;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -43,8 +35,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.MenuItem;
+
+import es.glasspixel.wlanaudit.R;
+import es.glasspixel.wlanaudit.adapters.WifiNetworkAdapter;
+import es.glasspixel.wlanaudit.util.ChannelCalculator;
+import es.glasspixel.wlanaudit.util.IKeyCalculator;
+import es.glasspixel.wlanaudit.util.KeyCalculatorFactory;
 
 /**
  * Activity to show the details of a given network previously scanned.
@@ -213,6 +212,7 @@ public class NetworkDetailsActivity extends SherlockActivity {
 			mNetworkIcon.setImageState(WifiNetworkAdapter.ENCRYPTED_STATE_SET,
 					false);
 		}
+		
 		// Setting network's values
 		mNetworkName.setText(mScannedNetwork.SSID);
 		mBssidValue.setText(mScannedNetwork.BSSID);
@@ -221,26 +221,26 @@ public class NetworkDetailsActivity extends SherlockActivity {
         mChannelValue.setText(String.valueOf(ChannelCalculator
                 .getChannelNumber(mScannedNetwork.frequency)));
 		mIntensityValue.setText(mScannedNetwork.level + " dBm");
+		
 		// Calculating key
-		if (mScannedNetwork.SSID.matches("(?:WLAN|JAZZTEL)_([0-9a-fA-F]{4})")) {
-			IKeyCalculator keyCalculator = new WLANXXXXKeyCalculator();
-			mKeyList = keyCalculator.getKey(mScannedNetwork);
-			if (mKeyList != null) {
-				mDefaultPassValue.setText(mKeyList.get(0));
-			} else {
-				mDefaultPassValue.setText(getString(R.string.no_default_key));
-				mCopyButton.setEnabled(false);
-			}
-		} else if (mScannedNetwork.SSID
-				.matches("(?:WLAN|YACOM|WiFi)([0-9a-fA-F]{6})")) {
-			IKeyCalculator keyCalculator = new WiFiXXXXXXKeyCalculator();
-			mKeyList = keyCalculator.getKey(mScannedNetwork);
-			mDefaultPassValue.setText(String.valueOf(mKeyList.size()) + " "
-					+ getText(R.string.number_of_keys_found));
-		} else {
-			mDefaultPassValue.setText(getString(R.string.no_default_key));
-			mCopyButton.setEnabled(false);
-		}
+		IKeyCalculator keyCalculator = KeyCalculatorFactory.getKeyCalculator(mScannedNetwork);
+        if (keyCalculator != null) {
+            mKeyList = keyCalculator.getKey(mScannedNetwork);
+            if (mKeyList != null) {
+                if (mKeyList.size() > 1) {
+                    mDefaultPassValue.setText(String.valueOf(mKeyList.size()) + " "
+                            + getText(R.string.number_of_keys_found));
+                } else if (mKeyList.size() == 1) {
+                    mDefaultPassValue.setText(mKeyList.get(0));
+                }
+            } else {
+                mDefaultPassValue.setText(getString(R.string.no_default_key));
+                mCopyButton.setEnabled(false);
+            }
+        } else {
+            mDefaultPassValue.setText(getString(R.string.no_default_key));
+            mCopyButton.setEnabled(false);
+        }
 	}
 
 	/**
