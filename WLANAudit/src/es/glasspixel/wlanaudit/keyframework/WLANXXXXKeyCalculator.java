@@ -45,6 +45,8 @@ public class WLANXXXXKeyCalculator implements IKeyCalculator {
 	@Override
 	public List<String> getKey(NetData network) {
 		String formattedESSID = null;
+		List<String> keyList = null;
+		
 		if (network.SSID.contains("JAZZTEL_")) {
 			if(network.BSSID.matches("(38:72:C0:[0-9A-Fa-f:]{8})"))
 				return null;
@@ -63,19 +65,20 @@ public class WLANXXXXKeyCalculator implements IKeyCalculator {
 			trimmedBSSID = network.BSSID.replaceAll(":", "").toUpperCase();
 			stringToHash = "bcgbghgg" + trimmedBSSID.substring(0, 8)
 					+ formattedESSID + trimmedBSSID;
+			keyList = new ArrayList<String>();
+			keyList.add(hashString(stringToHash));
 			break;
 		case ZYX_KIND:
 			formattedESSID.toLowerCase();
 			trimmedBSSID = network.BSSID.replaceAll(":", "").toLowerCase();
 			stringToHash = (trimmedBSSID.substring(0, 8) + formattedESSID)
 					.toLowerCase();
+			keyList = new ArrayList<String>();
+            keyList.add(hashString(stringToHash).toUpperCase());
 			break;
 		case UNK_KIND:
 			return null;
 		}
-
-		List<String> keyList = new ArrayList<String>();
-		keyList.add(hashString(stringToHash));
 
 		return keyList;
 	}
@@ -114,6 +117,7 @@ public class WLANXXXXKeyCalculator implements IKeyCalculator {
 		MessageDigest hasher;
 		try {
 			hasher = MessageDigest.getInstance("MD5");
+			hasher.reset();
 			return (getHex(hasher.digest(stringToHash.getBytes("UTF-8")))
 					.substring(0, 20).toLowerCase());
 		} catch (NoSuchAlgorithmException ignored) {

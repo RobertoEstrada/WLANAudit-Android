@@ -126,7 +126,7 @@ public class KeyCalculatorFactory {
         addPattern("(.*)", "(00:0F:E2:[0-9A-Fa-f:]{8})", HWeiKeyCalculator.class);
         
         // Discus Patterns
-        addPattern("Discus--([0-9a-fA-F]{6})", "([0-9A-Fa-f:]{17})", DiscusCalculator.class);
+        addPattern("Discus--([0-9a-fA-F]{6})", "([0-9A-Fa-f:]{17})", DiscusKeyCalculator.class);
         
         // DLink Patterns
         addPattern("DLink-([0-9a-fA-F]{6})", "([0-9A-Fa-f:]{17})", DlinkKeyCalculator.class);
