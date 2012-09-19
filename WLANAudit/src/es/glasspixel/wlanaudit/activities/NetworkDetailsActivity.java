@@ -224,7 +224,8 @@ public class NetworkDetailsActivity extends SherlockActivity {
 		mIntensityValue.setText(mScannedNetwork.level + " dBm");
 		
 		// Calculating key
-		IKeyCalculator keyCalculator = KeyCalculatorFactory.getKeyCalculator(mScannedNetwork);
+        IKeyCalculator keyCalculator = KeyCalculatorFactory.getKeyCalculator(new NetData(
+                mScannedNetwork.SSID, mScannedNetwork.BSSID));
         if (keyCalculator != null) {
             mKeyList = keyCalculator.getKey(new NetData(mScannedNetwork.SSID, mScannedNetwork.BSSID));
             if (mKeyList != null) {

@@ -18,7 +18,6 @@ package es.glasspixel.wlanaudit.keyframework;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import android.net.wifi.ScanResult;
 
 /**
  * Data structure to represent a vulnerable combination of ssid and bssid
@@ -41,7 +40,7 @@ class VulnerablePattern {
         mBssidPattern = Pattern.compile(bssidPattern,Pattern.CASE_INSENSITIVE);
     }
 
-    public boolean isVulnerable(ScanResult network) {
+    public boolean isVulnerable(NetData network) {
         Matcher ssidMatcher = mSsidPattern.matcher(network.SSID);
         Matcher bssidMatcher = mBssidPattern.matcher(network.BSSID);
         return ssidMatcher.matches() && bssidMatcher.matches();

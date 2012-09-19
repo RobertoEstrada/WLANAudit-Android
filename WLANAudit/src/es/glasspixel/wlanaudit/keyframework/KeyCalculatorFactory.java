@@ -19,7 +19,6 @@ package es.glasspixel.wlanaudit.keyframework;
 import java.util.HashMap;
 import java.util.Map;
 
-import android.net.wifi.ScanResult;
 import android.util.Log;
 
 public class KeyCalculatorFactory {
@@ -47,7 +46,7 @@ public class KeyCalculatorFactory {
      * @param network The network to find an appropiate key calculator
      * @return A key calculator or null if an appropriate one is not found
      */
-    public static IKeyCalculator getKeyCalculator(ScanResult network) {
+    public static IKeyCalculator getKeyCalculator(NetData network) {
         if (instance == null) {
             instance = new KeyCalculatorFactory();
         }
