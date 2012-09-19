@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package es.glasspixel.wlanaudit.util;
+package es.glasspixel.wlanaudit.keyframework;
 
 import java.util.HashMap;
 import java.util.Map;

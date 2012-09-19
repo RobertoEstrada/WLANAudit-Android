@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package es.glasspixel.wlanaudit.util;
+package es.glasspixel.wlanaudit.keyframework;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import android.net.wifi.ScanResult;
 
 /**
  * Default key generator for DLink routers. Documentation about the algorithm
@@ -33,7 +32,7 @@ public class DlinkKeyCalculator implements IKeyCalculator {
     };
 
     @Override
-    public List<String> getKey(ScanResult network) {
+    public List<String> getKey(NetData network) {
         char key[] = new char[20];
         char newkey[] = new char[20];
         int index;

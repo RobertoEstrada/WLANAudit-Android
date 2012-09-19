@@ -41,9 +41,10 @@ import com.actionbarsherlock.view.MenuItem;
 
 import es.glasspixel.wlanaudit.R;
 import es.glasspixel.wlanaudit.adapters.WifiNetworkAdapter;
+import es.glasspixel.wlanaudit.keyframework.IKeyCalculator;
+import es.glasspixel.wlanaudit.keyframework.KeyCalculatorFactory;
+import es.glasspixel.wlanaudit.keyframework.NetData;
 import es.glasspixel.wlanaudit.util.ChannelCalculator;
-import es.glasspixel.wlanaudit.util.IKeyCalculator;
-import es.glasspixel.wlanaudit.util.KeyCalculatorFactory;
 
 /**
  * Activity to show the details of a given network previously scanned.
@@ -225,7 +226,7 @@ public class NetworkDetailsActivity extends SherlockActivity {
 		// Calculating key
 		IKeyCalculator keyCalculator = KeyCalculatorFactory.getKeyCalculator(mScannedNetwork);
         if (keyCalculator != null) {
-            mKeyList = keyCalculator.getKey(mScannedNetwork);
+            mKeyList = keyCalculator.getKey(new NetData(mScannedNetwork.SSID, mScannedNetwork.BSSID));
             if (mKeyList != null) {
                 if (mKeyList.size() > 1) {
                     mDefaultPassValue.setText(String.valueOf(mKeyList.size()) + " "

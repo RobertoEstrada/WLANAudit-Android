@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package es.glasspixel.wlanaudit.util;
+package es.glasspixel.wlanaudit.keyframework;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import android.net.wifi.ScanResult;
 
 /**
  * Default key calculator for Huawei AP's Based on the algorithm documented at
@@ -49,7 +48,7 @@ public class HWeiKeyCalculator implements IKeyCalculator {
     final int [] key= {30,31,32,33,34,35,36,37,38,39,61,62,63,64,65,66};
     
     @Override
-    public List<String> getKey(ScanResult network) {        
+    public List<String> getKey(NetData network) {        
         String trimmedBSSID = network.BSSID.replaceAll(":", "").toLowerCase();
         List<String> result;
 

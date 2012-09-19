@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package es.glasspixel.wlanaudit.util;
+package es.glasspixel.wlanaudit.keyframework;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import android.net.wifi.ScanResult;
 
 /**
  * Default key generator for the Pirelli Discus DRG A225 Documentation on the
@@ -32,7 +31,7 @@ import android.net.wifi.ScanResult;
 public class DiscusCalculator implements IKeyCalculator {
 
     @Override
-    public List<String> getKey(ScanResult network) {
+    public List<String> getKey(NetData network) {
         List<String> result = new ArrayList<String>();
         String key = "YW0"
                 + Integer.toString((Integer.parseInt(
