@@ -18,8 +18,7 @@
             android:layout_marginBottom="10dip"
             android:layout_marginLeft="10dip"
             android:layout_marginTop="10dip"
-            android:src="@drawable/wifi_signal" >
-        </ImageView>
+            android:src="@drawable/wifi_signal" />
 
         <TextView
             android:id="@+id/networkName"

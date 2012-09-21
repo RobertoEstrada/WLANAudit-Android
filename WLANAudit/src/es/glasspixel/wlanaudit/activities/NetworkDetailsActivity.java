@@ -28,7 +28,7 @@ import es.glasspixel.wlanaudit.util.IKeyCalculator;
 import es.glasspixel.wlanaudit.util.WLANXXXXKeyCalculator;
 import es.glasspixel.wlanaudit.util.WiFiXXXXXXKeyCalculator;
 
-import android.annotation.TargetApi;
+
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
@@ -167,7 +167,7 @@ public class NetworkDetailsActivity extends SherlockActivity {
 				dialogBuilder.setPositiveButton(R.string.ok_button,
 						new DialogInterface.OnClickListener() {
 
-							@TargetApi(11)
+							
 							@Override
 							public void onClick(DialogInterface dialog, int unkn) {
 								if (mKeyList.size() == 1) {

@@ -35,6 +35,7 @@
     <string name="disclaimer_text">WLANAudit © 2012 Roberto Estrada\n\nWLANAudit es una aplicacion pensada para auditar la seguridad de las claves de acceso de los puntos de acceso WLAN comprobando si pueden ser calculadas a traves de los datos publicos de la red.No me responsabilizo del uso que pueda derivarse de esta aplicacion\n\nPuedes descargar el código fuente desde:\nhttps://github.com/RobertoEstrada/WLANAudit-Android\n\</string>
     <string name="number_of_keys_found">posibles claves</string>
     <string name="scan_now">Buscar</string>
+    <string name="scan_fragment_dialog_title">Información sobre el punto de acceso</string>
     <string name="autoscan_toggle">Busqueda automática</string>
     <string name="wifi_autostart_inactive_summary">Si el WiFi estaba inactivo al inicio de la aplicación no se activará automáticamente</string>
     <string name="wifi_autostart_active_summary">Si el WiFi estaba inactivo al inicio de la aplicación se activará automáticamente</string>

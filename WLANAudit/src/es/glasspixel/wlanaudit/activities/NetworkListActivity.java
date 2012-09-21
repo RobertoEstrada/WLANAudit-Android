@@ -38,7 +38,7 @@ import es.glasspixel.wlanaudit.adapters.WifiNetworkAdapter;
 import es.glasspixel.wlanaudit.ads.Key;
 import es.glasspixel.wlanaudit.database.KeysSQliteHelper;
 
-import android.annotation.SuppressLint;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -74,7 +74,7 @@ import android.widget.Toast;
  * 
  * @author Roberto Estrada
  */
-@SuppressLint({ "NewApi", "NewApi" })
+
 public class NetworkListActivity extends SherlockFragmentActivity implements
 		OnItemClickListener {
 

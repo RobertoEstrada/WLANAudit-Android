@@ -5,8 +5,7 @@ import java.util.List;
 
 import com.actionbarsherlock.app.SherlockFragment;
 
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
+
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -58,7 +57,7 @@ public class SavedKeysFragment extends SherlockFragment {
 		((ListView) myFragmentView.findViewById(R.id.listView1))
 				.setMultiChoiceModeListener(new MultiChoiceModeListener() {
 
-					@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+				
 					@Override
 					public boolean onActionItemClicked(ActionMode mode,
 							android.view.MenuItem item) {
@@ -107,7 +106,7 @@ public class SavedKeysFragment extends SherlockFragment {
 						}
 					}
 
-					@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+					
 					@Override
 					public boolean onCreateActionMode(ActionMode mode,
 							android.view.Menu menu) {
@@ -119,14 +118,14 @@ public class SavedKeysFragment extends SherlockFragment {
 						return true;
 					}
 
-					@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+					
 					@Override
 					public void onDestroyActionMode(ActionMode mode) {
 						// TODO Auto-generated method stub
 
 					}
 
-					@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+					
 					@Override
 					public boolean onPrepareActionMode(ActionMode mode,
 							android.view.Menu menu) {

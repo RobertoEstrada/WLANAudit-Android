@@ -6,8 +6,6 @@ import java.util.List;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.AlertDialog.Builder;
@@ -99,8 +97,16 @@ public class ScanFragment extends SherlockFragment implements
 
 	// ActionBar mActionbar;
 
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	@SuppressLint("NewApi")
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		if (savedInstanceState != null
+				&& savedInstanceState.getBoolean("autoscan_state")) {
+			mAutoScanAction = new AutoScanAction(getActivity(), true);
+		} else {
+			mAutoScanAction = new AutoScanAction(getActivity());
+		}
+	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -133,7 +139,7 @@ public class ScanFragment extends SherlockFragment implements
 	}
 
 	public void initScan() {
-		getActivity();
+
 		// WifiManager initialization
 		mWifiManager = (WifiManager) getActivity().getSystemService(
 				Context.WIFI_SERVICE);
@@ -143,6 +149,8 @@ public class ScanFragment extends SherlockFragment implements
 				&& prefs.getBoolean("wifi_autostart", true)) {
 			mWifiManager.setWifiEnabled(true);
 		}
+
+		mRefreshAction = new RefreshAction(getActivity());
 
 		setupNetworkScanCallBack();
 		// StartPassButtonListener();
@@ -211,39 +219,37 @@ public class ScanFragment extends SherlockFragment implements
 
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-		Context mContext = getActivity().getApplicationContext();
+		Context mContext = getActivity();
 		Dialog dialog = new Dialog(mContext);
 
 		dialog.setContentView(R.layout.network_details_dialog);
-		dialog.setTitle("Custom Dialog");
+		dialog.setTitle(getActivity().getResources().getString(
+				R.string.scan_fragment_dialog_title));
+		mDefaultPassValue = (TextView) dialog.findViewById(R.id.password_value);
 
 		ScanResult s = (ScanResult) arg0.getItemAtPosition(arg2);
 
 		int signalLevel = WifiManager.calculateSignalLevel(s.level,
 				WifiNetworkAdapter.MAX_SIGNAL_STRENGTH_LEVEL);
 
-		((ImageView) myFragmentView.findViewById(R.id.networkIcon))
+		((ImageView) dialog.findViewById(R.id.networkIcon))
 				.setImageLevel(signalLevel);
 		if (WifiNetworkAdapter.getSecurity(s) != WifiNetworkAdapter.SECURITY_NONE) {
 			// Set an icon of encrypted wi-fi hotspot
-			((ImageView) myFragmentView.findViewById(R.id.networkIcon))
-					.setImageState(WifiNetworkAdapter.ENCRYPTED_STATE_SET,
-							false);
+			((ImageView) dialog.findViewById(R.id.networkIcon)).setImageState(
+					WifiNetworkAdapter.ENCRYPTED_STATE_SET, false);
 		}
 		// Setting network's values
-		((TextView) myFragmentView.findViewById(R.id.networkName))
-				.setText(s.SSID);
-		((TextView) myFragmentView.findViewById(R.id.bssid_value))
-				.setText(s.BSSID);
-		((TextView) myFragmentView.findViewById(R.id.encryption_value))
+		((TextView) dialog.findViewById(R.id.networkName)).setText(s.SSID);
+		((TextView) dialog.findViewById(R.id.bssid_value)).setText(s.BSSID);
+		((TextView) dialog.findViewById(R.id.encryption_value))
 				.setText(s.capabilities);
-		((TextView) myFragmentView.findViewById(R.id.frequency_value))
+		((TextView) dialog.findViewById(R.id.frequency_value))
 				.setText(s.frequency + " MHz");
-		((TextView) myFragmentView.findViewById(R.id.channel_value))
-				.setText(String.valueOf(ChannelCalculator
-						.getChannelNumber(s.frequency)));
-		((TextView) myFragmentView.findViewById(R.id.intensity_value))
-				.setText(s.level + " dBm");
+		((TextView) dialog.findViewById(R.id.channel_value)).setText(String
+				.valueOf(ChannelCalculator.getChannelNumber(s.frequency)));
+		((TextView) dialog.findViewById(R.id.intensity_value)).setText(s.level
+				+ " dBm");
 		// Calculating key
 		if (s.SSID.matches("(?:WLAN|JAZZTEL)_([0-9a-fA-F]{4})")) {
 			IKeyCalculator keyCalculator = new WLANXXXXKeyCalculator();
@@ -263,9 +269,10 @@ public class ScanFragment extends SherlockFragment implements
 					+ getText(R.string.number_of_keys_found));
 		} else {
 			mDefaultPassValue.setText(getString(R.string.no_default_key));
-			((Button) myFragmentView.findViewById(R.id.copyPasswordButton))
+			((Button) dialog.findViewById(R.id.copyPasswordButton))
 					.setEnabled(false);
 		}
+		dialog.show();
 
 	}
 
@@ -286,7 +293,6 @@ public class ScanFragment extends SherlockFragment implements
 						dialogBuilder.setPositiveButton(R.string.ok_button,
 								new DialogInterface.OnClickListener() {
 
-									@TargetApi(11)
 									@Override
 									public void onClick(DialogInterface dialog,
 											int unkn) {
@@ -418,6 +424,7 @@ public class ScanFragment extends SherlockFragment implements
 	 */
 	public void onResume() {
 		super.onResume();
+		setupNetworkScanCallBack();
 		mWifiManager.startScan();
 		// mAd.loadAd(new AdRequest());
 	}
