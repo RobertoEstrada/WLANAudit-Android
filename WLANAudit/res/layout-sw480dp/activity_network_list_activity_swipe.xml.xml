@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/lightgray"
+    android:background="@drawable/grey_background_pattern"
     android:baselineAligned="false"
     android:orientation="horizontal" >
 
@@ -55,15 +55,14 @@
             android:text="@string/action2"
             android:textColor="@color/white" />
 
-        <fragment
-            android:id="@+id/saved_keys_fragment"
-            android:name="es.glasspixel.wlanaudit.fragments.SavedKeysFragment"
+        <FrameLayout
+            android:id="@+id/item_detail_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="9dp"
             android:layout_marginLeft="9dp"
             android:layout_marginRight="9dp"
-            tools:layout="@layout/saved_keys_fragment" />
+            android:background="@color/white" />
     </LinearLayout>
 
 </LinearLayout>

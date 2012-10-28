@@ -1,15 +1,22 @@
 package es.glasspixel.wlanaudit;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import es.glasspixel.wlanaudit.fragments.SavedKeysFragment;
 import es.glasspixel.wlanaudit.fragments.ScanFragment;
+import android.content.res.Resources;
+import android.net.wifi.ScanResult;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 
-public class NetworkListActivitySwipe extends SherlockFragmentActivity {
+public class NetworkListActivitySwipe extends SherlockFragmentActivity
+		implements ScanFragment.Callbacks {
 
 	/**
 	 * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -20,11 +27,16 @@ public class NetworkListActivitySwipe extends SherlockFragmentActivity {
 	 * {@link android.support.v4.app.FragmentStatePagerAdapter}.
 	 */
 	SectionsPagerAdapter mSectionsPagerAdapter;
+	List<SherlockFragment> mFragments;
 
 	/**
 	 * The {@link ViewPager} that will host the section contents.
 	 */
 	ViewPager mViewPager;
+
+	private Resources res;
+
+	private boolean screenIsLarge;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -33,12 +45,25 @@ public class NetworkListActivitySwipe extends SherlockFragmentActivity {
 
 		// Create the adapter that will return a fragment for each of the three
 		// primary sections of the app.
-		mSectionsPagerAdapter = new SectionsPagerAdapter(
-				getSupportFragmentManager());
 
-		// Set up the ViewPager with the sections adapter.
-		mViewPager = (ViewPager) findViewById(R.id.pager);
-		mViewPager.setAdapter(mSectionsPagerAdapter);
+		res = getResources();
+		screenIsLarge = res.getBoolean(R.bool.screen_large);
+
+		if (!screenIsLarge) {
+
+			mFragments = new ArrayList<SherlockFragment>();
+
+			mSectionsPagerAdapter = new SectionsPagerAdapter(
+					getSupportFragmentManager());
+
+			// Set up the ViewPager with the sections adapter.
+			mViewPager = (ViewPager) findViewById(R.id.pager);
+			mViewPager.setAdapter(mSectionsPagerAdapter);
+		} else {
+			SherlockFragment fragment = new SavedKeysFragment();
+			getSupportFragmentManager().beginTransaction()
+					.replace(R.id.item_detail_container, fragment).commit();
+		}
 
 	}
 
@@ -136,6 +161,20 @@ public class NetworkListActivitySwipe extends SherlockFragmentActivity {
 		// mAd.loadAd(new AdRequest());
 	}
 
-	
+	@Override
+	public void onItemSelected(ScanResult s) {
+
+		if (screenIsLarge) {
+			SherlockFragment fragment = new SavedKeysFragment();
+			FragmentTransaction ft = getSupportFragmentManager()
+					.beginTransaction();
+			// ft.add(R.id.saved_keys_fragment, fragment).commit();
+			ft.replace(R.id.item_detail_container, fragment).commit();
+		} else {
+			mViewPager.setAdapter(mSectionsPagerAdapter);
+			// mViewPager.refreshDrawableState();
+		}
+
+	}
 
 }

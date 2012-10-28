@@ -48,5 +48,6 @@
     <string name="action2">Claves almacenadas</string>
     <string name="delete">Borrar</string>
     <string name="copy">Copiar</string>
+    <string name="no_data_saved_keys">No hay claves almacenadas</string>
 
 </resources>

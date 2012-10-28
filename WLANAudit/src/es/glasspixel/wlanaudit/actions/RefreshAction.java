@@ -39,18 +39,17 @@ import android.net.wifi.WifiManager;
  */
 public class RefreshAction implements Action {
 
-	/**
-	 * A context for this action
-	 */
-	private Context mContext;
+    /**
+     * A context for this action
+     */
+    private final Context mContext;
 
-	public RefreshAction(Context context) {
-		mContext = context;
-	}
+    public RefreshAction(Context context) {
+        mContext = context;
+    }
 
-	public void performAction() {
-		WifiManager wifiManager = (WifiManager) mContext
-				.getSystemService(Context.WIFI_SERVICE);
-		wifiManager.startScan();
-	}
+    public void performAction() {
+        WifiManager wifiManager = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
+        wifiManager.startScan();
+    }
 }

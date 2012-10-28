@@ -67,7 +67,7 @@ public class KeyListActivity extends SherlockListActivity {
 
 		setContentView(R.layout.key_list_layout);
 		ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.setDisplayHomeAsUpEnabled(true);
 
 		// If a previous instance state was saved
 		if (savedInstanceState != null
@@ -98,42 +98,40 @@ public class KeyListActivity extends SherlockListActivity {
 		super.onStart();
 		mAd.loadAd(new AdRequest());
 	}
-	
+
 	/**
 	 * Lifecycle management: Activity state is saved to be restored later
 	 */
 	protected void onSaveInstanceState(Bundle outState) {
-		outState.putStringArrayList(KeyListActivity.KEY_LIST_KEY, (ArrayList<String>) mKeyList);
+		outState.putStringArrayList(KeyListActivity.KEY_LIST_KEY,
+				(ArrayList<String>) mKeyList);
 	}
-	
+
 	/**
-	 * Handles the event of clicking on a list element. 
+	 * Handles the event of clicking on a list element.
 	 */
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		// Clipboard copy
 		ClipboardManager clipBoard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
 		clipBoard.setText(mKeyList.get(position));
 		// Copy notification
-		Toast notificationToast = Toast.makeText(this,
-				getResources().getString(
-						R.string.key_copy_success),
-				Toast.LENGTH_SHORT);
-		notificationToast.setGravity(Gravity.CENTER, 0,
-				0);
+		Toast notificationToast = Toast.makeText(this, getResources()
+				.getString(R.string.key_copy_success), Toast.LENGTH_SHORT);
+		notificationToast.setGravity(Gravity.CENTER, 0, 0);
 		notificationToast.show();
 	}
-	
+
 	@Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                // app icon in action bar clicked; go home
-                Intent intent = new Intent(this,  NetworkListActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			// app icon in action bar clicked; go home
+			// Intent intent = new Intent(this, NetworkListActivity.class);
+			// intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			// startActivity(intent);
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
 }

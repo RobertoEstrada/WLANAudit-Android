@@ -36,7 +36,7 @@ public class AutoScanAction implements Action {
     /**
      * Time before first scan
      */
-    private static final int TIME_BEFORE_START = 500;
+    private static final int TIME_BEFORE_START = 1000;
 
     /**
      * Status of the autoscan feature
@@ -45,7 +45,7 @@ public class AutoScanAction implements Action {
     /**
      * Context for the action
      */
-    private Context mContext;
+    private final Context mContext;
     /**
      * Clock to manage the interval between scan requests
      */
@@ -63,13 +63,13 @@ public class AutoScanAction implements Action {
     /**
      * Constructor meant for restoring the state of this action when the app
      * state is recovered.
-     * 
-     * @param activity Activity context
+     *
+     * @param context Activity context
      * @param autoScanInitialState The state of the autoscan
      */
     public AutoScanAction(Context context, boolean autoScanInitialState) {
         this(context);
-        mIsAutoScanEnabled = autoScanInitialState;
+        mIsAutoScanEnabled = true;
         scheduleScan();
     }
 
@@ -80,17 +80,11 @@ public class AutoScanAction implements Action {
     /**
      * Initiates autoscan
      */
-    public void scheduleScan() {
+    void scheduleScan() {
         mIsAutoScanEnabled = true;
         mAutoScanTimer = new Timer();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
-        // If preference does not exist
-        if(!prefs.contains("autoscan_interval")){
-        	SharedPreferences.Editor editor = prefs.edit();
-        	editor.putInt("autoscan_interval", 5);
-        	editor.commit();
-        }
-        mAutoScanTimer.scheduleAtFixedRate(new AutoScanTask(), TIME_BEFORE_START, prefs.getInt("autoscan_interval", 5)*1000);        
+        mAutoScanTimer.scheduleAtFixedRate(new AutoScanTask(), TIME_BEFORE_START, prefs.getInt("autoscan_interval", 30)*1000);        
     }
 
     /**

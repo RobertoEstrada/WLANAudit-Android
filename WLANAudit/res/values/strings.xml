@@ -54,5 +54,6 @@
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
     <string name="title_activity_network_list_activity_swipe">NetworkListActivitySwipe</string>
+    <string name="no_data_saved_keys">There aren\'t saved keys</string>
 
 </resources>
