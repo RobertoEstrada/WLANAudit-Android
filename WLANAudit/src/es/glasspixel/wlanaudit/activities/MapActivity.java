@@ -16,9 +16,14 @@ import com.actionbarsherlock.view.MenuItem;
 import es.glasspixel.wlanaudit.R;
 import es.glasspixel.wlanaudit.adapters.MapElementsAdapter;
 import es.glasspixel.wlanaudit.database.KeysSQliteHelper;
+import android.content.Context;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.View;
@@ -34,12 +39,22 @@ public class MapActivity extends SherlockActivity {
 	private ArrayList<SavedKey> mKeys;
 	private ArrayList<OverlayItem> anotherOverlayItemArray;
 	private boolean screenIsLarge;
+	private LocationManager locationManager;
+	private LocationProvider provider;
+	protected double keyLatitude;
+	protected double keyLongitude;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_map_layout);
-		getSupportActionBar().setHomeButtonEnabled(true);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+		locationManager = (LocationManager) this
+				.getSystemService(Context.LOCATION_SERVICE);
+
+		locationManager.requestLocationUpdates(
+				LocationManager.NETWORK_PROVIDER, 1000, 50, listener);
 
 		screenIsLarge = getResources().getBoolean(R.bool.screen_large);
 
@@ -51,7 +66,49 @@ public class MapActivity extends SherlockActivity {
 
 		loadElements();
 
+		if (mKeys.size() == 0) {
+
+			Location lastKnownLocation = locationManager
+					.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+			if (lastKnownLocation != null) {
+				keyLatitude = lastKnownLocation.getLatitude();
+				keyLongitude = lastKnownLocation.getLongitude();
+				myMapController.setCenter(new GeoPoint(keyLatitude,
+						keyLongitude));
+			}
+
+		}
+
 	}
+
+	private final LocationListener listener = new LocationListener() {
+
+		@Override
+		public void onLocationChanged(Location location) {
+			keyLatitude = location.getLatitude();
+			keyLongitude = location.getLongitude();
+			myMapController.setCenter(new GeoPoint(keyLatitude, keyLongitude));
+		}
+
+		@Override
+		public void onProviderDisabled(String provider) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void onProviderEnabled(String provider) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void onStatusChanged(String provider, int status, Bundle extras) {
+			// TODO Auto-generated method stub
+
+		}
+
+	};
 
 	protected void loadSavedKeys() {
 		mKeys = new ArrayList<SavedKey>();

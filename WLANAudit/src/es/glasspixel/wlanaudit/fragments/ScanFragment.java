@@ -54,7 +54,7 @@ import es.glasspixel.wlanaudit.actions.AutoScanAction;
 import es.glasspixel.wlanaudit.actions.RefreshAction;
 import es.glasspixel.wlanaudit.activities.AboutActivity;
 import es.glasspixel.wlanaudit.activities.KeyListActivity;
-
+import es.glasspixel.wlanaudit.activities.MapActivity;
 
 import es.glasspixel.wlanaudit.activities.SavedKey;
 import es.glasspixel.wlanaudit.activities.WLANAuditPreferencesActivity;
@@ -65,7 +65,6 @@ import es.glasspixel.wlanaudit.keyframework.IKeyCalculator;
 import es.glasspixel.wlanaudit.keyframework.NetData;
 import es.glasspixel.wlanaudit.keyframework.WLANXXXXKeyCalculator;
 import es.glasspixel.wlanaudit.util.ChannelCalculator;
-
 
 public class ScanFragment extends SherlockFragment implements
 		OnItemClickListener {
@@ -235,6 +234,10 @@ public class ScanFragment extends SherlockFragment implements
 			i = new Intent(getActivity(), AboutActivity.class);
 			startActivity(i);
 			return true;
+		case R.id.mapOption:
+			i = new Intent(getSherlockActivity(), MapActivity.class);
+			startActivity(i);
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -289,7 +292,7 @@ public class ScanFragment extends SherlockFragment implements
 		// Calculating key
 		if (s.SSID.matches("(?:WLAN|JAZZTEL)_([0-9a-fA-F]{4})")) {
 			IKeyCalculator keyCalculator = new WLANXXXXKeyCalculator();
-			mKeyList = keyCalculator.getKey(new NetData(s.SSID,s.BSSID));
+			mKeyList = keyCalculator.getKey(new NetData(s.SSID, s.BSSID));
 			// keyCalculator.getKey(network);
 			if (mKeyList != null) {
 				mDefaultPassValue.setText(mKeyList.get(0));
@@ -321,7 +324,7 @@ public class ScanFragment extends SherlockFragment implements
 
 		} else if (s.SSID.matches("(?:WLAN|YACOM|WiFi)([0-9a-fA-F]{6})")) {
 			IKeyCalculator keyCalculator = new WLANXXXXKeyCalculator();
-			mKeyList = keyCalculator.getKey(new NetData(s.SSID,s.BSSID));
+			mKeyList = keyCalculator.getKey(new NetData(s.SSID, s.BSSID));
 			mDefaultPassValue.setText(String.valueOf(mKeyList.size()) + " "
 					+ getText(R.string.number_of_keys_found));
 			((Button) dialog.findViewById(R.id.copyPasswordButton))

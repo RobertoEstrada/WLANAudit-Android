@@ -67,6 +67,8 @@ public class SavedKeysFragment extends SherlockFragment {
 		locationManager = (LocationManager) getSherlockActivity()
 				.getSystemService(Context.LOCATION_SERVICE);
 		provider = locationManager.getProvider(LocationManager.GPS_PROVIDER);
+		locationManager.requestLocationUpdates(
+				LocationManager.NETWORK_PROVIDER, 100, 50, listener);
 
 		myFragmentView = inflater.inflate(R.layout.saved_keys_fragment,
 				container, false);
