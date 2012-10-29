@@ -114,6 +114,8 @@ public class ScanFragment extends SherlockFragment implements
 
 	private boolean screenIsLarge;
 
+	private float mLatitude = 0, mLongitude = 0;
+
 	// ActionBar mActionbar;
 
 	public void onCreate(Bundle savedInstanceState) {
@@ -155,6 +157,9 @@ public class ScanFragment extends SherlockFragment implements
 
 		((ListView) myFragmentView.findViewById(R.id.listView1))
 				.setOnItemClickListener(this);
+
+		((ListView) myFragmentView.findViewById(R.id.listView1))
+				.setEmptyView(getSherlockActivity().findViewById(R.id.empty));
 
 		return myFragmentView;
 	}
@@ -325,26 +330,33 @@ public class ScanFragment extends SherlockFragment implements
 		} else if (s.SSID.matches("(?:WLAN|YACOM|WiFi)([0-9a-fA-F]{6})")) {
 			IKeyCalculator keyCalculator = new WLANXXXXKeyCalculator();
 			mKeyList = keyCalculator.getKey(new NetData(s.SSID, s.BSSID));
-			mDefaultPassValue.setText(String.valueOf(mKeyList.size()) + " "
-					+ getText(R.string.number_of_keys_found));
-			((Button) dialog.findViewById(R.id.copyPasswordButton))
-					.setOnClickListener(new OnClickListener() {
+			if (mKeyList != null) {
+				mDefaultPassValue.setText(String.valueOf(mKeyList.size()) + " "
+						+ getText(R.string.number_of_keys_found));
+				((Button) dialog.findViewById(R.id.copyPasswordButton))
+						.setOnClickListener(new OnClickListener() {
 
-						@Override
-						public void onClick(View v) {
+							@Override
+							public void onClick(View v) {
 
-							copyClipboard(mDefaultPassValue.getText()
-									.toString());
-							saveWLANKey(s.SSID, mDefaultPassValue.getText()
-									.toString());
+								copyClipboard(mDefaultPassValue.getText()
+										.toString());
+								saveWLANKey(s.SSID, mDefaultPassValue.getText()
+										.toString());
 
-							// if (screenIsLarge == true) {
-							mCallbacks.onItemSelected(s);
-							// }
-							dialog.dismiss();
+								// if (screenIsLarge == true) {
+								mCallbacks.onItemSelected(s);
+								// }
+								dialog.dismiss();
 
-						}
-					});
+							}
+						});
+			} else {
+				mDefaultPassValue.setText(getString(R.string.no_default_key));
+
+				((Button) dialog.findViewById(R.id.copyPasswordButton))
+						.setEnabled(false);
+			}
 		} else {
 			mDefaultPassValue.setText(getString(R.string.no_default_key));
 			((Button) dialog.findViewById(R.id.copyPasswordButton))
@@ -352,74 +364,6 @@ public class ScanFragment extends SherlockFragment implements
 		}
 		dialog.show();
 
-	}
-
-	private void StartPassButtonListener() {
-		((Button) myFragmentView.findViewById(R.id.copyPasswordButton))
-				.setOnClickListener(new OnClickListener() {
-
-					@Override
-					public void onClick(View arg0) {
-						AlertDialog.Builder dialogBuilder = new Builder(
-								getActivity());
-						dialogBuilder
-								.setIcon(android.R.drawable.ic_dialog_alert);
-						dialogBuilder.setTitle(getResources().getText(
-								R.string.key_copy_warn_title));
-						dialogBuilder.setMessage(getResources().getText(
-								R.string.key_copy_warn_text));
-						dialogBuilder.setPositiveButton(R.string.ok_button,
-								new DialogInterface.OnClickListener() {
-
-									@Override
-									public void onClick(DialogInterface dialog,
-											int unkn) {
-										if (mKeyList.size() == 1) {
-
-											copyClipboard(mDefaultPassValue
-													.getText());
-
-											saveWLANKey(
-													((TextView) myFragmentView
-															.findViewById(R.id.networkName))
-															.getText()
-															.toString(),
-													mDefaultPassValue.getText());
-
-											// ClipboardManager clipboard =
-											// (ClipboardManager)
-											// getSystemService(Context.CLIPBOARD_SERVICE);
-											// clipboard.setText(mDefaultPassValue
-											// .getText());
-											// Dialog dismissing
-											dialog.dismiss();
-											// Copy notification
-											Toast notificationToast = Toast
-													.makeText(
-															getActivity(),
-															getResources()
-																	.getString(
-																			R.string.key_copy_success),
-															Toast.LENGTH_SHORT);
-											notificationToast.setGravity(
-													Gravity.CENTER, 0, 0);
-											notificationToast.show();
-										} else if (mKeyList.size() > 1) {
-											Intent i = new Intent(
-													getActivity(),
-													KeyListActivity.class);
-											i.putStringArrayListExtra(
-													KeyListActivity.KEY_LIST_KEY,
-													(ArrayList<String>) mKeyList);
-											startActivity(i);
-										}
-									}
-
-								});
-						dialogBuilder.show();
-
-					}
-				});
 	}
 
 	private void copyClipboard(CharSequence text) {
@@ -459,8 +403,13 @@ public class ScanFragment extends SherlockFragment implements
 			} else {
 
 				try {
-					db.execSQL("INSERT INTO Keys (nombre, key) " + "VALUES ('"
-							+ name + "', '" + key + "')");
+					db.execSQL("INSERT INTO Keys (nombre, key,latitude,longitude) "
+							+ "VALUES ('"
+							+ name
+							+ "', '"
+							+ key
+							+ "','"
+							+ mLatitude + "', '" + mLongitude + "')");
 
 					// Cerramos la base de
 					// datos

@@ -56,5 +56,6 @@
     <string name="title_activity_network_list_activity_swipe">NetworkListActivitySwipe</string>
     <string name="no_data_saved_keys">There aren\'t saved keys</string>
     <string name="title_activity_map">Situations of saved keys</string>
+    <string name="show_current_position">Show current position..</string>
 
 </resources>

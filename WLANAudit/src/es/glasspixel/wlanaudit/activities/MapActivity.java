@@ -11,26 +11,30 @@ import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
 import org.osmdroid.views.overlay.OverlayItem;
 
 import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
 import es.glasspixel.wlanaudit.R;
 import es.glasspixel.wlanaudit.adapters.MapElementsAdapter;
 import es.glasspixel.wlanaudit.database.KeysSQliteHelper;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-import android.widget.Toast;
 
 public class MapActivity extends SherlockActivity {
 
@@ -41,8 +45,9 @@ public class MapActivity extends SherlockActivity {
 	private boolean screenIsLarge;
 	private LocationManager locationManager;
 	private LocationProvider provider;
-	protected double keyLatitude;
-	protected double keyLongitude;
+	protected double keyLatitude, mLatitude = 0;
+	protected double keyLongitude, mLongitude = 0;
+	private String bestProvider;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,10 +58,15 @@ public class MapActivity extends SherlockActivity {
 		locationManager = (LocationManager) this
 				.getSystemService(Context.LOCATION_SERVICE);
 
-		locationManager.requestLocationUpdates(
-				LocationManager.NETWORK_PROVIDER, 1000, 50, listener);
+		// List all providers:
+		List<String> providers = locationManager.getAllProviders();
+		for (String provider : providers) {
+			printProvider(provider);
+		}
 
-		screenIsLarge = getResources().getBoolean(R.bool.screen_large);
+		Criteria criteria = new Criteria();
+		bestProvider = locationManager.getBestProvider(criteria, false);
+		Log.d("MapActivity", "best provider: " + bestProvider);
 
 		myOpenMapView = (MapView) findViewById(R.id.openmapview);
 		myOpenMapView.setBuiltInZoomControls(true);
@@ -64,21 +74,79 @@ public class MapActivity extends SherlockActivity {
 		myMapController.setZoom(4);
 		myOpenMapView.setMultiTouchControls(true);
 
+		Location location = locationManager.getLastKnownLocation(bestProvider);
+		if (location != null) {
+			showLocation(location);
+		}
+
+		locationManager.requestLocationUpdates(bestProvider, 20, 0, listener);
+
+		screenIsLarge = getResources().getBoolean(R.bool.screen_large);
+
 		loadElements();
 
 		if (mKeys.size() == 0) {
 
 			Location lastKnownLocation = locationManager
-					.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+					.getLastKnownLocation(bestProvider);
 			if (lastKnownLocation != null) {
-				keyLatitude = lastKnownLocation.getLatitude();
-				keyLongitude = lastKnownLocation.getLongitude();
-				myMapController.setCenter(new GeoPoint(keyLatitude,
-						keyLongitude));
+				// mLatitude = lastKnownLocation.getLatitude();
+				// mLongitude = lastKnownLocation.getLongitude();
+				showLocation(lastKnownLocation);
+
 			}
 
 		}
 
+	}
+
+	private void showLocation(Location l) {
+		myMapController.setCenter(new GeoPoint(l.getLatitude(), l
+				.getLongitude()));
+		myMapController.setZoom(6);
+		Toast.makeText(getApplicationContext(), "Show current position",
+				Toast.LENGTH_LONG).show();
+	}
+
+	private void printProvider(String provider) {
+		LocationProvider info = locationManager.getProvider(provider);
+		Log.d("MapActivity", info.getName());
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+
+		getSupportMenuInflater().inflate(R.menu.menu_map_location, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle item selection
+		Intent i;
+		switch (item.getItemId()) {
+
+		case android.R.id.home:
+			NavUtils.navigateUpFromSameTask(this);
+			break;
+		case R.id.check_location_menu:
+			Location lastKnownLocation = locationManager
+					.getLastKnownLocation(bestProvider);
+			if (lastKnownLocation != null) {
+				this.showLocation(lastKnownLocation);
+			}
+			break;
+
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+		return true;
+	}
+
+	@Override
+	protected void onPause() {
+		locationManager.removeUpdates(listener);
+		super.onPause();
 	}
 
 	private final LocationListener listener = new LocationListener() {
@@ -98,7 +166,7 @@ public class MapActivity extends SherlockActivity {
 
 		@Override
 		public void onProviderEnabled(String provider) {
-			// TODO Auto-generated method stub
+			bestProvider = provider;
 
 		}
 
@@ -147,6 +215,9 @@ public class MapActivity extends SherlockActivity {
 		if (screenIsLarge
 				&& getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
 
+			((ListView) findViewById(R.id.listViewMap)).setEmptyView(this
+					.findViewById(R.id.empty));
+
 			((ListView) findViewById(R.id.listViewMap))
 					.setAdapter(new MapElementsAdapter(this, mKeys));
 			((ListView) findViewById(R.id.listViewMap))
@@ -165,16 +236,6 @@ public class MapActivity extends SherlockActivity {
 
 		}
 
-	}
-
-	@Override
-	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		switch (item.getItemId()) {
-		case android.R.id.home:
-			NavUtils.navigateUpFromSameTask(this);
-			break;
-		}
-		return super.onMenuItemSelected(featureId, item);
 	}
 
 	OnItemGestureListener<OverlayItem> myOnItemGestureListener = new OnItemGestureListener<OverlayItem>() {

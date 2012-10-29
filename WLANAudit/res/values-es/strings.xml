@@ -49,5 +49,6 @@
     <string name="delete">Borrar</string>
     <string name="copy">Copiar</string>
     <string name="no_data_saved_keys">No hay claves almacenadas</string>
+    <string name="show_current_position">Mostrando posición actual..</string>
 
 </resources>
