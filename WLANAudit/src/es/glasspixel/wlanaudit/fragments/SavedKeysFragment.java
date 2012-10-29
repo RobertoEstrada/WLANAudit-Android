@@ -15,6 +15,10 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.net.wifi.ScanResult;
 import android.os.Build;
 import android.os.Bundle;
@@ -37,6 +41,7 @@ import android.widget.Toast;
 import es.glasspixel.wlanaudit.R;
 
 import es.glasspixel.wlanaudit.activities.AboutActivity;
+import es.glasspixel.wlanaudit.activities.MapActivity;
 import es.glasspixel.wlanaudit.activities.SavedKey;
 import es.glasspixel.wlanaudit.activities.WLANAuditPreferencesActivity;
 import es.glasspixel.wlanaudit.adapters.KeysSavedAdapter;
@@ -50,10 +55,18 @@ public class SavedKeysFragment extends SherlockFragment {
 	private boolean screenIsLarge;
 	private ArrayList<SavedKey> mKeys;
 	protected SavedKey mKey;
+	private LocationManager locationManager;
+	private LocationProvider provider;
+	protected double keyLatitude = 0f;
+	protected double keyLongitude = 0f;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+
+		locationManager = (LocationManager) getSherlockActivity()
+				.getSystemService(Context.LOCATION_SERVICE);
+		provider = locationManager.getProvider(LocationManager.GPS_PROVIDER);
 
 		myFragmentView = inflater.inflate(R.layout.saved_keys_fragment,
 				container, false);
@@ -127,6 +140,35 @@ public class SavedKeysFragment extends SherlockFragment {
 		return myFragmentView;
 	}
 
+	private final LocationListener listener = new LocationListener() {
+
+		@Override
+		public void onLocationChanged(Location location) {
+			keyLatitude = location.getLatitude();
+			keyLongitude = location.getLongitude();
+
+		}
+
+		@Override
+		public void onProviderDisabled(String provider) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void onProviderEnabled(String provider) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void onStatusChanged(String provider, int status, Bundle extras) {
+			// TODO Auto-generated method stub
+
+		}
+
+	};
+
 	protected List<SavedKey> getSavedKeys() {
 		mKeys = new ArrayList<SavedKey>();
 		KeysSQliteHelper usdbh = new KeysSQliteHelper(getActivity(), "DBKeys",
@@ -137,7 +179,9 @@ public class SavedKeysFragment extends SherlockFragment {
 				null, null, null, "nombre ASC");
 		while (c.moveToNext()) {
 			SavedKey k = new SavedKey(c.getString(c.getColumnIndex("nombre")),
-					c.getString(c.getColumnIndex("key")));
+					c.getString(c.getColumnIndex("key")), c.getFloat(c
+							.getColumnIndex("latitude")), c.getFloat(c
+							.getColumnIndex("longitude")));
 			mKeys.add(k);
 		}
 		return mKeys;
@@ -161,11 +205,16 @@ public class SavedKeysFragment extends SherlockFragment {
 		switch (item.getItemId()) {
 
 		case R.id.preferenceOption:
-			i = new Intent(getActivity(), WLANAuditPreferencesActivity.class);
+			i = new Intent(getSherlockActivity(),
+					WLANAuditPreferencesActivity.class);
 			startActivity(i);
 			return true;
 		case R.id.aboutOption:
-			i = new Intent(getActivity(), AboutActivity.class);
+			i = new Intent(getSherlockActivity(), AboutActivity.class);
+			startActivity(i);
+			return true;
+		case R.id.mapOption:
+			i = new Intent(getSherlockActivity(), MapActivity.class);
 			startActivity(i);
 			return true;
 		default:
@@ -211,7 +260,8 @@ public class SavedKeysFragment extends SherlockFragment {
 
 				try {
 					db.execSQL("INSERT INTO Keys (nombre, key) " + "VALUES ('"
-							+ name + "', '" + key + "')");
+							+ name + "', '" + key + "', '" + keyLatitude
+							+ "', '" + keyLongitude + "')");
 
 					// Cerramos la base de
 					// datos

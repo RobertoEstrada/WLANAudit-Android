@@ -27,5 +27,6 @@
     <color name="lightorange">#FFBB33</color>
     <color name="dkorange">#FF8800</color>
     <color name="lightlightblue">#C9E5FF</color>
+    <color name="semitransparentblack">#99D8D8D8</color>
 
 </resources>

@@ -42,6 +42,18 @@
     <style name="Widget.Styled.ActionBar.MoreButton" parent="Widget.Sherlock.Light.ActionButton.Overflow">
         <item name="android:src">@drawable/abs__ic_menu_moreoverflow_holo_dark</item>
     </style>
+    
+    <style name="Theme.Styled.Transparent" parent="@style/Theme.Sherlock.Light">
+        <item name="actionBarStyle">@style/Theme.Styled.ActionBarTransparent</item>
+        <item name="android:actionBarStyle">@style/Theme.Styled.ActionBarTransparent</item>
+        <item name="windowActionBarOverlay">true</item>
+        <item name="android:windowActionBarOverlay">true</item>
+    </style>
+
+    <style name="Theme.Styled.ActionBarTransparent" parent="@style/Widget.Sherlock.ActionBar">
+        <item name="background">@color/semitransparentblack</item>
+        <item name="android:background">@color/semitransparentblack</item>
+    </style>
 
     <style name="wlanaudit_solid_ActionBar" parent="@style/Widget.Sherlock.Light.ActionBar.Solid.Inverse">
         <item name="background">@drawable/ab_solid_wlanaudit</item>
