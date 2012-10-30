@@ -9,6 +9,7 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.ItemizedIconOverlay.OnItemGestureListener;
 import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
 import org.osmdroid.views.overlay.OverlayItem;
+import org.osmdroid.views.overlay.SimpleLocationOverlay;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
@@ -22,6 +23,10 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Point;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -48,6 +53,7 @@ public class MapActivity extends SherlockActivity {
 	protected double keyLatitude, mLatitude = 0;
 	protected double keyLongitude, mLongitude = 0;
 	private String bestProvider;
+	private SimpleLocationOverlay mCurrentTrackOverlay;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -101,11 +107,27 @@ public class MapActivity extends SherlockActivity {
 	}
 
 	private void showLocation(Location l) {
-		myMapController.setCenter(new GeoPoint(l.getLatitude(), l
-				.getLongitude()));
+		final GeoPoint gp = new GeoPoint(l.getLatitude(), l.getLongitude());
+		myMapController.setCenter(gp);
 		myMapController.setZoom(6);
 		Toast.makeText(getApplicationContext(), "Show current position",
 				Toast.LENGTH_LONG).show();
+		mCurrentTrackOverlay = new SimpleLocationOverlay(
+				getApplicationContext()) {
+			@Override
+			public void draw(Canvas canavas, MapView mapView, boolean arg2) {
+
+				Point from = new Point();
+
+				from = mapView.getProjection().toPixels(gp, from);
+
+				Paint p = new Paint();
+
+				canavas.drawBitmap(BitmapFactory.decodeResource(getResources(),
+						R.drawable.social_google), from.x, from.y, p);
+
+			}
+		};
 	}
 
 	private void printProvider(String provider) {
