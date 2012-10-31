@@ -14,10 +14,12 @@ import org.osmdroid.views.overlay.SimpleLocationOverlay;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.korovyansk.android.slideout.SlideoutActivity;
 
 import es.glasspixel.wlanaudit.R;
 import es.glasspixel.wlanaudit.adapters.MapElementsAdapter;
 import es.glasspixel.wlanaudit.database.KeysSQliteHelper;
+import es.glasspixel.wlanaudit.dominio.ActivityConstants;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -35,13 +37,19 @@ import android.location.LocationProvider;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.GestureDetector;
+import android.view.GestureDetector.OnGestureListener;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
-public class MapActivity extends SherlockActivity {
+public class MapActivity extends SherlockActivity implements OnGestureListener {
 
 	private MapView myOpenMapView;
 	private MapController myMapController;
@@ -55,12 +63,16 @@ public class MapActivity extends SherlockActivity {
 	private String bestProvider;
 	private SimpleLocationOverlay mCurrentTrackOverlay;
 	private OverlayItem positionOverlay;
+	private GestureDetector myGesture;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_map_layout);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+		myGesture = new GestureDetector(getBaseContext(),
+				(OnGestureListener) this);
 
 		locationManager = (LocationManager) this
 				.getSystemService(Context.LOCATION_SERVICE);
@@ -104,6 +116,30 @@ public class MapActivity extends SherlockActivity {
 				showLocation(lastKnownLocation);
 
 			}
+
+		}
+
+		if (!screenIsLarge) {
+
+			((LinearLayout) findViewById(R.id.swipeBezelMap))
+					.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View arg0) {
+							// TODO Auto-generated method stub
+							int width = (int) TypedValue.applyDimension(
+									TypedValue.COMPLEX_UNIT_DIP, 40,
+									getResources().getDisplayMetrics());
+							SlideoutActivity.prepare(MapActivity.this,
+									R.id.swipeBezelMap, width);
+							Intent i = new Intent(MapActivity.this,
+									MenuActivity.class);
+							i.putExtra("calling-activity",
+									ActivityConstants.ACTIVITY_2);
+							startActivity(i);
+							overridePendingTransition(0, 0);
+						}
+					});
 
 		}
 
@@ -287,5 +323,79 @@ public class MapActivity extends SherlockActivity {
 		}
 
 	};
+
+	private static final int SWIPE_MIN_DISTANCE = 120;
+	private static final int SWIPE_MAX_OFF_PATH = 250;
+	private static final int SWIPE_THRESHOLD_VELOCITY = 200;
+
+	@Override
+	public boolean onDown(MotionEvent arg0) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		Log.e("Flags Touch", "Flags: " + event.getEdgeFlags());
+		return myGesture.onTouchEvent(event);
+	}
+
+	@Override
+	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+			float velocityY) {
+		Log.e("Event", "onFling");
+		Log.e("Flags", "Flags: " + e1.getEdgeFlags());
+
+		if (e1.getEdgeFlags() == MotionEvent.EDGE_LEFT) {
+			// code to handle swipe from left edge
+			Log.e("!!!!!", "Edge fling!");
+		}
+
+		try {
+			// do not do anything if the swipe does not reach a certain length
+			// of distance
+			if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH)
+				return false;
+
+			// right to left swipe
+			if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE
+					&& Math.abs(velocityX) < SWIPE_THRESHOLD_VELOCITY) {
+
+			}
+			// left to right swipe
+			else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE
+					&& Math.abs(velocityX) < SWIPE_THRESHOLD_VELOCITY) {
+
+			}
+		} catch (Exception e) {
+			// nothing
+		}
+		return false;
+	}
+
+	@Override
+	public void onLongPress(MotionEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
+			float distanceY) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void onShowPress(MotionEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean onSingleTapUp(MotionEvent e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 }
