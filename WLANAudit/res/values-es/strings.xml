@@ -13,6 +13,7 @@
     <string name="key_copy_warn_title">AP Inseguro</string>
     <string name="key_copy_warn_text">Se pudo calcular una posible clave por defecto a traves de los datos publicos.\n\nSi no se trata de tu AP, avisa a su propietario de que cambie la clave de su red.</string>
     <string name="ok_button">Aceptar</string>
+    <string name="send_report">Sending error report..</string>
     <string name="error_saving_key">Ha ocurrido un error guardando la clave</string>
     <string name="key_copy_success">Clave copiada con éxito</string>
     <string name="scan_pref_group_name">Ajustes de búsqueda</string>

@@ -78,8 +78,8 @@ public class MenuFragment extends SherlockFragment {
 				"DBKeys", null, 1);
 
 		SQLiteDatabase db = usdbh.getReadableDatabase();
-		Cursor c = db.query("Keys", new String[] { "nombre", "key" }, null,
-				null, null, null, "nombre ASC");
+		Cursor c = db.query("Keys", new String[] { "nombre", "key", "latitude",
+				"longitude" }, null, null, null, null, "nombre ASC");
 		while (c.moveToNext()) {
 			SavedKey k = new SavedKey(c.getString(c.getColumnIndex("nombre")),
 					c.getString(c.getColumnIndex("key")), c.getFloat(c
@@ -87,6 +87,7 @@ public class MenuFragment extends SherlockFragment {
 							.getColumnIndex("longitude")));
 			mKeys.add(k);
 		}
+		c.close();
 
 		if (mKeys.isEmpty()) {
 			for (int i = 0; i < 4; i++) {
@@ -95,6 +96,8 @@ public class MenuFragment extends SherlockFragment {
 				mKeys.add(k);
 			}
 		}
+
+		usdbh.close();
 
 	}
 
@@ -113,6 +116,7 @@ public class MenuFragment extends SherlockFragment {
 					@Override
 					public void onItemClick(AdapterView<?> arg0, View arg1,
 							int arg2, long arg3) {
+						dataPasser.onDataPass(mKeys.get(arg2).getWlan_name());
 
 					}
 

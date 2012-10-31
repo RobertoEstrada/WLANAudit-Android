@@ -16,6 +16,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
+        android:name="es.glasspixel.wlanaudit.AcraUtils"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:theme="@style/Theme.Sherlock.Light.DarkActionBar" >
@@ -61,6 +62,10 @@
         <!-- android:name=".NetworkListActivitySwipe" -->
         <!-- android:label="@string/title_activity_network_list_activity_swipe" > -->
         <!-- </activity> -->
+        <activity
+            android:name="es.glasspixel.wlanaudit.activities.MenuActivity"
+            android:label="@string/app_name" >
+        </activity>
 
     </application>
 

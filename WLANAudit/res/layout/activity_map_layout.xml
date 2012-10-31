@@ -8,14 +8,15 @@
         android:id="@+id/swipeBezelMap"
         android:layout_width="16dp"
         android:layout_height="match_parent"
-        android:layout_alignParentRight="true" >
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="?android:attr/actionBarSize"
+        android:background="@color/dkgray" >
     </LinearLayout>
 
     <org.osmdroid.views.MapView
         android:id="@+id/openmapview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="4dp"
         android:layout_toLeftOf="@+id/swipeBezelMap"
         android:clickable="true" />
 

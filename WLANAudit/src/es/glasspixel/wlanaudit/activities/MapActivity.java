@@ -20,6 +20,8 @@ import es.glasspixel.wlanaudit.R;
 import es.glasspixel.wlanaudit.adapters.MapElementsAdapter;
 import es.glasspixel.wlanaudit.database.KeysSQliteHelper;
 import es.glasspixel.wlanaudit.dominio.ActivityConstants;
+import es.glasspixel.wlanaudit.dominio.DataUtils;
+import es.glasspixel.wlanaudit.interfaces.SavedKeyListener;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -49,7 +51,8 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
-public class MapActivity extends SherlockActivity implements OnGestureListener {
+public class MapActivity extends SherlockActivity implements OnGestureListener,
+		SavedKeyListener {
 
 	private MapView myOpenMapView;
 	private MapController myMapController;
@@ -119,8 +122,7 @@ public class MapActivity extends SherlockActivity implements OnGestureListener {
 
 		}
 
-		if (!screenIsLarge) {
-
+		if (!(screenIsLarge && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)) {
 			((LinearLayout) findViewById(R.id.swipeBezelMap))
 					.setOnClickListener(new OnClickListener() {
 
@@ -128,7 +130,7 @@ public class MapActivity extends SherlockActivity implements OnGestureListener {
 						public void onClick(View arg0) {
 							// TODO Auto-generated method stub
 							int width = (int) TypedValue.applyDimension(
-									TypedValue.COMPLEX_UNIT_DIP, 40,
+									TypedValue.COMPLEX_UNIT_DIP, 110,
 									getResources().getDisplayMetrics());
 							SlideoutActivity.prepare(MapActivity.this,
 									R.id.swipeBezelMap, width);
@@ -136,13 +138,31 @@ public class MapActivity extends SherlockActivity implements OnGestureListener {
 									MenuActivity.class);
 							i.putExtra("calling-activity",
 									ActivityConstants.ACTIVITY_2);
-							startActivity(i);
+							startActivityForResult(i, 1);
 							overridePendingTransition(0, 0);
 						}
 					});
 
 		}
 
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == 1) {
+			String wlan_selected = DataUtils.getInstance(
+					getApplicationContext()).getSavedkeyselected();
+			Log.d("MapActivity", "wlan selected on menu: " + wlan_selected);
+			for (SavedKey s : mKeys) {
+				if (s.getWlan_name().equals(wlan_selected)) {
+					this.centerMap(new GeoPoint(s.getLatitude(), s
+							.getLongitude()));
+					break;
+				}
+			}
+
+		}
+		super.onActivityResult(requestCode, resultCode, data);
 	}
 
 	private void showLocation(Location l) {
@@ -152,8 +172,12 @@ public class MapActivity extends SherlockActivity implements OnGestureListener {
 				Toast.LENGTH_LONG).show();
 
 		changePositionInMap(l);
-		myMapController.setCenter(gp);
-		myMapController.setZoom(7);
+		this.centerMap(gp);
+		// myMapController.setZoom(7);
+	}
+
+	private void centerMap(GeoPoint g) {
+		myMapController.setCenter(g);
 	}
 
 	private void changePositionInMap(Location l) {
@@ -247,8 +271,8 @@ public class MapActivity extends SherlockActivity implements OnGestureListener {
 		KeysSQliteHelper usdbh = new KeysSQliteHelper(this, "DBKeys", null, 1);
 
 		SQLiteDatabase db = usdbh.getReadableDatabase();
-		Cursor c = db.query("Keys", new String[] { "nombre", "key" }, null,
-				null, null, null, "nombre ASC");
+		Cursor c = db.query("Keys", new String[] { "nombre", "key", "latitude",
+				"longitude" }, null, null, null, null, "nombre ASC");
 		while (c.moveToNext()) {
 			SavedKey k = new SavedKey(c.getString(c.getColumnIndex("nombre")),
 					c.getString(c.getColumnIndex("key")), c.getFloat(c
@@ -256,6 +280,7 @@ public class MapActivity extends SherlockActivity implements OnGestureListener {
 							.getColumnIndex("longitude")));
 			mKeys.add(k);
 		}
+		c.close();
 
 		if (mKeys.isEmpty()) {
 			for (int i = 0; i < 4; i++) {
@@ -396,6 +421,12 @@ public class MapActivity extends SherlockActivity implements OnGestureListener {
 	public boolean onSingleTapUp(MotionEvent e) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public void onKeySlected(String data) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

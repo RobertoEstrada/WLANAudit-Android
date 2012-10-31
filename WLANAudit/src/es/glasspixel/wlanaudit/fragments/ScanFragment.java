@@ -3,6 +3,10 @@ package es.glasspixel.wlanaudit.fragments;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.OverlayItem;
+
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 
@@ -20,6 +24,11 @@ import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Build;
@@ -114,7 +123,11 @@ public class ScanFragment extends SherlockFragment implements
 
 	private boolean screenIsLarge;
 
-	private float mLatitude = 0, mLongitude = 0;
+	private double mLatitude = 0, mLongitude = 0;
+
+	private LocationManager locationManager;
+
+	private String bestProvider;
 
 	// ActionBar mActionbar;
 
@@ -128,12 +141,71 @@ public class ScanFragment extends SherlockFragment implements
 		}
 		screenIsLarge = getSherlockActivity().getResources().getBoolean(
 				R.bool.screen_large);
+		locationManager = (LocationManager) getSherlockActivity()
+				.getSystemService(Context.LOCATION_SERVICE);
+
+		// List all providers:
+		List<String> providers = locationManager.getAllProviders();
+		for (String provider : providers) {
+			printProvider(provider);
+		}
+
+		Criteria criteria = new Criteria();
+		bestProvider = locationManager.getBestProvider(criteria, false);
+		Log.d("MapActivity", "best provider: " + bestProvider);
+
+		Location location = locationManager.getLastKnownLocation(bestProvider);
+		if (location != null) {
+			showLocation(location);
+		}
+
+		locationManager.requestLocationUpdates(bestProvider, 20, 0, listener);
+		
+		loadFakeWlan();
+	}
+
+	private final LocationListener listener = new LocationListener() {
+
+		@Override
+		public void onLocationChanged(Location location) {
+			mLatitude = location.getLatitude();
+			mLongitude = location.getLongitude();
+
+		}
+
+		@Override
+		public void onProviderDisabled(String provider) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void onProviderEnabled(String provider) {
+			bestProvider = provider;
+
+		}
+
+		@Override
+		public void onStatusChanged(String provider, int status, Bundle extras) {
+			// TODO Auto-generated method stub
+
+		}
+
+	};
+
+	private void printProvider(String provider) {
+		LocationProvider info = locationManager.getProvider(provider);
+		Log.d("MapActivity", info.getName());
+	}
+
+	private void showLocation(Location l) {
+		mLatitude = l.getLatitude();
+		mLongitude = l.getLongitude();
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		Intent launchingIntent = getActivity().getIntent();
 
 		myFragmentView = inflater.inflate(R.layout.saved_keys_fragment,
 				container, false);
@@ -366,6 +438,12 @@ public class ScanFragment extends SherlockFragment implements
 
 	}
 
+	private void loadFakeWlan() {
+		for (int i = 0; i < 4; i++) {
+			this.saveWLANKey("WLAN_" + i, "1234567890");
+		}
+	}
+
 	private void copyClipboard(CharSequence text) {
 		int sdk = android.os.Build.VERSION.SDK_INT;
 		if (sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
@@ -390,10 +468,6 @@ public class ScanFragment extends SherlockFragment implements
 				null, 1);
 
 		SQLiteDatabase db = usdbh.getWritableDatabase();
-
-		// Si hemos abierto correctamente la
-		// base de
-		// datos
 		if (db != null) {
 			Cursor c = db.query("Keys", new String[] { "nombre", "key" },
 					"nombre like ?", new String[] { name }, null, null,
@@ -411,8 +485,6 @@ public class ScanFragment extends SherlockFragment implements
 							+ "','"
 							+ mLatitude + "', '" + mLongitude + "')");
 
-					// Cerramos la base de
-					// datos
 				} catch (SQLException e) {
 					Toast.makeText(
 							getActivity().getApplicationContext(),
@@ -422,6 +494,7 @@ public class ScanFragment extends SherlockFragment implements
 				db.close();
 			}
 		}
+		usdbh.close();
 
 	}
 

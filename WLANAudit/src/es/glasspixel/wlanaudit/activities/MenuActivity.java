@@ -3,8 +3,11 @@ package es.glasspixel.wlanaudit.activities;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.korovyansk.android.slideout.SlideoutHelper;
 
+import es.glasspixel.wlanaudit.dominio.ActivityConstants;
+import es.glasspixel.wlanaudit.dominio.DataUtils;
 import es.glasspixel.wlanaudit.fragments.MenuFragment;
 import es.glasspixel.wlanaudit.interfaces.OnDataPass;
+import es.glasspixel.wlanaudit.interfaces.SavedKeyListener;
 
 import android.os.Bundle;
 
@@ -14,6 +17,8 @@ import android.view.KeyEvent;
 public class MenuActivity extends SherlockFragmentActivity implements
 		OnDataPass {
 
+	private SavedKeyListener keyListener;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -21,6 +26,11 @@ public class MenuActivity extends SherlockFragmentActivity implements
 		mSlideoutHelper = new SlideoutHelper(this, true);
 		mSlideoutHelper.activate();
 		int callingActivity = getIntent().getIntExtra("calling-activity", 0);
+		switch (callingActivity) {
+		case ActivityConstants.ACTIVITY_2:
+
+			break;
+		}
 		MenuFragment fragment = new MenuFragment();
 		Bundle bundle = new Bundle();
 		bundle.putInt("calling-activity", callingActivity);
@@ -50,12 +60,9 @@ public class MenuActivity extends SherlockFragmentActivity implements
 
 	@Override
 	public void onDataPass(String data) {
-		// TODO Auto-generated method stub
-		if (data.equals("maintain")) {
-			// if (mSlideoutHelper != null) {
-			// mSlideoutHelper.close();
-			// }
-		}
+		DataUtils.getInstance(getApplicationContext())
+				.setSavedkeyselected(data);
+		mSlideoutHelper.close();
 	}
 
 }
