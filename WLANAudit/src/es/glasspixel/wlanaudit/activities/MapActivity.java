@@ -54,6 +54,7 @@ public class MapActivity extends SherlockActivity {
 	protected double keyLongitude, mLongitude = 0;
 	private String bestProvider;
 	private SimpleLocationOverlay mCurrentTrackOverlay;
+	private OverlayItem positionOverlay;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +81,8 @@ public class MapActivity extends SherlockActivity {
 		myMapController.setZoom(4);
 		myOpenMapView.setMultiTouchControls(true);
 
+		anotherOverlayItemArray = new ArrayList<OverlayItem>();
+
 		Location location = locationManager.getLastKnownLocation(bestProvider);
 		if (location != null) {
 			showLocation(location);
@@ -103,31 +106,28 @@ public class MapActivity extends SherlockActivity {
 			}
 
 		}
+		
+		
 
 	}
 
 	private void showLocation(Location l) {
 		final GeoPoint gp = new GeoPoint(l.getLatitude(), l.getLongitude());
 		myMapController.setCenter(gp);
-		myMapController.setZoom(6);
+		myMapController.setZoom(7);
 		Toast.makeText(getApplicationContext(), "Show current position",
 				Toast.LENGTH_LONG).show();
-		mCurrentTrackOverlay = new SimpleLocationOverlay(
-				getApplicationContext()) {
-			@Override
-			public void draw(Canvas canavas, MapView mapView, boolean arg2) {
 
-				Point from = new Point();
+		if (positionOverlay != null
+				&& anotherOverlayItemArray.contains(positionOverlay)) {
+			anotherOverlayItemArray.remove(positionOverlay);
+		}
 
-				from = mapView.getProjection().toPixels(gp, from);
-
-				Paint p = new Paint();
-
-				canavas.drawBitmap(BitmapFactory.decodeResource(getResources(),
-						R.drawable.social_google), from.x, from.y, p);
-
-			}
-		};
+		positionOverlay = new OverlayItem("", "", new GeoPoint(l.getLatitude(),
+				l.getLongitude()));
+		positionOverlay.setMarker(this.getResources().getDrawable(
+				R.drawable.marker_blue));
+		anotherOverlayItemArray.add(positionOverlay);
 	}
 
 	private void printProvider(String provider) {
@@ -215,13 +215,19 @@ public class MapActivity extends SherlockActivity {
 			mKeys.add(k);
 		}
 
+		if (mKeys.isEmpty()) {
+			for (int i = 0; i < 4; i++) {
+				SavedKey k = new SavedKey("Key " + i, "title " + i, i * 20,
+						i * 60);
+				mKeys.add(k);
+			}
+		}
+
 	}
 
 	private void loadElements() {
 
 		this.loadSavedKeys();
-
-		anotherOverlayItemArray = new ArrayList<OverlayItem>();
 
 		for (SavedKey s : mKeys) {
 			anotherOverlayItemArray
