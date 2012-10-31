@@ -77,9 +77,9 @@ public class MapActivity extends SherlockActivity {
 
 		myOpenMapView = (MapView) findViewById(R.id.openmapview);
 		myOpenMapView.setBuiltInZoomControls(true);
+		myOpenMapView.setMultiTouchControls(true);
 		myMapController = myOpenMapView.getController();
 		myMapController.setZoom(4);
-		myOpenMapView.setMultiTouchControls(true);
 
 		anotherOverlayItemArray = new ArrayList<OverlayItem>();
 
@@ -106,18 +106,21 @@ public class MapActivity extends SherlockActivity {
 			}
 
 		}
-		
-		
 
 	}
 
 	private void showLocation(Location l) {
 		final GeoPoint gp = new GeoPoint(l.getLatitude(), l.getLongitude());
-		myMapController.setCenter(gp);
-		myMapController.setZoom(7);
+
 		Toast.makeText(getApplicationContext(), "Show current position",
 				Toast.LENGTH_LONG).show();
 
+		changePositionInMap(l);
+		myMapController.setCenter(gp);
+		myMapController.setZoom(7);
+	}
+
+	private void changePositionInMap(Location l) {
 		if (positionOverlay != null
 				&& anotherOverlayItemArray.contains(positionOverlay)) {
 			anotherOverlayItemArray.remove(positionOverlay);
@@ -128,6 +131,7 @@ public class MapActivity extends SherlockActivity {
 		positionOverlay.setMarker(this.getResources().getDrawable(
 				R.drawable.marker_blue));
 		anotherOverlayItemArray.add(positionOverlay);
+
 	}
 
 	private void printProvider(String provider) {
@@ -177,7 +181,9 @@ public class MapActivity extends SherlockActivity {
 		public void onLocationChanged(Location location) {
 			keyLatitude = location.getLatitude();
 			keyLongitude = location.getLongitude();
-			myMapController.setCenter(new GeoPoint(keyLatitude, keyLongitude));
+			changePositionInMap(location);
+			// myMapController.setCenter(new GeoPoint(keyLatitude,
+			// keyLongitude));
 		}
 
 		@Override
