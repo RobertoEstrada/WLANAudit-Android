@@ -160,7 +160,7 @@ public class ScanFragment extends SherlockFragment implements
 		}
 
 		locationManager.requestLocationUpdates(bestProvider, 20, 0, listener);
-		
+
 		loadFakeWlan();
 	}
 
@@ -440,7 +440,7 @@ public class ScanFragment extends SherlockFragment implements
 
 	private void loadFakeWlan() {
 		for (int i = 0; i < 4; i++) {
-			this.saveWLANKey("WLAN_" + i, "1234567890");
+			this.saveFakeWLAN("WLAN_" + i, "1234567890", i);
 		}
 	}
 
@@ -496,6 +496,42 @@ public class ScanFragment extends SherlockFragment implements
 		}
 		usdbh.close();
 
+	}
+
+	private void saveFakeWLAN(String name, CharSequence key, int i) {
+		KeysSQliteHelper usdbh = new KeysSQliteHelper(getActivity(), "DBKeys",
+				null, 1);
+
+		SQLiteDatabase db = usdbh.getWritableDatabase();
+		if (db != null) {
+			Cursor c = db.query("Keys", new String[] { "nombre", "key" },
+					"nombre like ?", new String[] { name }, null, null,
+					"nombre ASC");
+			if (c.getCount() > 0) {
+
+			} else {
+
+				try {
+					db.execSQL("INSERT INTO Keys (nombre, key,latitude,longitude) "
+							+ "VALUES ('"
+							+ name
+							+ "', '"
+							+ key
+							+ "','"
+							+ (mLatitude + (i * 5))
+							+ "', '"
+							+ (mLongitude + (i * 5)) + "')");
+
+				} catch (SQLException e) {
+					Toast.makeText(
+							getActivity().getApplicationContext(),
+							getResources().getString(R.string.error_saving_key),
+							Toast.LENGTH_LONG).show();
+				}
+				db.close();
+			}
+		}
+		usdbh.close();
 	}
 
 	/**

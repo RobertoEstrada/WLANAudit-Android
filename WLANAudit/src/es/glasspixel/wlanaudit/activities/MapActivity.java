@@ -173,6 +173,7 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 
 		changePositionInMap(l);
 		this.centerMap(gp);
+
 		// myMapController.setZoom(7);
 	}
 
@@ -343,8 +344,10 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 
 		@Override
 		public boolean onItemSingleTapUp(int index, OverlayItem item) {
+			centerMap(new GeoPoint(mKeys.get(index - 1).getLatitude(), mKeys
+					.get(index - 1).getLongitude()));
 
-			return true;
+			return false;
 		}
 
 	};
