@@ -67,6 +67,7 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 	private SimpleLocationOverlay mCurrentTrackOverlay;
 	private OverlayItem positionOverlay;
 	private GestureDetector myGesture;
+	private ArrayList<OverlayItem> positionOverlayItemArray;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +98,7 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 		myMapController.setZoom(4);
 
 		anotherOverlayItemArray = new ArrayList<OverlayItem>();
+		positionOverlayItemArray = new ArrayList<OverlayItem>();
 
 		Location location = locationManager.getLastKnownLocation(bestProvider);
 		if (location != null) {
@@ -153,12 +155,15 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 			String wlan_selected = DataUtils.getInstance(
 					getApplicationContext()).getSavedkeyselected();
 			Log.d("MapActivity", "wlan selected on menu: " + wlan_selected);
+			int i = 0;
 			for (SavedKey s : mKeys) {
 				if (s.getWlan_name().equals(wlan_selected)) {
 					this.centerMap(new GeoPoint(s.getLatitude(), s
 							.getLongitude()));
+					centerMap(anotherOverlayItemArray.get(i).mGeoPoint);
 					break;
 				}
+				i++;
 			}
 
 		}
@@ -183,15 +188,20 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 
 	private void changePositionInMap(Location l) {
 		if (positionOverlay != null
-				&& anotherOverlayItemArray.contains(positionOverlay)) {
-			anotherOverlayItemArray.remove(positionOverlay);
+				&& positionOverlayItemArray.contains(positionOverlay)) {
+			positionOverlayItemArray.remove(positionOverlay);
 		}
 
-		positionOverlay = new OverlayItem("", "", new GeoPoint(l.getLatitude(),
+		positionOverlay = new OverlayItem("My position", "", new GeoPoint(l.getLatitude(),
 				l.getLongitude()));
 		positionOverlay.setMarker(this.getResources().getDrawable(
 				R.drawable.marker_blue));
-		anotherOverlayItemArray.add(positionOverlay);
+		// anotherOverlayItemArray.add(positionOverlay);
+		// anotherOverlayItemArray.add(0, positionOverlay);
+		positionOverlayItemArray.add(positionOverlay);
+		ItemizedOverlayWithFocus<OverlayItem> positiontemizedIconOverlay = new ItemizedOverlayWithFocus<OverlayItem>(
+				this, positionOverlayItemArray, null);
+		myOpenMapView.getOverlays().add(positiontemizedIconOverlay);
 
 	}
 
@@ -344,10 +354,14 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 
 		@Override
 		public boolean onItemSingleTapUp(int index, OverlayItem item) {
-			centerMap(new GeoPoint(mKeys.get(index - 1).getLatitude(), mKeys
-					.get(index - 1).getLongitude()));
+			// SavedKey s = mKeys.get(index - 1);
 
-			return false;
+			// centerMap(new GeoPoint(mKeys.get(index - 1).getLatitude(), mKeys
+			// .get(index - 1).getLongitude()));
+
+			// centerMap(anotherOverlayItemArray.get(index-1).mGeoPoint);
+
+			return true;
 		}
 
 	};
