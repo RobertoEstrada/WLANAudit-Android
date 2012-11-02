@@ -103,6 +103,10 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 		Location location = locationManager.getLastKnownLocation(bestProvider);
 		if (location != null) {
 			showLocation(location);
+		} else {
+			Toast.makeText(getApplicationContext(),
+					"Your location is unavailable now", Toast.LENGTH_LONG)
+					.show();
 		}
 
 		locationManager.requestLocationUpdates(bestProvider, 20, 0, listener);
@@ -192,8 +196,8 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 			positionOverlayItemArray.remove(positionOverlay);
 		}
 
-		positionOverlay = new OverlayItem("My position", "", new GeoPoint(l.getLatitude(),
-				l.getLongitude()));
+		positionOverlay = new OverlayItem("My position", "", new GeoPoint(
+				l.getLatitude(), l.getLongitude()));
 		positionOverlay.setMarker(this.getResources().getDrawable(
 				R.drawable.marker_blue));
 		// anotherOverlayItemArray.add(positionOverlay);
