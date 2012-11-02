@@ -3,13 +3,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_weight="2"
-    android:background="@drawable/grey_background_pattern"
+    android:background="@color/white"
     android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/menu_layout_list_title"
+        style="?android:attr/listSeparatorTextViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="7dip"
+        android:paddingRight="7dip"
+        android:text="@string/map_layout_locations_list_title"
+        android:textColor="#0099cc" />
 
     <ListView
         android:id="@+id/listViewMap"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        android:background="@drawable/grey_background_pattern" >
     </ListView>
 
     <TextView

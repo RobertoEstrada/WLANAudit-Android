@@ -57,5 +57,7 @@
     <string name="no_data_saved_keys">There aren\'t saved keys</string>
     <string name="title_activity_map">Situations of saved keys</string>
     <string name="show_current_position">Show current position..</string>
+    <string name="map_layout_locations_list_title">My key\'s locations</string>
+    <string name="show_my_location">Show my location</string>
 
 </resources>

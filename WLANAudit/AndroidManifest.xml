@@ -48,8 +48,7 @@
         </activity>
         <activity
             android:name="es.glasspixel.wlanaudit.activities.MapActivity"
-            android:label="@string/title_activity_map"
-            android:theme="@style/Theme.Styled.Transparent" >
+            android:label="@string/title_activity_map" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="es.glasspixel.wlanaudit.NetworkListActivitySwipe" />
@@ -66,7 +65,6 @@
             android:name="es.glasspixel.wlanaudit.activities.MenuActivity"
             android:label="@string/app_name" >
         </activity>
-
     </application>
 
 </manifest>

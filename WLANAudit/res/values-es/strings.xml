@@ -51,5 +51,7 @@
     <string name="copy">Copiar</string>
     <string name="no_data_saved_keys">No hay claves almacenadas</string>
     <string name="show_current_position">Mostrando posición actual..</string>
+    <string name="map_layout_locations_list_title">Localización de claves</string>
+    <string name="show_my_location">Enséñame donde estoy</string>
 
 </resources>
