@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:paddingLeft="7dip"
         android:paddingRight="7dip"
-        android:text="@string/map_layout_locations_list_title"
+        android:text="@string/action2"
         android:textColor="#0099cc" />
 
     <ListView

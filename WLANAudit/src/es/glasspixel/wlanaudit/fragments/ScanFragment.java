@@ -40,6 +40,7 @@ import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Window;
 
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -338,8 +339,10 @@ public class ScanFragment extends SherlockFragment implements
 		final Dialog dialog = new Dialog(mContext);
 
 		dialog.setContentView(R.layout.network_details_dialog);
-		dialog.setTitle(getActivity().getResources().getString(
-				R.string.scan_fragment_dialog_title));
+		// dialog.setTitle(getActivity().getResources().getString(
+		// R.string.scan_fragment_dialog_title));
+		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
 		mDefaultPassValue = (TextView) dialog.findViewById(R.id.password_value);
 
 		final ScanResult s = (ScanResult) arg0.getItemAtPosition(arg2);

@@ -44,6 +44,7 @@ import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
@@ -135,9 +136,16 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 						@Override
 						public void onClick(View arg0) {
 							// TODO Auto-generated method stub
-							int width = (int) TypedValue.applyDimension(
-									TypedValue.COMPLEX_UNIT_DIP, 110,
-									getResources().getDisplayMetrics());
+							int width = (int) TypedValue
+									.applyDimension(
+											TypedValue.COMPLEX_UNIT_DIP,
+											getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (((WindowManager) getSystemService(Context.WINDOW_SERVICE))
+													.getDefaultDisplay()
+													.getHeight() / 4)
+													: (((WindowManager) getSystemService(Context.WINDOW_SERVICE))
+															.getDefaultDisplay()
+															.getWidth() / 5),
+											getResources().getDisplayMetrics());
 							SlideoutActivity.prepare(MapActivity.this,
 									R.id.swipeBezelMap, width);
 							Intent i = new Intent(MapActivity.this,
