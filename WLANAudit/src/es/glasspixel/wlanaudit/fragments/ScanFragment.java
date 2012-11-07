@@ -162,7 +162,7 @@ public class ScanFragment extends SherlockFragment implements
 
 		locationManager.requestLocationUpdates(bestProvider, 20, 0, listener);
 
-		loadFakeWlan();
+		// loadFakeWlan();
 	}
 
 	private final LocationListener listener = new LocationListener() {
@@ -337,11 +337,10 @@ public class ScanFragment extends SherlockFragment implements
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 		Context mContext = getActivity();
 		final Dialog dialog = new Dialog(mContext);
-
+		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		dialog.setContentView(R.layout.network_details_dialog);
 		// dialog.setTitle(getActivity().getResources().getString(
 		// R.string.scan_fragment_dialog_title));
-		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 		mDefaultPassValue = (TextView) dialog.findViewById(R.id.password_value);
 

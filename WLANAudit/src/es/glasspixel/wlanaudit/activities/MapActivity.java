@@ -141,7 +141,7 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 											TypedValue.COMPLEX_UNIT_DIP,
 											getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (((WindowManager) getSystemService(Context.WINDOW_SERVICE))
 													.getDefaultDisplay()
-													.getHeight() / 4)
+													.getHeight() / 2)
 													: (((WindowManager) getSystemService(Context.WINDOW_SERVICE))
 															.getDefaultDisplay()
 															.getWidth() / 5),

@@ -34,14 +34,14 @@
             tools:ignore="HardcodedText" >
         </TextView>
     </LinearLayout>
-
+
     <!-- <View -->
     <!-- android:id="@+id/divider" -->
     <!-- android:layout_width="fill_parent" -->
     <!-- android:layout_height="1dp" -->
     <!-- android:background="@drawable/layout_divider" /> -->
 
-<TableLayout
+    <TableLayout
         android:id="@+id/networkParamsLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -196,7 +196,7 @@
             </TextView>
         </TableRow>
     </TableLayout>
-
+
     <!-- <View -->
     <!-- android:id="@+id/divider2" -->
     <!-- android:layout_width="fill_parent" -->
@@ -204,7 +204,6 @@
     <!-- android:layout_marginTop="5dip" -->
     <!-- android:background="@drawable/layout_divider" > -->
     <!-- </View> -->
-
 
     <LinearLayout
         android:id="@+id/buttonsLayout"

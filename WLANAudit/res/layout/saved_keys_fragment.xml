@@ -2,14 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@drawable/grey_background_pattern"
     android:orientation="vertical" >
-
-    
 
     <ListView
         android:id="@+id/listView1"
-        android:background="@drawable/grey_background_pattern" 
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
     </ListView>

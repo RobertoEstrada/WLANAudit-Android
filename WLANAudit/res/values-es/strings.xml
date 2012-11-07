@@ -33,7 +33,7 @@
     <string name="time_unit"> segundos</string>
     <string name="about_version_number">Versión: </string>
     <string name="about_release_number">Número de revisión:</string>
-    <string name="disclaimer_text">WLANAudit © 2012 Roberto Estrada\n\nWLANAudit es una aplicacion pensada para auditar la seguridad de las claves de acceso de los puntos de acceso WLAN comprobando si pueden ser calculadas a traves de los datos publicos de la red.No me responsabilizo del uso que pueda derivarse de esta aplicacion\n\nPuedes descargar el código fuente desde:\nhttps://github.com/RobertoEstrada/WLANAudit-Android\n\</string>
+    <string name="disclaimer_text">WLANAudit © 2012 Roberto Estrada, Jesús Manzano\n\nWLANAudit es una aplicacion pensada para auditar la seguridad de las claves de acceso de los puntos de acceso WLAN comprobando si pueden ser calculadas a traves de los datos publicos de la red.No me responsabilizo del uso que pueda derivarse de esta aplicacion\n\nPuedes descargar el código fuente desde:\nhttps://github.com/RobertoEstrada/WLANAudit-Android\n\</string>
     <string name="number_of_keys_found">posibles claves</string>
     <string name="scan_now">Buscar</string>
     <string name="scan_fragment_dialog_title">Información sobre el punto de acceso</string>
