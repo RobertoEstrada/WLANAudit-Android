@@ -130,7 +130,7 @@ public class ScanFragment extends SherlockFragment implements
 
 	private String bestProvider;
 
-	// ActionBar mActionbar;
+	private MenuItem refresh;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -142,6 +142,11 @@ public class ScanFragment extends SherlockFragment implements
 		}
 		screenIsLarge = getSherlockActivity().getResources().getBoolean(
 				R.bool.screen_large);
+
+		// if (!screenIsLarge) {
+		// this.setHasOptionsMenu(true);
+		// }
+
 		locationManager = (LocationManager) getSherlockActivity()
 				.getSystemService(Context.LOCATION_SERVICE);
 
@@ -253,7 +258,13 @@ public class ScanFragment extends SherlockFragment implements
 
 		setupNetworkScanCallBack();
 		// StartPassButtonListener();
+		this.startScan();
+	}
+
+	public void startScan() {
 		mWifiManager.startScan();
+		if (refresh != null)
+			refresh.setActionView(R.layout.indeterminate_progress_action);
 	}
 
 	/**
@@ -270,11 +281,14 @@ public class ScanFragment extends SherlockFragment implements
 			public void onReceive(Context context, Intent intent) {
 				// Network scan complete, datasource needs to be updated and
 				// ListView refreshed
+
 				((ListView) myFragmentView.findViewById(R.id.listView1))
 						.setAdapter(new WifiNetworkAdapter(
 								getSherlockActivity(),
 								R.layout.network_list_element_layout,
 								mWifiManager.getScanResults()));
+				if (refresh != null && refresh.getActionView() != null)
+					refresh.setActionView(null);
 			}
 		};
 		getActivity().registerReceiver(mCallBackReceiver, i);
@@ -285,6 +299,7 @@ public class ScanFragment extends SherlockFragment implements
 		// TODO Add your menu entries here
 		super.onCreateOptionsMenu(menu, inflater);
 		inflater.inflate(R.menu.networklistactivity_menu, menu);
+		refresh = (MenuItem) menu.findItem(R.id.scanOption);
 	}
 
 	/**
@@ -298,6 +313,8 @@ public class ScanFragment extends SherlockFragment implements
 		case R.id.scanOption:
 			// if (mPosition == 0)
 			mRefreshAction.performAction();
+			if (refresh != null)
+				refresh.setActionView(R.layout.indeterminate_progress_action);
 			return true;
 		case R.id.toggleAutoscanOption:
 			// if (mPosition == 0)
@@ -552,7 +569,8 @@ public class ScanFragment extends SherlockFragment implements
 	public void onResume() {
 		super.onResume();
 		setupNetworkScanCallBack();
-		mWifiManager.startScan();
+		// mWifiManager.startScan();
+		this.startScan();
 		// mAd.loadAd(new AdRequest());
 	}
 

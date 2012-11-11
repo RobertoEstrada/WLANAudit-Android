@@ -48,7 +48,7 @@ public class RefreshAction implements Action {
         mContext = context;
     }
 
-    public void performAction() {
+	public void performAction() {
         WifiManager wifiManager = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
         wifiManager.startScan();
     }

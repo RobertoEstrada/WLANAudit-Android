@@ -63,6 +63,7 @@ public class NetworkListActivitySwipe extends SherlockFragmentActivity
 			SherlockFragment fragment = new SavedKeysFragment();
 			getSupportFragmentManager().beginTransaction()
 					.replace(R.id.item_detail_container, fragment).commit();
+			
 		}
 
 	}
