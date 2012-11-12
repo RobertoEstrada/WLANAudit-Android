@@ -177,18 +177,17 @@ public class SavedKeysFragment extends SherlockFragment {
 				null, 1);
 
 		SQLiteDatabase db = usdbh.getReadableDatabase();
-		Cursor c = db.query("Keys", new String[] { "nombre", "key", "latitude","longitude" }, null,
-				null, null, null, "nombre ASC");
-		if (c.moveToFirst()) {
-			while (c.moveToNext()) {
-				SavedKey k = new SavedKey(c.getString(c
-						.getColumnIndex("nombre")), c.getString(c
-						.getColumnIndex("key")), c.getFloat(c
-						.getColumnIndex("latitude")), c.getFloat(c
-						.getColumnIndex("longitude")));
-				mKeys.add(k);
-			}
+		Cursor c = db.query("Keys", new String[] { "nombre", "key", "latitude",
+				"longitude" }, null, null, null, null, "nombre ASC");
+		// if (c.moveToFirst()) {
+		while (c.moveToNext()) {
+			SavedKey k = new SavedKey(c.getString(c.getColumnIndex("nombre")),
+					c.getString(c.getColumnIndex("key")), c.getFloat(c
+							.getColumnIndex("latitude")), c.getFloat(c
+							.getColumnIndex("longitude")));
+			mKeys.add(k);
 		}
+		// }
 		c.close();
 		return mKeys;
 

@@ -199,6 +199,8 @@ public class ScanFragment extends SherlockFragment implements
 
 	};
 
+	private MenuItem automatic_scan;
+
 	private void printProvider(String provider) {
 		LocationProvider info = locationManager.getProvider(provider);
 		Log.d("MapActivity", info.getName());
@@ -300,6 +302,8 @@ public class ScanFragment extends SherlockFragment implements
 		super.onCreateOptionsMenu(menu, inflater);
 		inflater.inflate(R.menu.networklistactivity_menu, menu);
 		refresh = (MenuItem) menu.findItem(R.id.scanOption);
+		automatic_scan = (MenuItem) menu.findItem(R.id.toggleAutoscanOption);
+		checkAutoScanStatus();
 	}
 
 	/**
@@ -319,6 +323,7 @@ public class ScanFragment extends SherlockFragment implements
 		case R.id.toggleAutoscanOption:
 			// if (mPosition == 0)
 			mAutoScanAction.performAction();
+			checkAutoScanStatus();
 
 			return true;
 		case R.id.preferenceOption:
@@ -336,6 +341,15 @@ public class ScanFragment extends SherlockFragment implements
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+	private void checkAutoScanStatus() {
+		if (mAutoScanAction.isAutoScanEnabled()) {
+			automatic_scan.setIcon(R.drawable.ic_autoscan);
+		} else {
+			automatic_scan.setIcon(R.drawable.ic_autoscan_disabled);
+		}
+
 	}
 
 	@Override
