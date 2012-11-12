@@ -152,6 +152,7 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 									MenuActivity.class);
 							i.putExtra("calling-activity",
 									ActivityConstants.ACTIVITY_2);
+							i.putExtra("width", width);
 							startActivityForResult(i, 1);
 							overridePendingTransition(0, 0);
 						}
@@ -305,13 +306,13 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 		}
 		c.close();
 
-		if (mKeys.isEmpty()) {
-			for (int i = 0; i < 4; i++) {
-				SavedKey k = new SavedKey("Key " + i, "title " + i, i * 20,
-						i * 60);
-				mKeys.add(k);
-			}
-		}
+		// if (mKeys.isEmpty()) {
+		// for (int i = 0; i < 4; i++) {
+		// SavedKey k = new SavedKey("Key " + i, "title " + i, i * 20,
+		// i * 60);
+		// mKeys.add(k);
+		// }
+		// }
 
 	}
 

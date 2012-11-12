@@ -72,6 +72,10 @@ public class SavedKeysFragment extends SherlockFragment {
 
 		myFragmentView = inflater.inflate(R.layout.saved_keys_fragment,
 				container, false);
+		((TextView) myFragmentView.findViewById(R.id.empty))
+				.setText(getSherlockActivity().getResources().getString(
+						R.string.no_data_saved_keys));
+
 		((ListView) myFragmentView.findViewById(R.id.listView1))
 				.setEmptyView(getSherlockActivity().findViewById(R.id.empty));
 		((ListView) myFragmentView.findViewById(R.id.listView1))

@@ -28,14 +28,18 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.WindowManager.LayoutParams;
 import android.location.LocationListener;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -63,9 +67,20 @@ public class MenuFragment extends SherlockFragment {
 
 		Bundle b = getArguments();
 		int a = b.getInt("calling-activity");
+		int w = b.getInt("width");
 		final int callingActivity = getArguments()
 				.getInt("calling-activity", 0);
 		mView = inflater.inflate(R.layout.saved_keys_map_list, null);
+
+		int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX,
+				w, getResources().getDisplayMetrics());
+		LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(
+				LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+		llp.setMargins(0, 0, width, 0); // llp.setMargins(left, top, right,
+										// bottom);
+		
+
+		((TextView) mView.findViewById(R.id.empty)).setLayoutParams(llp);
 		loadElements(mView);
 
 		return mView;
@@ -89,13 +104,13 @@ public class MenuFragment extends SherlockFragment {
 		}
 		c.close();
 
-		if (mKeys.isEmpty()) {
-			for (int i = 0; i < 4; i++) {
-				SavedKey k = new SavedKey("Key " + i, "title " + i, i * 20,
-						i * 60);
-				mKeys.add(k);
-			}
-		}
+		// if (mKeys.isEmpty()) {
+		// for (int i = 0; i < 4; i++) {
+		// SavedKey k = new SavedKey("Key " + i, "title " + i, i * 20,
+		// i * 60);
+		// mKeys.add(k);
+		// }
+		// }
 
 		usdbh.close();
 

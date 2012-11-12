@@ -1,5 +1,6 @@
 package es.glasspixel.wlanaudit.fragments;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +41,7 @@ import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.ViewConfiguration;
 import android.view.Window;
 
 import android.view.View;
@@ -217,6 +219,11 @@ public class ScanFragment extends SherlockFragment implements
 
 		myFragmentView = inflater.inflate(R.layout.saved_keys_fragment,
 				container, false);
+		((TextView) myFragmentView.findViewById(R.id.empty))
+				.setText(getSherlockActivity().getResources().getString(
+						R.string.no_networks_found));
+		((ListView) myFragmentView.findViewById(R.id.listView1))
+				.setEmptyView(getSherlockActivity().findViewById(R.id.empty));
 		setHasOptionsMenu(true);
 
 		prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -233,13 +240,10 @@ public class ScanFragment extends SherlockFragment implements
 			editor.commit();
 		}
 
-		initScan();
-
 		((ListView) myFragmentView.findViewById(R.id.listView1))
 				.setOnItemClickListener(this);
 
-		((ListView) myFragmentView.findViewById(R.id.listView1))
-				.setEmptyView(getSherlockActivity().findViewById(R.id.empty));
+		initScan();
 
 		return myFragmentView;
 	}
@@ -250,17 +254,27 @@ public class ScanFragment extends SherlockFragment implements
 		mWifiManager = (WifiManager) getActivity().getSystemService(
 				Context.WIFI_SERVICE);
 
-		// If WiFi is disabled, enable it
-		if (!mWifiManager.isWifiEnabled()
-				&& prefs.getBoolean("wifi_autostart", true)) {
-			mWifiManager.setWifiEnabled(true);
+		if (mWifiManager != null) {
+
+			// If WiFi is disabled, enable it
+			if (!mWifiManager.isWifiEnabled()
+					&& prefs.getBoolean("wifi_autostart", true)) {
+				mWifiManager.setWifiEnabled(true);
+			}
+
+			mRefreshAction = new RefreshAction(getActivity());
+
+			setupNetworkScanCallBack();
+			// StartPassButtonListener();
+			this.startScan();
+		} else {
+			((TextView) myFragmentView.findViewById(R.id.empty))
+					.setText(getSherlockActivity().getResources().getString(
+							R.string.no_networks_found));
+			((ListView) myFragmentView.findViewById(R.id.listView1))
+					.setEmptyView(getSherlockActivity()
+							.findViewById(R.id.empty));
 		}
-
-		mRefreshAction = new RefreshAction(getActivity());
-
-		setupNetworkScanCallBack();
-		// StartPassButtonListener();
-		this.startScan();
 	}
 
 	public void startScan() {
@@ -284,11 +298,18 @@ public class ScanFragment extends SherlockFragment implements
 				// Network scan complete, datasource needs to be updated and
 				// ListView refreshed
 
-				((ListView) myFragmentView.findViewById(R.id.listView1))
-						.setAdapter(new WifiNetworkAdapter(
-								getSherlockActivity(),
-								R.layout.network_list_element_layout,
-								mWifiManager.getScanResults()));
+				if (mWifiManager.getScanResults().size() > 0) {
+					((ListView) myFragmentView.findViewById(R.id.listView1))
+							.setAdapter(new WifiNetworkAdapter(
+									getSherlockActivity(),
+									R.layout.network_list_element_layout,
+									mWifiManager.getScanResults()));
+				} else {
+					((ListView) myFragmentView.findViewById(R.id.listView1))
+							.setEmptyView(getSherlockActivity().findViewById(
+									R.id.empty));
+				}
+
 				if (refresh != null && refresh.getActionView() != null)
 					refresh.setActionView(null);
 			}

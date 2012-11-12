@@ -55,5 +55,7 @@
     <string name="show_my_location">Enséñame donde estoy</string>
     <string name="title_activity_map">Localización de claves</string>
     <string name="no_data_scan_keys">No hay puntos de acceso cerca tuyo</string>
+    <string name="menu_map_option">Mostrar claves almacenadas en el mapa</string>
+    <string name="no_data_scan_keys">No hay puntos de acceso cercanos</string>
 
 </resources>

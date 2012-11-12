@@ -26,14 +26,16 @@ public class MenuActivity extends SherlockFragmentActivity implements
 		mSlideoutHelper = new SlideoutHelper(this, true);
 		mSlideoutHelper.activate();
 		int callingActivity = getIntent().getIntExtra("calling-activity", 0);
-		switch (callingActivity) {
-		case ActivityConstants.ACTIVITY_2:
-
-			break;
-		}
+		int width = getIntent().getIntExtra("width", 0);
+		// switch (callingActivity) {
+		// case ActivityConstants.ACTIVITY_2:
+		//
+		// break;
+		// }
 		MenuFragment fragment = new MenuFragment();
 		Bundle bundle = new Bundle();
 		bundle.putInt("calling-activity", callingActivity);
+		bundle.putInt("width", width);
 		fragment.setArguments(bundle);
 		getSupportFragmentManager()
 				.beginTransaction()
