@@ -18,7 +18,6 @@ import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
-
 import es.glasspixel.wlanaudit.R;
 import es.glasspixel.wlanaudit.adapters.MapElementsAdapter;
 import es.glasspixel.wlanaudit.database.KeysSQliteHelper;
@@ -79,6 +78,7 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 	private ArrayList<Object> items;
 	private es.glasspixel.wlanaudit.activities.MenuListView mList;
 	private MenuAdapter mAdapter;
+	private LinearLayout l;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +88,10 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 
 		screenIsLarge = getResources().getBoolean(R.bool.screen_large);
 
-		if (!(screenIsLarge && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)) {
+		setContentView(R.layout.activity_map_layout);
+		l = ((LinearLayout) findViewById(R.id.swipeBezelMap));
+
+		if (l != null) {
 			mMenuDrawer = new MenuDrawerManager(this,
 					MenuDrawer.MENU_DRAG_CONTENT,
 					MenuDrawer.MENU_POSITION_RIGHT);
@@ -403,7 +406,7 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 			if (!(screenIsLarge && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE))
 				items.add(new Item(s.getWlan_name(), s.getKey()));
 		}
-		if (!(screenIsLarge && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)) {
+		if (l != null) {
 
 			mAdapter = new MenuAdapter(items);
 			mList.setAdapter(mAdapter);
