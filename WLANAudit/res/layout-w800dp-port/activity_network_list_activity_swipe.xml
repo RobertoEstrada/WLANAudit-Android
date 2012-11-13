@@ -23,6 +23,7 @@
             android:gravity="center"
             android:padding="6dp"
             android:text="@string/action1"
+            android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/white" />
 
         <fragment
@@ -52,13 +53,13 @@
             android:gravity="center"
             android:padding="6dp"
             android:text="@string/action2"
+            android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/white" />
 
         <FrameLayout
             android:id="@+id/item_detail_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            
             android:layout_marginLeft="9dp"
             android:layout_marginRight="9dp"
             android:background="@color/white" />

@@ -168,8 +168,6 @@ public class ScanFragment extends SherlockFragment implements
 		}
 
 		locationManager.requestLocationUpdates(bestProvider, 20, 0, listener);
-		
-		
 
 		// loadFakeWlan();
 	}
@@ -250,10 +248,8 @@ public class ScanFragment extends SherlockFragment implements
 				.setOnItemClickListener(this);
 
 		initScan();
-		
-		 setHasOptionsMenu(true);
 
-		
+		setHasOptionsMenu(true);
 
 		return myFragmentView;
 	}
@@ -294,7 +290,7 @@ public class ScanFragment extends SherlockFragment implements
 
 	public void startScan() {
 		boolean start = mWifiManager.startScan();
-		if (refresh != null)
+		if (refresh != null && start == true)
 			refresh.setActionView(R.layout.indeterminate_progress_action);
 	}
 
