@@ -94,9 +94,13 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 					MenuDrawer.MENU_POSITION_RIGHT);
 			mMenuDrawer.setContentView(R.layout.activity_map_layout);
 
-			mMenuDrawer.getMenuDrawer().setMenuWidth(
-					(((WindowManager) getSystemService(Context.WINDOW_SERVICE))
-							.getDefaultDisplay().getWidth() / 2));
+			mMenuDrawer
+					.getMenuDrawer()
+					.setMenuWidth(
+							getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT ? ((((WindowManager) getSystemService(Context.WINDOW_SERVICE))
+									.getDefaultDisplay().getWidth() / 4) * 3)
+									: (((WindowManager) getSystemService(Context.WINDOW_SERVICE))
+											.getDefaultDisplay().getWidth() / 2));
 
 			items = new ArrayList<Object>();
 			items.add(new Category(getResources().getString(
