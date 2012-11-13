@@ -17,7 +17,7 @@ import org.osmdroid.views.overlay.SimpleLocationOverlay;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.korovyansk.android.slideout.SlideoutActivity;
+
 
 import es.glasspixel.wlanaudit.R;
 import es.glasspixel.wlanaudit.adapters.MapElementsAdapter;
@@ -103,8 +103,8 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 											.getDefaultDisplay().getWidth() / 2));
 
 			items = new ArrayList<Object>();
-			items.add(new Category(getResources().getString(
-					R.string.map_layout_locations_list_title).toUpperCase()));
+			items.add(new Category(getResources().getString(R.string.action2)
+					.toUpperCase()));
 			((LinearLayout) findViewById(R.id.swipeBezelMap))
 					.setOnClickListener(new OnClickListener() {
 
@@ -206,9 +206,10 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 			int i = 0;
 			for (SavedKey s : mKeys) {
 				if (s.getWlan_name().equals(wlan_selected)) {
-					this.centerMap(new GeoPoint(s.getLatitude(), s
-							.getLongitude()));
-					centerMap(anotherOverlayItemArray.get(i).mGeoPoint);
+					this.centerMap(
+							new GeoPoint(s.getLatitude(), s.getLongitude()),
+							false);
+					// centerMap(anotherOverlayItemArray.get(i).mGeoPoint);
 					break;
 				}
 				i++;
@@ -221,17 +222,21 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 	private void showLocation(Location l) {
 		final GeoPoint gp = new GeoPoint(l.getLatitude(), l.getLongitude());
 
-		Toast.makeText(getApplicationContext(), "Show current position",
+		Toast.makeText(getApplicationContext(),
+				getResources().getString(R.string.position_refreshed),
 				Toast.LENGTH_LONG).show();
 
 		changePositionInMap(l);
-		this.centerMap(gp);
+		this.centerMap(gp, false);
 
-		// myMapController.setZoom(7);
 	}
 
-	private void centerMap(GeoPoint g) {
+	private void centerMap(GeoPoint g, boolean zoom) {
 		myMapController.setCenter(g);
+
+		if (zoom)
+			myMapController.setZoom(myOpenMapView.getMaxZoomLevel() - 5);
+
 	}
 
 	private void changePositionInMap(Location l) {
@@ -368,17 +373,20 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 			mActivePosition = position - 1;
 			mMenuDrawer.setActiveView(view, mActivePosition);
 
-			String wlan_selected = mKeys.get(mActivePosition).getWlan_name();
-			Log.d("MapActivity", "wlan selected on menu: " + wlan_selected);
-			int i = 0;
-			for (SavedKey s : mKeys) {
-				if (s.getWlan_name().equals(wlan_selected)) {
-					centerMap(new GeoPoint(s.getLatitude(), s.getLongitude()));
-					centerMap(anotherOverlayItemArray.get(i).mGeoPoint);
-					break;
-				}
-				i++;
-			}
+			// String wlan_selected = mKeys.get(mActivePosition).getWlan_name();
+			// Log.d("MapActivity", "wlan selected on menu: " + wlan_selected);
+			// int i = 0;
+			// for (SavedKey s : mKeys) {
+			// if (s.getWlan_name().equals(wlan_selected)) {
+			// centerMap(new GeoPoint(s.getLatitude(), s.getLongitude()));
+			// // centerMap(anotherOverlayItemArray.get(i).mGeoPoint);
+			// break;
+			// }
+			// i++;
+			// }
+
+			centerMap(anotherOverlayItemArray.get(mActivePosition).mGeoPoint,
+					true);
 
 			mMenuDrawer.closeMenu();
 		}
@@ -429,9 +437,12 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 						@Override
 						public void onItemClick(AdapterView<?> arg0, View arg1,
 								int arg2, long arg3) {
-							myMapController.setCenter(new GeoPoint(mKeys.get(
-									arg2).getLatitude(), mKeys.get(arg2)
-									.getLongitude()));
+							// myMapController.setCenter(new GeoPoint(mKeys.get(
+							// arg2).getLatitude(), mKeys.get(arg2)
+							// .getLongitude()));
+							centerMap(
+									anotherOverlayItemArray.get(arg2).mGeoPoint,
+									true);
 
 						}
 

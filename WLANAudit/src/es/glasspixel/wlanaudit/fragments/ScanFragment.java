@@ -224,7 +224,11 @@ public class ScanFragment extends SherlockFragment implements
 						R.string.no_networks_found));
 		((ListView) myFragmentView.findViewById(R.id.listView1))
 				.setEmptyView(getSherlockActivity().findViewById(R.id.empty));
-		setHasOptionsMenu(true);
+
+		((ListView) myFragmentView.findViewById(R.id.listView1))
+				.setAdapter(new WifiNetworkAdapter(getSherlockActivity(),
+						R.layout.network_list_element_layout,
+						new ArrayList<ScanResult>()));
 
 		prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		// If preference does not exist
@@ -245,14 +249,19 @@ public class ScanFragment extends SherlockFragment implements
 
 		initScan();
 
+		
+
+			setHasOptionsMenu(true);
+
 		return myFragmentView;
 	}
 
 	public void initScan() {
 
 		// WifiManager initialization
-		mWifiManager = (WifiManager) getActivity().getSystemService(
-				Context.WIFI_SERVICE);
+		if (mWifiManager == null)
+			mWifiManager = (WifiManager) getActivity().getSystemService(
+					Context.WIFI_SERVICE);
 
 		if (mWifiManager != null) {
 
@@ -268,6 +277,10 @@ public class ScanFragment extends SherlockFragment implements
 			// StartPassButtonListener();
 			this.startScan();
 		} else {
+			if (refresh != null) {
+				refresh.setActionView(null);
+				refresh.setEnabled(false);
+			}
 			((TextView) myFragmentView.findViewById(R.id.empty))
 					.setText(getSherlockActivity().getResources().getString(
 							R.string.no_networks_found));
@@ -278,7 +291,7 @@ public class ScanFragment extends SherlockFragment implements
 	}
 
 	public void startScan() {
-		mWifiManager.startScan();
+		boolean start = mWifiManager.startScan();
 		if (refresh != null)
 			refresh.setActionView(R.layout.indeterminate_progress_action);
 	}
@@ -314,7 +327,7 @@ public class ScanFragment extends SherlockFragment implements
 					refresh.setActionView(null);
 			}
 		};
-		getActivity().registerReceiver(mCallBackReceiver, i);
+		getSherlockActivity().registerReceiver(mCallBackReceiver, i);
 	}
 
 	@Override
@@ -492,12 +505,6 @@ public class ScanFragment extends SherlockFragment implements
 
 	}
 
-	private void loadFakeWlan() {
-		for (int i = 0; i < 4; i++) {
-			this.saveFakeWLAN("WLAN_" + i, "1234567890", i);
-		}
-	}
-
 	private void copyClipboard(CharSequence text) {
 		int sdk = android.os.Build.VERSION.SDK_INT;
 		if (sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
@@ -605,7 +612,8 @@ public class ScanFragment extends SherlockFragment implements
 		super.onResume();
 		setupNetworkScanCallBack();
 		// mWifiManager.startScan();
-		this.startScan();
+		initScan();
+		startScan();
 		// mAd.loadAd(new AdRequest());
 	}
 

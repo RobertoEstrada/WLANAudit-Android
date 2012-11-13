@@ -131,7 +131,7 @@ public class NetworkListActivitySwipe extends SherlockFragmentActivity
 	 */
 	protected void onResume() {
 		super.onResume();
-		// mWifiManager.startScan();
+		
 		// mAd.loadAd(new AdRequest());
 	}
 

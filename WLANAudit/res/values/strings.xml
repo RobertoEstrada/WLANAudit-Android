@@ -9,6 +9,7 @@
     <string name="signal_level_label">Intensity:</string>
     <string name="default_password_label">Default pass:</string>
     <string name="copy_pass_button">Copy password</string>
+    <string name="send_report">Sending error report..</string>
     <string name="no_default_key">Impossible to calculate</string>
     <string name="key_copy_warn_title">Unsafe AP</string>
     <string name="key_copy_warn_text">The default key of this AP could be guessed, hence this AP is unsafe. If this AP isn\'t yours, warn the owner about this security issue.</string>
@@ -61,6 +62,7 @@
     <string name="show_my_location">Show my location</string>
     <string name="menu_map_option">Show saved keys in map</string>
     <string name="no_data_scan_keys">There aren\'t AP near you</string>
+    <string name="position_refreshed">Location updated</string>
     
     
 
