@@ -63,8 +63,10 @@ public class NetworkListActivitySwipe extends SherlockFragmentActivity
 			mViewPager.setAdapter(mSectionsPagerAdapter);
 		} else {
 			SherlockFragment fragment = new SavedKeysFragment();
+
 			getSupportFragmentManager().beginTransaction()
-					.replace(R.id.item_detail_container, fragment).commit();
+					.replace(R.id.item_detail_container, fragment, "tag")
+					.commit();
 		}
 
 		if (!screenIsLarge) {
@@ -144,9 +146,9 @@ public class NetworkListActivitySwipe extends SherlockFragmentActivity
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
+		// super.onSaveInstanceState(outState);
 
-		outState.remove("android:support:fragments");
+		// outState.remove("android:support:fragments");
 	}
 
 	@Override

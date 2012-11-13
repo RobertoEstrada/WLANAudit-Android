@@ -168,8 +168,7 @@ public class ScanFragment extends SherlockFragment implements
 		}
 
 		locationManager.requestLocationUpdates(bestProvider, 20, 0, listener);
-
-		// loadFakeWlan();
+		setHasOptionsMenu(true);
 	}
 
 	private final LocationListener listener = new LocationListener() {
@@ -249,7 +248,7 @@ public class ScanFragment extends SherlockFragment implements
 
 		initScan();
 
-		setHasOptionsMenu(true);
+		
 
 		return myFragmentView;
 	}
@@ -309,16 +308,18 @@ public class ScanFragment extends SherlockFragment implements
 				// Network scan complete, datasource needs to be updated and
 				// ListView refreshed
 
-				if (mWifiManager.getScanResults().size() > 0) {
-					((ListView) myFragmentView.findViewById(R.id.listView1))
-							.setAdapter(new WifiNetworkAdapter(
-									getSherlockActivity(),
-									R.layout.network_list_element_layout,
-									mWifiManager.getScanResults()));
-				} else {
-					((ListView) myFragmentView.findViewById(R.id.listView1))
-							.setEmptyView(getSherlockActivity().findViewById(
-									R.id.empty));
+				if (myFragmentView != null) {
+					if (mWifiManager.getScanResults().size() > 0) {
+						((ListView) myFragmentView.findViewById(R.id.listView1))
+								.setAdapter(new WifiNetworkAdapter(
+										getSherlockActivity(),
+										R.layout.network_list_element_layout,
+										mWifiManager.getScanResults()));
+					} else {
+						((ListView) myFragmentView.findViewById(R.id.listView1))
+								.setEmptyView(getSherlockActivity()
+										.findViewById(R.id.empty));
+					}
 				}
 
 				if (refresh != null && refresh.getActionView() != null)

@@ -165,6 +165,7 @@ public class SavedKeysFragment extends SherlockFragment {
 		}
 
 		setHasOptionsMenu(true);
+		// setRetainInstance(true);
 
 		return myFragmentView;
 	}
