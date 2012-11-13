@@ -4,3 +4,9 @@
 [submodule "NumberPicker"]
 	path = NumberPicker
 	url = https://github.com/mrn/numberpicker.git
+[submodule "android-fb-like-slideout-navigation"]
+	path = android-fb-like-slideout-navigation
+	url = git://github.com/korovyansk/android-fb-like-slideout-navigation.git
+[submodule "android-menudrawer"]
+	path = android-menudrawer
+	url = git://github.com/SimonVT/android-menudrawer.git

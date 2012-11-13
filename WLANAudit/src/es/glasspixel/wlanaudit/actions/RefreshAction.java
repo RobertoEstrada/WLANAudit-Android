@@ -39,10 +39,10 @@ import android.net.wifi.WifiManager;
  */
 public class RefreshAction implements Action {
 
-	/**
-	 * A context for this action
-	 */
-	private final Context mContext;
+    /**
+     * A context for this action
+     */
+    private final Context mContext;
 
 	public RefreshAction(Context context) {
 		mContext = context;

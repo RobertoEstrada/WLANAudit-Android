@@ -41,9 +41,9 @@ public class WifiNetworkAdapter extends ArrayAdapter<ScanResult> {
 	public static final int[] ENCRYPTED_STATE_SET = { R.attr.state_encrypted };
 
 	public static final int SECURITY_NONE = 0;
-	public static final int SECURITY_WEP = 1;
-	public static final int SECURITY_PSK = 2;
-	public static final int SECURITY_EAP = 3;
+	private static final int SECURITY_WEP = 1;
+	private static final int SECURITY_PSK = 2;
+	private static final int SECURITY_EAP = 3;
 
 	public static final int MAX_SIGNAL_STRENGTH_LEVEL = 4;
 
