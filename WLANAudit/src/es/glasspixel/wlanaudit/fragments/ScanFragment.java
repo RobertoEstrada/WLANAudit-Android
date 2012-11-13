@@ -168,6 +168,8 @@ public class ScanFragment extends SherlockFragment implements
 		}
 
 		locationManager.requestLocationUpdates(bestProvider, 20, 0, listener);
+		
+		
 
 		// loadFakeWlan();
 	}
@@ -248,10 +250,10 @@ public class ScanFragment extends SherlockFragment implements
 				.setOnItemClickListener(this);
 
 		initScan();
+		
+		 setHasOptionsMenu(true);
 
 		
-
-			setHasOptionsMenu(true);
 
 		return myFragmentView;
 	}

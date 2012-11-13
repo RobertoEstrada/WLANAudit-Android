@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <bool name="screen_large">false</bool>
+
+    <bool name="screen_large">true</bool>
     <bool name="portrait">false</bool>
-    
+
 </resources>

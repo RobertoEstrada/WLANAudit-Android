@@ -160,10 +160,11 @@ public class SavedKeysFragment extends SherlockFragment {
 			// if(getSherlockActivity().getResources().getConfiguration().orientation
 			// == Configuration.ORIENTATION_LANDSCAPE)
 			// {
-			
-				setHasOptionsMenu(true);
+
 			// }
 		}
+
+		setHasOptionsMenu(true);
 
 		return myFragmentView;
 	}
@@ -221,7 +222,7 @@ public class SavedKeysFragment extends SherlockFragment {
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		// TODO Add your menu entries here
+
 		super.onCreateOptionsMenu(menu, inflater);
 		inflater.inflate(R.menu.networklistactivity_savedkeys_menu, menu);
 	}

@@ -36,7 +36,7 @@ public class NetworkListActivitySwipe extends SherlockFragmentActivity
 
 	private Resources res;
 
-	private boolean screenIsLarge;
+	private boolean screenIsLarge = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -48,22 +48,29 @@ public class NetworkListActivitySwipe extends SherlockFragmentActivity
 
 		res = getResources();
 		screenIsLarge = res.getBoolean(R.bool.screen_large);
+		int a = 0;
 
-		if (!screenIsLarge) {
+		mViewPager = (ViewPager) findViewById(R.id.pager);
 
+		if (mViewPager != null) {
 			mFragments = new ArrayList<SherlockFragment>();
 
 			mSectionsPagerAdapter = new SectionsPagerAdapter(
 					getSupportFragmentManager());
 
 			// Set up the ViewPager with the sections adapter.
-			mViewPager = (ViewPager) findViewById(R.id.pager);
+
 			mViewPager.setAdapter(mSectionsPagerAdapter);
 		} else {
 			SherlockFragment fragment = new SavedKeysFragment();
 			getSupportFragmentManager().beginTransaction()
 					.replace(R.id.item_detail_container, fragment).commit();
-			
+		}
+
+		if (!screenIsLarge) {
+
+		} else {
+
 		}
 
 	}
@@ -131,8 +138,15 @@ public class NetworkListActivitySwipe extends SherlockFragmentActivity
 	 */
 	protected void onResume() {
 		super.onResume();
-		
+
 		// mAd.loadAd(new AdRequest());
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+
+		outState.remove("android:support:fragments");
 	}
 
 	@Override
