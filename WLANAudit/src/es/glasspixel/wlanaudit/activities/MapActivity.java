@@ -3,6 +3,9 @@ package es.glasspixel.wlanaudit.activities;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.simonvt.widget.MenuDrawer;
+import net.simonvt.widget.MenuDrawerManager;
+
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
@@ -44,10 +47,13 @@ import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
@@ -69,12 +75,70 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 	private OverlayItem positionOverlay;
 	private GestureDetector myGesture;
 	private ArrayList<OverlayItem> positionOverlayItemArray;
+	private MenuDrawerManager mMenuDrawer;
+	private ArrayList<Object> items;
+	private es.glasspixel.wlanaudit.activities.MenuListView mList;
+	private MenuAdapter mAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_map_layout);
+		// setContentView(R.layout.activity_map_layout);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+		screenIsLarge = getResources().getBoolean(R.bool.screen_large);
+
+		if (!(screenIsLarge && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)) {
+			mMenuDrawer = new MenuDrawerManager(this,
+					MenuDrawer.MENU_DRAG_CONTENT,
+					MenuDrawer.MENU_POSITION_RIGHT);
+			mMenuDrawer.setContentView(R.layout.activity_map_layout);
+
+			mMenuDrawer.getMenuDrawer().setMenuWidth(
+					(((WindowManager) getSystemService(Context.WINDOW_SERVICE))
+							.getDefaultDisplay().getWidth() / 2));
+
+			items = new ArrayList<Object>();
+			items.add(new Category(getResources().getString(
+					R.string.map_layout_locations_list_title).toUpperCase()));
+			((LinearLayout) findViewById(R.id.swipeBezelMap))
+					.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View arg0) {
+							// TODO Auto-generated method stub
+							int width = (int) TypedValue
+									.applyDimension(
+											TypedValue.COMPLEX_UNIT_DIP,
+											getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (((WindowManager) getSystemService(Context.WINDOW_SERVICE))
+													.getDefaultDisplay()
+													.getHeight() / 2)
+													: (((WindowManager) getSystemService(Context.WINDOW_SERVICE))
+															.getDefaultDisplay()
+															.getWidth() / 2),
+											getResources().getDisplayMetrics());
+
+							mMenuDrawer.toggleMenu();
+							// SlideoutActivity.prepare(MapActivity.this,
+							// R.id.swipeBezelMap, width);
+							// Intent i = new Intent(MapActivity.this,
+							// MenuActivity.class);
+							// i.putExtra("calling-activity",
+							// ActivityConstants.ACTIVITY_2);
+							// i.putExtra("width", width);
+							// startActivityForResult(i, 1);
+							// overridePendingTransition(0, 0);
+						}
+					});
+
+		} else {
+			setContentView(R.layout.activity_map_layout);
+		}
+
+		// A custom ListView is needed so the drawer can be notified when it's
+		// scrolled. This is to update the position
+		// of the arrow indicator.
+		mList = new MenuListView(this);
 
 		myGesture = new GestureDetector(getBaseContext(),
 				(OnGestureListener) this);
@@ -112,8 +176,6 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 
 		locationManager.requestLocationUpdates(bestProvider, 20, 0, listener);
 
-		screenIsLarge = getResources().getBoolean(R.bool.screen_large);
-
 		loadElements();
 
 		if (mKeys.size() == 0) {
@@ -126,37 +188,6 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 				showLocation(lastKnownLocation);
 
 			}
-
-		}
-
-		if (!(screenIsLarge && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)) {
-			((LinearLayout) findViewById(R.id.swipeBezelMap))
-					.setOnClickListener(new OnClickListener() {
-
-						@Override
-						public void onClick(View arg0) {
-							// TODO Auto-generated method stub
-							int width = (int) TypedValue
-									.applyDimension(
-											TypedValue.COMPLEX_UNIT_DIP,
-											getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? (((WindowManager) getSystemService(Context.WINDOW_SERVICE))
-													.getDefaultDisplay()
-													.getHeight() / 2)
-													: (((WindowManager) getSystemService(Context.WINDOW_SERVICE))
-															.getDefaultDisplay()
-															.getWidth() / 5),
-											getResources().getDisplayMetrics());
-							SlideoutActivity.prepare(MapActivity.this,
-									R.id.swipeBezelMap, width);
-							Intent i = new Intent(MapActivity.this,
-									MenuActivity.class);
-							i.putExtra("calling-activity",
-									ActivityConstants.ACTIVITY_2);
-							i.putExtra("width", width);
-							startActivityForResult(i, 1);
-							overridePendingTransition(0, 0);
-						}
-					});
 
 		}
 
@@ -232,10 +263,7 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle item selection
-		Intent i;
 		switch (item.getItemId()) {
-
 		case android.R.id.home:
 			NavUtils.navigateUpFromSameTask(this);
 			break;
@@ -251,6 +279,18 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 			return super.onOptionsItemSelected(item);
 		}
 		return true;
+	}
+
+	@Override
+	public void onBackPressed() {
+		final int drawerState = mMenuDrawer.getDrawerState();
+		if (drawerState == MenuDrawer.STATE_OPEN
+				|| drawerState == MenuDrawer.STATE_OPENING) {
+			mMenuDrawer.closeMenu();
+			return;
+		}
+
+		super.onBackPressed();
 	}
 
 	@Override
@@ -303,6 +343,7 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 							.getColumnIndex("latitude")), c.getFloat(c
 							.getColumnIndex("longitude")));
 			mKeys.add(k);
+
 		}
 		c.close();
 
@@ -316,6 +357,29 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 
 	}
 
+	private AdapterView.OnItemClickListener mItemClickListener = new AdapterView.OnItemClickListener() {
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position,
+				long id) {
+			mActivePosition = position - 1;
+			mMenuDrawer.setActiveView(view, mActivePosition);
+
+			String wlan_selected = mKeys.get(mActivePosition).getWlan_name();
+			Log.d("MapActivity", "wlan selected on menu: " + wlan_selected);
+			int i = 0;
+			for (SavedKey s : mKeys) {
+				if (s.getWlan_name().equals(wlan_selected)) {
+					centerMap(new GeoPoint(s.getLatitude(), s.getLongitude()));
+					centerMap(anotherOverlayItemArray.get(i).mGeoPoint);
+					break;
+				}
+				i++;
+			}
+
+			mMenuDrawer.closeMenu();
+		}
+	};
+
 	private void loadElements() {
 
 		this.loadSavedKeys();
@@ -324,6 +388,22 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 			anotherOverlayItemArray
 					.add(new OverlayItem(s.getWlan_name(), s.getKey(),
 							new GeoPoint(s.getLatitude(), s.getLongitude())));
+			if (!(screenIsLarge && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE))
+				items.add(new Item(s.getWlan_name(), s.getKey()));
+		}
+		if (!(screenIsLarge && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)) {
+
+			mAdapter = new MenuAdapter(items);
+			mList.setAdapter(mAdapter);
+			mList.setOnItemClickListener(mItemClickListener);
+			mList.setOnScrollChangedListener(new MenuListView.OnScrollChangedListener() {
+				@Override
+				public void onScrollChanged() {
+					mMenuDrawer.getMenuDrawer().invalidate();
+				}
+			});
+
+			mMenuDrawer.setMenuView(mList);
 		}
 
 		ItemizedOverlayWithFocus<OverlayItem> anotherItemizedIconOverlay = new ItemizedOverlayWithFocus<OverlayItem>(
@@ -378,6 +458,7 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 		}
 
 	};
+	public int mActivePosition;
 
 	private static final int SWIPE_MIN_DISTANCE = 120;
 	private static final int SWIPE_MAX_OFF_PATH = 250;
@@ -457,6 +538,112 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 	public void onKeySlected(String data) {
 		// TODO Auto-generated method stub
 
+	}
+
+	private static class Category {
+
+		String mTitle;
+
+		Category(String title) {
+			mTitle = title;
+		}
+	}
+
+	private static class Item {
+
+		String mTitle;
+		String mSubTitle;
+
+		Item(String title, String subtitle) {
+			mTitle = title;
+			mSubTitle = subtitle;
+
+		}
+	}
+
+	private class MenuAdapter extends BaseAdapter {
+
+		private List<Object> mItems;
+
+		MenuAdapter(List<Object> items) {
+			mItems = items;
+		}
+
+		@Override
+		public int getCount() {
+			return mItems.size();
+		}
+
+		@Override
+		public Object getItem(int position) {
+			return mItems.get(position);
+		}
+
+		@Override
+		public long getItemId(int position) {
+			return position;
+		}
+
+		@Override
+		public int getItemViewType(int position) {
+			return getItem(position) instanceof Item ? 0 : 1;
+		}
+
+		@Override
+		public int getViewTypeCount() {
+			return 2;
+		}
+
+		@Override
+		public boolean isEnabled(int position) {
+			return getItem(position) instanceof Item;
+		}
+
+		@Override
+		public boolean areAllItemsEnabled() {
+			return false;
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			View v = convertView;
+			Object item = getItem(position);
+
+			if (item instanceof Category) {
+				if (v == null) {
+					v = getLayoutInflater().inflate(R.layout.menu_row_category,
+							parent, false);
+				}
+
+				((TextView) v).setText(((Category) item).mTitle);
+
+			} else {
+				if (v == null) {
+					// v = getLayoutInflater().inflate(R.layout.menu_row_item,
+					// parent, false);
+					v = getLayoutInflater().inflate(
+							R.layout.key_saved_list_element, parent, false);
+				}
+
+				((TextView) v.findViewById(R.id.networkName))
+						.setText(((Item) item).mTitle);
+				((TextView) v.findViewById(R.id.networkKey))
+						.setText(((Item) item).mSubTitle);
+
+				// TextView tv = (TextView) v;
+				// tv.setText(((Item) item).mTitle);
+				// tv.setCompoundDrawablesWithIntrinsicBounds(
+				// ((Item) item).mIconRes, 0, 0, 0);
+			}
+
+			v.setTag(R.id.mdActiveViewPosition, position);
+
+			if (position == mActivePosition) {
+				mMenuDrawer.setActiveView(v, position);
+			}
+
+			return v;
+		}
 	}
 
 }
