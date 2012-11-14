@@ -1,10 +1,16 @@
-package es.glasspixel.wlanaudit;
+package es.glasspixel.wlanaudit.activities;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+
+import es.glasspixel.wlanaudit.R;
+import es.glasspixel.wlanaudit.R.bool;
+import es.glasspixel.wlanaudit.R.id;
+import es.glasspixel.wlanaudit.R.layout;
+import es.glasspixel.wlanaudit.R.string;
 import es.glasspixel.wlanaudit.fragments.SavedKeysFragment;
 import es.glasspixel.wlanaudit.fragments.ScanFragment;
 import android.content.res.Resources;
@@ -12,8 +18,10 @@ import android.net.wifi.ScanResult;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 
 public class NetworkListActivitySwipe extends SherlockFragmentActivity
 		implements ScanFragment.Callbacks {
@@ -33,24 +41,25 @@ public class NetworkListActivitySwipe extends SherlockFragmentActivity
 	 * The {@link ViewPager} that will host the section contents.
 	 */
 	ViewPager mViewPager;
+	List<SherlockFragment> fragments = new ArrayList<SherlockFragment>();
 
 	private Resources res;
 
 	private boolean screenIsLarge = false;
+	protected int position = 0;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_network_list_activity_swipe);
 
-		// Create the adapter that will return a fragment for each of the three
-		// primary sections of the app.
-
 		res = getResources();
 		screenIsLarge = res.getBoolean(R.bool.screen_large);
-		int a = 0;
 
 		mViewPager = (ViewPager) findViewById(R.id.pager);
+
+		fragments.add(new ScanFragment());
+		fragments.add(new SavedKeysFragment());
 
 		if (mViewPager != null) {
 			mFragments = new ArrayList<SherlockFragment>();
@@ -58,21 +67,51 @@ public class NetworkListActivitySwipe extends SherlockFragmentActivity
 			mSectionsPagerAdapter = new SectionsPagerAdapter(
 					getSupportFragmentManager());
 
-			// Set up the ViewPager with the sections adapter.
+			// mViewPager.setOnPageChangeListener(new OnPageChangeListener() {
+			//
+			// @Override
+			// public void onPageScrollStateChanged(int arg0) {
+			// // TODO Auto-generated method stub
+			//
+			// }
+			//
+			// @Override
+			// public void onPageScrolled(int arg0, float arg1, int arg2) {
+			// // TODO Auto-generated method stub
+			//
+			// }
+			//
+			// @Override
+			// public void onPageSelected(int arg0) {
+			// if (arg0 != position) {
+			// position = arg0;
+			// mViewPager.setCurrentItem(position);
+			// }
+			// }
+			// });
+			//
+			// // Set up the ViewPager with the sections adapter.
+			//
+			// mViewPager.post(new Runnable() {
+			//
+			// @Override
+			// public void run() {
+			// if (mViewPager.getCurrentItem() != position) {
+			// mViewPager.setCurrentItem(position);
+			//
+			// }
+			//
+			// }
+			// });
 
 			mViewPager.setAdapter(mSectionsPagerAdapter);
+
 		} else {
 			SherlockFragment fragment = new SavedKeysFragment();
 
 			getSupportFragmentManager().beginTransaction()
 					.replace(R.id.item_detail_container, fragment, "tag")
 					.commit();
-		}
-
-		if (!screenIsLarge) {
-
-		} else {
-
 		}
 
 	}
@@ -89,26 +128,20 @@ public class NetworkListActivitySwipe extends SherlockFragmentActivity
 
 		@Override
 		public SherlockFragment getItem(int position) {
-			// getItem is called to instantiate the fragment for the given page.
-			// Return a DummySectionFragment (defined as a static inner class
-			// below) with the page number as its lone argument.
-			// Fragment fragment = new DummySectionFragment();
-			// Bundle args = new Bundle();
-			// args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position +
-			// 1);
-			// fragment.setArguments(args);
+			// NetworkListActivitySwipe.this.position = position;
+
 			SherlockFragment fragment;
 			if (position == 0)
 				fragment = new ScanFragment();
 			else
 				fragment = new SavedKeysFragment();
 
-			return fragment;
+			return fragments.get(position);
+
 		}
 
 		@Override
 		public int getCount() {
-			// Show 3 total pages.
 			return 2;
 		}
 

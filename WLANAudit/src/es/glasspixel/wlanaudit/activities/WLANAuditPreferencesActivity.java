@@ -20,7 +20,6 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockPreferenceActivity;
 import com.actionbarsherlock.view.MenuItem;
 
-import es.glasspixel.wlanaudit.NetworkListActivitySwipe;
 import es.glasspixel.wlanaudit.R;
 
 import android.content.Intent;

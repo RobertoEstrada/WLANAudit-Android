@@ -168,7 +168,9 @@ public class ScanFragment extends SherlockFragment implements
 		}
 
 		locationManager.requestLocationUpdates(bestProvider, 20, 0, listener);
+		Log.d("ScanFragment", "showing menu..");
 		setHasOptionsMenu(true);
+
 	}
 
 	private final LocationListener listener = new LocationListener() {
@@ -248,8 +250,6 @@ public class ScanFragment extends SherlockFragment implements
 
 		initScan();
 
-		
-
 		return myFragmentView;
 	}
 
@@ -308,7 +308,7 @@ public class ScanFragment extends SherlockFragment implements
 				// Network scan complete, datasource needs to be updated and
 				// ListView refreshed
 
-				if (myFragmentView != null) {
+				if (myFragmentView != null && getSherlockActivity() != null) {
 					if (mWifiManager.getScanResults().size() > 0) {
 						((ListView) myFragmentView.findViewById(R.id.listView1))
 								.setAdapter(new WifiNetworkAdapter(
@@ -331,12 +331,13 @@ public class ScanFragment extends SherlockFragment implements
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		// TODO Add your menu entries here
-		super.onCreateOptionsMenu(menu, inflater);
+		
 		inflater.inflate(R.menu.networklistactivity_menu, menu);
 		refresh = (MenuItem) menu.findItem(R.id.scanOption);
 		automatic_scan = (MenuItem) menu.findItem(R.id.toggleAutoscanOption);
 		checkAutoScanStatus();
+		super.onCreateOptionsMenu(menu, inflater);
+
 	}
 
 	/**
