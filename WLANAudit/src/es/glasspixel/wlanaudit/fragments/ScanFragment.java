@@ -205,8 +205,8 @@ public class ScanFragment extends SherlockFragment implements
 	private MenuItem automatic_scan;
 
 	private void printProvider(String provider) {
-		LocationProvider info = locationManager.getProvider(provider);
-		Log.d("MapActivity", info.getName());
+		// LocationProvider info = locationManager.getProvider(provider);
+		// Log.d("MapActivity", info.getName());
 	}
 
 	private void showLocation(Location l) {
@@ -251,6 +251,12 @@ public class ScanFragment extends SherlockFragment implements
 		initScan();
 
 		return myFragmentView;
+	}
+
+	@Override
+	public void onDetach() {
+		
+		super.onDetach();
 	}
 
 	public void initScan() {
@@ -331,7 +337,7 @@ public class ScanFragment extends SherlockFragment implements
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		
+
 		inflater.inflate(R.menu.networklistactivity_menu, menu);
 		refresh = (MenuItem) menu.findItem(R.id.scanOption);
 		automatic_scan = (MenuItem) menu.findItem(R.id.toggleAutoscanOption);

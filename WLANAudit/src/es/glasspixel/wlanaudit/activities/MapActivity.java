@@ -155,9 +155,9 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 
 		// List all providers:
 		List<String> providers = locationManager.getAllProviders();
-		for (String provider : providers) {
-			printProvider(provider);
-		}
+		// for (String provider : providers) {
+		// printProvider(provider);
+		// }
 
 		Criteria criteria = new Criteria();
 		bestProvider = locationManager.getBestProvider(criteria, false);
@@ -257,6 +257,7 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 		positionOverlayItemArray.add(positionOverlay);
 		ItemizedOverlayWithFocus<OverlayItem> positiontemizedIconOverlay = new ItemizedOverlayWithFocus<OverlayItem>(
 				this, positionOverlayItemArray, null);
+		myOpenMapView.getOverlays().clear();
 		myOpenMapView.getOverlays().add(positiontemizedIconOverlay);
 
 	}

@@ -33,7 +33,7 @@
         <activity android:name="es.glasspixel.wlanaudit.activities.WLANAuditPreferencesActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="es.glasspixel.wlanaudit.NetworkListActivitySwipe" />
+                android:value="es.glasspixel.wlanaudit.activities.NetworkListActivitySwipe" />
         </activity>
         <activity
             android:name="es.glasspixel.wlanaudit.activities.AboutActivity"
@@ -46,14 +46,14 @@
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="es.glasspixel.wlanaudit.NetworkListActivitySwipe" />
+                android:value="es.glasspixel.wlanaudit.activities.NetworkListActivitySwipe" />
         </activity>
         <activity
             android:name="es.glasspixel.wlanaudit.activities.MapActivity"
             android:label="@string/title_activity_map" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="es.glasspixel.wlanaudit.NetworkListActivitySwipe" />
+                android:value="es.glasspixel.wlanaudit.activities.NetworkListActivitySwipe" />
         </activity>
         <activity
             android:name="com.google.ads.AdActivity"
