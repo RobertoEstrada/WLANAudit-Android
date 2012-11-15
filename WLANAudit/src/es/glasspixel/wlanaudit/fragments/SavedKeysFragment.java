@@ -12,9 +12,11 @@ import com.actionbarsherlock.view.MenuItem;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -23,6 +25,7 @@ import android.net.wifi.ScanResult;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 
 import android.view.LayoutInflater;
@@ -59,6 +62,7 @@ public class SavedKeysFragment extends SherlockFragment {
 	private LocationProvider provider;
 	protected double keyLatitude = 0f;
 	protected double keyLongitude = 0f;
+	private String bestProvider;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -66,9 +70,21 @@ public class SavedKeysFragment extends SherlockFragment {
 
 		locationManager = (LocationManager) getSherlockActivity()
 				.getSystemService(Context.LOCATION_SERVICE);
-		provider = locationManager.getProvider(LocationManager.GPS_PROVIDER);
-		locationManager.requestLocationUpdates(
-				LocationManager.NETWORK_PROVIDER, 100, 50, listener);
+		locationManager = (LocationManager) getSherlockActivity()
+				.getSystemService(Context.LOCATION_SERVICE);
+
+		// List all providers:
+		List<String> providers = locationManager.getAllProviders();
+		// for (String provider : providers) {
+		// printProvider(provider);
+		// }
+
+		Criteria criteria = new Criteria();
+		bestProvider = locationManager.getBestProvider(criteria, false);
+
+		Log.d("MapActivity", "best provider: " + bestProvider);
+
+		locationManager.requestLocationUpdates(bestProvider, 100, 50, listener);
 
 		myFragmentView = inflater.inflate(R.layout.saved_keys_fragment,
 				container, false);
@@ -140,8 +156,16 @@ public class SavedKeysFragment extends SherlockFragment {
 
 		screenIsLarge = getSherlockActivity().getResources().getBoolean(
 				R.bool.screen_large);
-		if (!screenIsLarge)
-			setHasOptionsMenu(true);
+		if (!screenIsLarge) {
+			// if(getSherlockActivity().getResources().getConfiguration().orientation
+			// == Configuration.ORIENTATION_LANDSCAPE)
+			// {
+
+			// }
+		}
+
+		setHasOptionsMenu(true);
+		// setRetainInstance(true);
 
 		return myFragmentView;
 	}
@@ -199,7 +223,7 @@ public class SavedKeysFragment extends SherlockFragment {
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		// TODO Add your menu entries here
+
 		super.onCreateOptionsMenu(menu, inflater);
 		inflater.inflate(R.menu.networklistactivity_savedkeys_menu, menu);
 	}

@@ -170,8 +170,9 @@ public class ScanFragment extends SherlockFragment implements
 		}
 
 		locationManager.requestLocationUpdates(bestProvider, 20, 0, listener);
+		Log.d("ScanFragment", "showing menu..");
+		setHasOptionsMenu(true);
 
-		// loadFakeWlan();
 	}
 
 	private final LocationListener listener = new LocationListener() {
@@ -206,8 +207,8 @@ public class ScanFragment extends SherlockFragment implements
 	private MenuItem automatic_scan;
 
 	private void printProvider(String provider) {
-		LocationProvider info = locationManager.getProvider(provider);
-		Log.d("MapActivity", info.getName());
+		// LocationProvider info = locationManager.getProvider(provider);
+		// Log.d("MapActivity", info.getName());
 	}
 
 	private void showLocation(Location l) {
@@ -226,7 +227,11 @@ public class ScanFragment extends SherlockFragment implements
 						R.string.no_networks_found));
 		((ListView) myFragmentView.findViewById(R.id.listView1))
 				.setEmptyView(getSherlockActivity().findViewById(R.id.empty));
-		setHasOptionsMenu(true);
+
+		((ListView) myFragmentView.findViewById(R.id.listView1))
+				.setAdapter(new WifiNetworkAdapter(getSherlockActivity(),
+						R.layout.network_list_element_layout,
+						new ArrayList<ScanResult>()));
 
 		prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		// If preference does not exist
@@ -250,11 +255,18 @@ public class ScanFragment extends SherlockFragment implements
 		return myFragmentView;
 	}
 
+	@Override
+	public void onDetach() {
+		
+		super.onDetach();
+	}
+
 	public void initScan() {
 
 		// WifiManager initialization
-		mWifiManager = (WifiManager) getActivity().getSystemService(
-				Context.WIFI_SERVICE);
+		if (mWifiManager == null)
+			mWifiManager = (WifiManager) getActivity().getSystemService(
+					Context.WIFI_SERVICE);
 
 		if (mWifiManager != null) {
 
@@ -270,6 +282,10 @@ public class ScanFragment extends SherlockFragment implements
 			// StartPassButtonListener();
 			this.startScan();
 		} else {
+			if (refresh != null) {
+				refresh.setActionView(null);
+				refresh.setEnabled(false);
+			}
 			((TextView) myFragmentView.findViewById(R.id.empty))
 					.setText(getSherlockActivity().getResources().getString(
 							R.string.no_networks_found));
@@ -280,8 +296,8 @@ public class ScanFragment extends SherlockFragment implements
 	}
 
 	public void startScan() {
-		mWifiManager.startScan();
-		if (refresh != null)
+		boolean start = mWifiManager.startScan();
+		if (refresh != null && start == true)
 			refresh.setActionView(R.layout.indeterminate_progress_action);
 	}
 
@@ -300,33 +316,36 @@ public class ScanFragment extends SherlockFragment implements
 				// Network scan complete, datasource needs to be updated and
 				// ListView refreshed
 
-				if (mWifiManager.getScanResults().size() > 0) {
-					((ListView) myFragmentView.findViewById(R.id.listView1))
-							.setAdapter(new WifiNetworkAdapter(
-									getSherlockActivity(),
-									R.layout.network_list_element_layout,
-									mWifiManager.getScanResults()));
-				} else {
-					((ListView) myFragmentView.findViewById(R.id.listView1))
-							.setEmptyView(getSherlockActivity().findViewById(
-									R.id.empty));
+				if (myFragmentView != null && getSherlockActivity() != null) {
+					if (mWifiManager.getScanResults().size() > 0) {
+						((ListView) myFragmentView.findViewById(R.id.listView1))
+								.setAdapter(new WifiNetworkAdapter(
+										getSherlockActivity(),
+										R.layout.network_list_element_layout,
+										mWifiManager.getScanResults()));
+					} else {
+						((ListView) myFragmentView.findViewById(R.id.listView1))
+								.setEmptyView(getSherlockActivity()
+										.findViewById(R.id.empty));
+					}
 				}
 
 				if (refresh != null && refresh.getActionView() != null)
 					refresh.setActionView(null);
 			}
 		};
-		getActivity().registerReceiver(mCallBackReceiver, i);
+		getSherlockActivity().registerReceiver(mCallBackReceiver, i);
 	}
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		// TODO Add your menu entries here
-		super.onCreateOptionsMenu(menu, inflater);
+
 		inflater.inflate(R.menu.networklistactivity_menu, menu);
 		refresh = (MenuItem) menu.findItem(R.id.scanOption);
 		automatic_scan = (MenuItem) menu.findItem(R.id.toggleAutoscanOption);
 		checkAutoScanStatus();
+		super.onCreateOptionsMenu(menu, inflater);
+
 	}
 
 	/**
@@ -532,6 +551,7 @@ public class ScanFragment extends SherlockFragment implements
 
 	}
 
+<<<<<<< HEAD
 	private void loadFakeWlan() {
 		for (int i = 0; i < 4; i++) {
 			this.saveFakeWLAN("WLAN_" + i, "1234567890", i);
@@ -540,6 +560,9 @@ public class ScanFragment extends SherlockFragment implements
 
 	@SuppressLint("NewApi")
     private void copyClipboard(CharSequence text) {
+=======
+	private void copyClipboard(CharSequence text) {
+>>>>>>> 093f958ca69cb4718c88efaab8c0844b9b9992cc
 		int sdk = android.os.Build.VERSION.SDK_INT;
 		if (sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
 			android.text.ClipboardManager clipboard = (android.text.ClipboardManager) getActivity()
@@ -646,7 +669,8 @@ public class ScanFragment extends SherlockFragment implements
 		super.onResume();
 		setupNetworkScanCallBack();
 		// mWifiManager.startScan();
-		this.startScan();
+		initScan();
+		startScan();
 		// mAd.loadAd(new AdRequest());
 	}
 
