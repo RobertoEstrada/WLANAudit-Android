@@ -551,7 +551,7 @@ public class ScanFragment extends SherlockFragment implements
 
 	}
 
-<<<<<<< HEAD
+
 	private void loadFakeWlan() {
 		for (int i = 0; i < 4; i++) {
 			this.saveFakeWLAN("WLAN_" + i, "1234567890", i);
@@ -560,9 +560,6 @@ public class ScanFragment extends SherlockFragment implements
 
 	@SuppressLint("NewApi")
     private void copyClipboard(CharSequence text) {
-=======
-	private void copyClipboard(CharSequence text) {
->>>>>>> 093f958ca69cb4718c88efaab8c0844b9b9992cc
 		int sdk = android.os.Build.VERSION.SDK_INT;
 		if (sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
 			android.text.ClipboardManager clipboard = (android.text.ClipboardManager) getActivity()
