@@ -1,12 +1,12 @@
-[submodule "ActionBarSherlock"]
-	path = ActionBarSherlock
+[submodule "Vendor/ActionBarSherlock"]
+	path = Vendor/ActionBarSherlock
 	url = https://github.com/JakeWharton/ActionBarSherlock.git
-[submodule "NumberPicker"]
-	path = NumberPicker
+[submodule "Vendor/NumberPicker"]
+	path = Vendor/NumberPicker
 	url = https://github.com/mrn/numberpicker.git
-[submodule "android-fb-like-slideout-navigation"]
-	path = android-fb-like-slideout-navigation
+[submodule "Vendor/FBLikeSlideoutNavigation"]
+	path = Vendor/FBLikeSlideoutNavigation
 	url = git://github.com/korovyansk/android-fb-like-slideout-navigation.git
-[submodule "android-menudrawer"]
-	path = android-menudrawer
+[submodule "Vendor/AndroidMenudrawer"]
+	path = Vendor/AndroidMenudrawer
 	url = git://github.com/SimonVT/android-menudrawer.git
