@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="WLANAudit-parent" default="build-debug">
+	
+	<property name="build-target" value="android-16" />
+	<property name="app-home" value="WLANAudit/" />
+	<property name="tests-home" value="WLANAudit-Tests/" />
+	
+	<target name="build-debug" depends="configure-build">
+		<subant target="debug">
+			<fileset dir="${app-home}" includes="build.xml"/>
+		</subant>
+	</target>
+	
+	<target name="test" depends="configure-build">
+		<subant target="test">
+			<fileset dir="${tests-home}" includes="build.xml"/>
+		</subant>
+	</target>
+	
+	<target name="clean">
+		<subant target="clean">
+			<fileset dir="${app-home}" includes="build.xml"/>
+			<fileset dir="${tests-home}" includes="build.xml"/>
+		</subant>
+	</target>
+    
+	<!-- set the operating system test properties -->
+	<condition property="isWindows">
+		<os family="windows" />
+	</condition>
+
+	<condition property="isUnix">
+		<os family="unix" />
+	</condition>	
+
+	<!-- define our main/default target -->
+	<target name="configure-build" depends="configure-build-windows, configure-build-unix">
+		<propertyfile file="Vendor/ActionBarSherlock/library/project.properties">
+			<entry key="android.library" value="true"/>
+		</propertyfile>
+		<propertyfile file="Vendor/AndroidMenudrawer/library/project.properties">
+			<entry key="android.library" value="true"/>
+		</propertyfile>
+		<propertyfile file="Vendor/FBLikeSlideoutNavigation/lib/project.properties">
+			<entry key="android.library" value="true"/>
+		</propertyfile>
+		<propertyfile file="Vendor/NumberPicker/lib/project.properties">
+			<entry key="android.library" value="true"/>
+		</propertyfile>
+		<echo message="Dependency configuration complete" />
+	</target>
+  
+	<target name="configure-build-windows" if="isWindows">
+		<exec executable="cmd" dir="Vendor/ActionBarSherlock/library">
+			<arg value="/c"/>
+			<arg value="android"/>
+			<arg value="update"/>
+			<arg value="lib-project"/>
+			<arg value="--target"/>
+			<arg value="${build-target}"/>
+			<arg value="--path"/>
+			<arg value="."/>
+		</exec>
+		<exec executable="cmd" dir="Vendor/AndroidMenudrawer/library">
+			<arg value="/c"/>
+			<arg value="android"/>
+			<arg value="update"/>
+			<arg value="lib-project"/>
+			<arg value="--target"/>
+			<arg value="${build-target}"/>
+			<arg value="--path"/>
+			<arg value="."/>
+		</exec>
+		<exec executable="cmd" dir="Vendor/FBLikeSlideoutNavigation/lib">
+			<arg value="/c"/>
+			<arg value="android"/>
+			<arg value="update"/>
+			<arg value="lib-project"/>
+			<arg value="--target"/>
+			<arg value="${build-target}"/>
+			<arg value="--path"/>
+			<arg value="."/>
+		</exec>
+		<exec executable="cmd" dir="Vendor/NumberPicker/lib">
+			<arg value="/c"/>
+			<arg value="android"/>
+			<arg value="update"/>
+			<arg value="lib-project"/>
+			<arg value="--target"/>
+			<arg value="${build-target}"/>
+			<arg value="--path"/>
+			<arg value="."/>
+		</exec>
+	</target>
+	
+	<target name="configure-build-unix" if="isUnix">
+		<exec executable="android" dir="Vendor/ActionBarSherlock/library">
+			<arg value="update"/>
+			<arg value="lib-project"/>
+			<arg value="--target"/>
+			<arg value="${build-target}"/>
+			<arg value="--path"/>
+			<arg value="."/>
+		</exec>
+		<exec executable="android" dir="Vendor/AndroidMenudrawer/library">
+			<arg value="update"/>
+			<arg value="lib-project"/>
+			<arg value="--target"/>
+			<arg value="${build-target}"/>
+			<arg value="--path"/>
+			<arg value="."/>
+		</exec>
+		<exec executable="android" dir="Vendor/FBLikeSlideoutNavigation/lib">
+			<arg value="update"/>
+			<arg value="lib-project"/>
+			<arg value="--target"/>
+			<arg value="${build-target}"/>
+			<arg value="--path"/>
+			<arg value="."/>
+		</exec>
+		<exec executable="android" dir="Vendor/NumberPicker/lib">
+			<arg value="update"/>
+			<arg value="lib-project"/>
+			<arg value="--target"/>
+			<arg value="${build-target}"/>
+			<arg value="--path"/>
+			<arg value="."/>
+		</exec>
+	</target>
+</project>
