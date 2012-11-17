@@ -4,6 +4,7 @@
 	<property name="build-target" value="android-16" />
 	<property name="app-home" value="WLANAudit/" />
 	<property name="tests-home" value="WLANAudit-Tests/" />
+	<property name="tools-home" value="Tools/" />
 	
 	<target name="build-debug" depends="configure-build">
 		<subant target="debug">
@@ -11,9 +12,30 @@
 		</subant>
 	</target>
 	
+	<target name="build-release" depends="configure-build">
+		<subant target="release">
+			<fileset dir="${app-home}" includes="build.xml"/>
+		</subant>
+	</target>
+	
 	<target name="test" depends="configure-build">
 		<subant target="test">
 			<fileset dir="${tests-home}" includes="build.xml"/>
+		</subant>
+	</target>
+	
+	<target name="eclipse" depends="configure-build">
+		<subant target="build">
+			<fileset dir="${tools-home}/EclipseProjectGenerator" includes="build.xml"/>
+		</subant>
+		<java jar="${tools-home}/eprojgen.jar" fork="true">
+			<arg value="Vendor/ActionBarSherlock/library"/>
+			<arg value="Vendor/AndroidMenudrawer/library"/>
+			<arg value="Vendor/FBLikeSlideoutNavigation/lib"/>
+			<arg value="Vendor/NumberPicker/lib"/>
+		</java>
+		<subant target="clean">
+			<fileset dir="${tools-home}/EclipseProjectGenerator" includes="build.xml"/>
 		</subant>
 	</target>
 	
@@ -55,9 +77,11 @@
 			<arg value="/c"/>
 			<arg value="android"/>
 			<arg value="update"/>
-			<arg value="lib-project"/>
+			<arg value="project"/>
 			<arg value="--target"/>
 			<arg value="${build-target}"/>
+			<arg value="--name"/>
+			<arg value="ActionBarSherlock"/>
 			<arg value="--path"/>
 			<arg value="."/>
 		</exec>
@@ -65,9 +89,11 @@
 			<arg value="/c"/>
 			<arg value="android"/>
 			<arg value="update"/>
-			<arg value="lib-project"/>
+			<arg value="project"/>
 			<arg value="--target"/>
 			<arg value="${build-target}"/>
+			<arg value="--name"/>
+			<arg value="AndroidMenuDrawer"/>
 			<arg value="--path"/>
 			<arg value="."/>
 		</exec>
@@ -75,9 +101,11 @@
 			<arg value="/c"/>
 			<arg value="android"/>
 			<arg value="update"/>
-			<arg value="lib-project"/>
+			<arg value="project"/>
 			<arg value="--target"/>
 			<arg value="${build-target}"/>
+			<arg value="--name"/>
+			<arg value="FBLikeSlideoutNavigation"/>
 			<arg value="--path"/>
 			<arg value="."/>
 		</exec>
@@ -85,9 +113,11 @@
 			<arg value="/c"/>
 			<arg value="android"/>
 			<arg value="update"/>
-			<arg value="lib-project"/>
+			<arg value="project"/>
 			<arg value="--target"/>
 			<arg value="${build-target}"/>
+			<arg value="--name"/>
+			<arg value="NumberPicker"/>
 			<arg value="--path"/>
 			<arg value="."/>
 		</exec>
@@ -96,33 +126,41 @@
 	<target name="configure-build-unix" if="isUnix">
 		<exec executable="android" dir="Vendor/ActionBarSherlock/library">
 			<arg value="update"/>
-			<arg value="lib-project"/>
+			<arg value="project"/>
 			<arg value="--target"/>
 			<arg value="${build-target}"/>
+			<arg value="--name"/>
+			<arg value="ActionBarSherlock"/>
 			<arg value="--path"/>
 			<arg value="."/>
 		</exec>
 		<exec executable="android" dir="Vendor/AndroidMenudrawer/library">
 			<arg value="update"/>
-			<arg value="lib-project"/>
+			<arg value="project"/>
 			<arg value="--target"/>
 			<arg value="${build-target}"/>
+			<arg value="--name"/>
+			<arg value="AndroidMenuDrawer"/>
 			<arg value="--path"/>
 			<arg value="."/>
 		</exec>
 		<exec executable="android" dir="Vendor/FBLikeSlideoutNavigation/lib">
 			<arg value="update"/>
-			<arg value="lib-project"/>
+			<arg value="project"/>
 			<arg value="--target"/>
 			<arg value="${build-target}"/>
+			<arg value="--name"/>
+			<arg value="FBLikeSlideoutNavigation"/>
 			<arg value="--path"/>
 			<arg value="."/>
 		</exec>
 		<exec executable="android" dir="Vendor/NumberPicker/lib">
 			<arg value="update"/>
-			<arg value="lib-project"/>
+			<arg value="project"/>
 			<arg value="--target"/>
 			<arg value="${build-target}"/>
+			<arg value="--name"/>
+			<arg value="NumberPicker"/>
 			<arg value="--path"/>
 			<arg value="."/>
 		</exec>
