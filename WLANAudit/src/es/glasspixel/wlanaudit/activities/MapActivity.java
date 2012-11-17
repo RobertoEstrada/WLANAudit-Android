@@ -243,6 +243,10 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 	}
 
 	private void changePositionInMap(Location l) {
+		// IF (POSITIONOVERLAY != NULL
+		// && POSITIONOVERLAYITEMARRAY.CONTAINS(POSITIONOVERLAY)) {
+		// POSITIONOVERLAYITEMARRAY.REMOVE(POSITIONOVERLAY);
+		// }
 		if (positionOverlay != null
 				&& positionOverlayItemArray.contains(positionOverlay)) {
 			positionOverlayItemArray.remove(positionOverlay);
@@ -257,7 +261,8 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 		positionOverlayItemArray.add(positionOverlay);
 		ItemizedOverlayWithFocus<OverlayItem> positiontemizedIconOverlay = new ItemizedOverlayWithFocus<OverlayItem>(
 				this, positionOverlayItemArray, null);
-		myOpenMapView.getOverlays().clear();
+		// myOpenMapView.getOverlays().clear();
+		
 		myOpenMapView.getOverlays().add(positiontemizedIconOverlay);
 
 	}
@@ -318,7 +323,7 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 		public void onLocationChanged(Location location) {
 			keyLatitude = location.getLatitude();
 			keyLongitude = location.getLongitude();
-			changePositionInMap(location);
+			// changePositionInMap(location);
 			// myMapController.setCenter(new GeoPoint(keyLatitude,
 			// keyLongitude));
 		}
