@@ -187,7 +187,7 @@ public class NetworkListActivitySwipe extends SherlockFragmentActivity
 	@Override
 	public void onItemSelected(ScanResult s) {
 
-		if (screenIsLarge) {
+		if (mViewPager == null) {
 			SherlockFragment fragment = new SavedKeysFragment();
 			FragmentTransaction ft = getSupportFragmentManager()
 					.beginTransaction();
