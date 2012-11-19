@@ -262,7 +262,7 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 		ItemizedOverlayWithFocus<OverlayItem> positiontemizedIconOverlay = new ItemizedOverlayWithFocus<OverlayItem>(
 				this, positionOverlayItemArray, null);
 		// myOpenMapView.getOverlays().clear();
-		
+
 		myOpenMapView.getOverlays().add(positiontemizedIconOverlay);
 
 	}
@@ -301,11 +301,13 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 
 	@Override
 	public void onBackPressed() {
-		final int drawerState = mMenuDrawer.getDrawerState();
-		if (drawerState == MenuDrawer.STATE_OPEN
-				|| drawerState == MenuDrawer.STATE_OPENING) {
-			mMenuDrawer.closeMenu();
-			return;
+		if (mMenuDrawer != null) {
+			final int drawerState = mMenuDrawer.getDrawerState();
+			if (drawerState == MenuDrawer.STATE_OPEN
+					|| drawerState == MenuDrawer.STATE_OPENING) {
+				mMenuDrawer.closeMenu();
+				return;
+			}
 		}
 
 		super.onBackPressed();
@@ -348,30 +350,41 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 
 	};
 
-	protected void loadSavedKeys() {
+	protected List<SavedKey> loadSavedKeys() {
 		mKeys = new ArrayList<SavedKey>();
 		KeysSQliteHelper usdbh = new KeysSQliteHelper(this, "DBKeys", null, 1);
 
 		SQLiteDatabase db = usdbh.getReadableDatabase();
 		Cursor c = db.query("Keys", new String[] { "nombre", "key", "latitude",
 				"longitude" }, null, null, null, null, "nombre ASC");
+		// if (c.moveToFirst()) {
 		while (c.moveToNext()) {
-			SavedKey k = new SavedKey(c.getString(c.getColumnIndex("nombre")),
-					c.getString(c.getColumnIndex("key")), c.getFloat(c
-							.getColumnIndex("latitude")), c.getFloat(c
-							.getColumnIndex("longitude")));
-			mKeys.add(k);
+
+			String name = c.getString(c.getColumnIndex("nombre"));
+			boolean nueva = true;
+			for (SavedKey s : mKeys) {
+				if (name.equals(s.getWlan_name())) {
+					s.getKeys().add(c.getString(c.getColumnIndex("key")));
+					nueva = false;
+					break;
+				}
+			}
+
+			if (nueva) {
+				List<String> a = new ArrayList<String>();
+				a.add(c.getString(c.getColumnIndex("key")));
+				SavedKey k = new SavedKey(c.getString(c
+						.getColumnIndex("nombre")), c.getString(c
+						.getColumnIndex("address")), a, c.getFloat(c
+						.getColumnIndex("latitude")), c.getFloat(c
+						.getColumnIndex("longitude")));
+				mKeys.add(k);
+			}
 
 		}
+		// }
 		c.close();
-
-		// if (mKeys.isEmpty()) {
-		// for (int i = 0; i < 4; i++) {
-		// SavedKey k = new SavedKey("Key " + i, "title " + i, i * 20,
-		// i * 60);
-		// mKeys.add(k);
-		// }
-		// }
+		return mKeys;
 
 	}
 
@@ -406,11 +419,14 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 		this.loadSavedKeys();
 
 		for (SavedKey s : mKeys) {
-			anotherOverlayItemArray
-					.add(new OverlayItem(s.getWlan_name(), s.getKey(),
-							new GeoPoint(s.getLatitude(), s.getLongitude())));
+			anotherOverlayItemArray.add(new OverlayItem(s.getWlan_name(), s
+					.getKeys().size() == 1 ? s.getKeys().get(0) : printKeys(s
+					.getKeys()),
+					new GeoPoint(s.getLatitude(), s.getLongitude())));
 			if (!(screenIsLarge && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE))
-				items.add(new Item(s.getWlan_name(), s.getKey()));
+				items.add(new Item(s.getWlan_name(),
+						s.getKeys().size() == 1 ? s.getKeys().get(0)
+								: printKeys(s.getKeys())));
 		}
 		if (l != null) {
 
@@ -459,6 +475,14 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 
 		}
 
+	}
+
+	private String printKeys(List<String> keys) {
+		String r = "";
+		for (String s : keys) {
+			r += s + ",";
+		}
+		return r;
 	}
 
 	OnItemGestureListener<OverlayItem> myOnItemGestureListener = new OnItemGestureListener<OverlayItem>() {

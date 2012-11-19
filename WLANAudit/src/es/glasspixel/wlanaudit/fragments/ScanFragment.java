@@ -22,6 +22,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -206,6 +207,8 @@ public class ScanFragment extends SherlockFragment implements
 
 	private MenuItem automatic_scan;
 
+	private Editor e;
+
 	private void printProvider(String provider) {
 		// LocationProvider info = locationManager.getProvider(provider);
 		// Log.d("MapActivity", info.getName());
@@ -257,7 +260,7 @@ public class ScanFragment extends SherlockFragment implements
 
 	@Override
 	public void onDetach() {
-		
+
 		super.onDetach();
 	}
 
@@ -316,13 +319,15 @@ public class ScanFragment extends SherlockFragment implements
 				// Network scan complete, datasource needs to be updated and
 				// ListView refreshed
 
+				List<ScanResult> res = mWifiManager.getScanResults();
+
 				if (myFragmentView != null && getSherlockActivity() != null) {
 					if (mWifiManager.getScanResults().size() > 0) {
 						((ListView) myFragmentView.findViewById(R.id.listView1))
 								.setAdapter(new WifiNetworkAdapter(
 										getSherlockActivity(),
 										R.layout.network_list_element_layout,
-										mWifiManager.getScanResults()));
+										res));
 					} else {
 						((ListView) myFragmentView.findViewById(R.id.listView1))
 								.setEmptyView(getSherlockActivity()
@@ -370,14 +375,26 @@ public class ScanFragment extends SherlockFragment implements
 			return true;
 		case R.id.preferenceOption:
 			i = new Intent(getActivity(), WLANAuditPreferencesActivity.class);
+			e = getSherlockActivity().getSharedPreferences("viewpager",
+					Context.MODE_PRIVATE).edit();
+			e.putInt("viewpager_index", 0);
+			e.commit();
 			startActivity(i);
 			return true;
 		case R.id.aboutOption:
 			i = new Intent(getActivity(), AboutActivity.class);
+			e = getSherlockActivity().getSharedPreferences("viewpager",
+					Context.MODE_PRIVATE).edit();
+			e.putInt("viewpager_index", 0);
+			e.commit();
 			startActivity(i);
 			return true;
 		case R.id.mapOption:
 			i = new Intent(getSherlockActivity(), MapActivity.class);
+			e = getSherlockActivity().getSharedPreferences("viewpager",
+					Context.MODE_PRIVATE).edit();
+			e.putInt("viewpager_index", 0);
+			e.commit();
 			startActivity(i);
 			return true;
 		default:
@@ -417,9 +434,13 @@ public class ScanFragment extends SherlockFragment implements
 
 		mDefaultPassValue = (TextView) dialog.findViewById(R.id.password_value);
 
-		final ScanResult scannedNetwork = (ScanResult) arg0.getItemAtPosition(arg2);
+		final ScanResult scannedNetwork = (ScanResult) arg0
+				.getItemAtPosition(arg2);
 
-		int signalLevel = WifiManager.calculateSignalLevel(scannedNetwork.level,
+		String address = scannedNetwork.BSSID;
+
+		int signalLevel = WifiManager.calculateSignalLevel(
+				scannedNetwork.level,
 				WifiNetworkAdapter.MAX_SIGNAL_STRENGTH_LEVEL);
 
 		((ImageView) dialog.findViewById(R.id.networkIcon))
@@ -430,127 +451,90 @@ public class ScanFragment extends SherlockFragment implements
 					WifiNetworkAdapter.ENCRYPTED_STATE_SET, false);
 		}
 		// Setting network's values
-		((TextView) dialog.findViewById(R.id.networkName)).setText(scannedNetwork.SSID);
-		((TextView) dialog.findViewById(R.id.bssid_value)).setText(scannedNetwork.BSSID);
+		((TextView) dialog.findViewById(R.id.networkName))
+				.setText(scannedNetwork.SSID);
+		((TextView) dialog.findViewById(R.id.bssid_value))
+				.setText(scannedNetwork.BSSID);
 		((TextView) dialog.findViewById(R.id.encryption_value))
 				.setText(scannedNetwork.capabilities);
 		((TextView) dialog.findViewById(R.id.frequency_value))
 				.setText(scannedNetwork.frequency + " MHz");
 		((TextView) dialog.findViewById(R.id.channel_value)).setText(String
-				.valueOf(ChannelCalculator.getChannelNumber(scannedNetwork.frequency)));
-		((TextView) dialog.findViewById(R.id.intensity_value)).setText(scannedNetwork.level
-				+ " dBm");
-		
+				.valueOf(ChannelCalculator
+						.getChannelNumber(scannedNetwork.frequency)));
+		((TextView) dialog.findViewById(R.id.intensity_value))
+				.setText(scannedNetwork.level + " dBm");
+
 		// Calculating key
-        IKeyCalculator keyCalculator = KeyCalculatorFactory.getKeyCalculator(new NetData(
-                scannedNetwork.SSID, scannedNetwork.BSSID));
-        if (keyCalculator != null) {
-            mKeyList = keyCalculator.getKey(new NetData(scannedNetwork.SSID, scannedNetwork.BSSID));
-            if (mKeyList != null) {
-                if (mKeyList.size() > 1) {
-                    mDefaultPassValue.setText(String.valueOf(mKeyList.size()) + " "
-                            + getText(R.string.number_of_keys_found));
-                } else if (mKeyList.size() == 1) {
-                    mDefaultPassValue.setText(mKeyList.get(0));
-                }
-                // TODO: REFACTOR!!! NO SIRVE PARA CLAVES DE MAS DE UN RESULTADO
-                ((Button) dialog.findViewById(R.id.copyPasswordButton))
-                        .setOnClickListener(new OnClickListener() {
+		IKeyCalculator keyCalculator = KeyCalculatorFactory
+				.getKeyCalculator(new NetData(scannedNetwork.SSID,
+						scannedNetwork.BSSID));
+		if (keyCalculator != null) {
+			mKeyList = keyCalculator.getKey(new NetData(scannedNetwork.SSID,
+					scannedNetwork.BSSID));
+			if (mKeyList != null) {
+				if (mKeyList.size() > 1) {
+					mDefaultPassValue.setText(String.valueOf(mKeyList.size())
+							+ " " + getText(R.string.number_of_keys_found));
+				} else if (mKeyList.size() == 1) {
+					mDefaultPassValue.setText(mKeyList.get(0));
+				}
+				// TODO: REFACTOR!!! NO SIRVE PARA CLAVES DE MAS DE UN RESULTADO
+				((Button) dialog.findViewById(R.id.copyPasswordButton))
+						.setOnClickListener(new OnClickListener() {
 
-                            @Override
-                            public void onClick(View v) {
+							@Override
+							public void onClick(View v) {
 
-                                copyClipboard(mDefaultPassValue.getText().toString());
-                                saveWLANKey(scannedNetwork.SSID, mDefaultPassValue.getText().toString());
+								if (mKeyList.size() == 1) {
 
-                                // if (screenIsLarge == true) {
-                                mCallbacks.onItemSelected(scannedNetwork);
-                                // }
-                                dialog.dismiss();
+									copyClipboard(mDefaultPassValue.getText()
+											.toString());
+									saveWLANKey(scannedNetwork.SSID,
+											mDefaultPassValue.getText()
+													.toString());
 
-                            }
-                        });
-            } else {
-                mDefaultPassValue.setText(getString(R.string.no_default_key));
-                ((Button) dialog.findViewById(R.id.copyPasswordButton)).setEnabled(false);
-            }
-        } else {
-            mDefaultPassValue.setText(getString(R.string.no_default_key));
-            ((Button) dialog.findViewById(R.id.copyPasswordButton)).setEnabled(false);
-        }
+									// if (screenIsLarge == true) {
+									mCallbacks.onItemSelected(scannedNetwork);
+									// }
+									dialog.dismiss();
+								} else {
+									Intent i = new Intent(
+											getSherlockActivity(),
+											KeyListActivity.class);
+									i.putExtra("wlan_name", scannedNetwork.SSID);
+									i.putExtra("wlan_address",
+											scannedNetwork.BSSID);
+									i.putExtra("wlan_latitude", mLatitude);
+									i.putExtra("wlan_longitude", mLongitude);
+									i.putStringArrayListExtra(
+											KeyListActivity.KEY_LIST_KEY,
+											(ArrayList<String>) mKeyList);
+									e = getSherlockActivity()
+											.getSharedPreferences("viewpager",
+													Context.MODE_PRIVATE)
+											.edit();
+									e.putInt("viewpager_index", 0);
+									e.commit();
+									startActivity(i);
+								}
 
-//		// Calculating key
-//		if (s.SSID.matches("(?:WLAN|JAZZTEL)_([0-9a-fA-F]{4})")) {
-//			IKeyCalculator keyCalculator = new WLANXXXXKeyCalculator();
-//			mKeyList = keyCalculator.getKey(new NetData(s.SSID, s.BSSID));
-//			// keyCalculator.getKey(network);
-//			if (mKeyList != null) {
-//				mDefaultPassValue.setText(mKeyList.get(0));
-//				((Button) dialog.findViewById(R.id.copyPasswordButton))
-//						.setOnClickListener(new OnClickListener() {
-//
-//							@Override
-//							public void onClick(View v) {
-//
-//								copyClipboard(mDefaultPassValue.getText()
-//										.toString());
-//
-//								saveWLANKey(s.SSID, mDefaultPassValue.getText()
-//										.toString());
-//
-//								// if (screenIsLarge == true) {
-//								mCallbacks.onItemSelected(s);
-//								// }
-//								dialog.dismiss();
-//
-//							}
-//						});
-//			} else {
-//				mDefaultPassValue.setText(getString(R.string.no_default_key));
-//
-//				((Button) dialog.findViewById(R.id.copyPasswordButton))
-//						.setEnabled(false);
-//			}
-//
-//		} else if (s.SSID.matches("(?:WLAN|YACOM|WiFi)([0-9a-fA-F]{6})")) {
-//			IKeyCalculator keyCalculator = new WLANXXXXKeyCalculator();
-//			mKeyList = keyCalculator.getKey(new NetData(s.SSID, s.BSSID));
-//			if (mKeyList != null) {
-//				mDefaultPassValue.setText(String.valueOf(mKeyList.size()) + " "
-//						+ getText(R.string.number_of_keys_found));
-//				((Button) dialog.findViewById(R.id.copyPasswordButton))
-//						.setOnClickListener(new OnClickListener() {
-//
-//							@Override
-//							public void onClick(View v) {
-//
-//								copyClipboard(mDefaultPassValue.getText()
-//										.toString());
-//								saveWLANKey(s.SSID, mDefaultPassValue.getText()
-//										.toString());
-//
-//								// if (screenIsLarge == true) {
-//								mCallbacks.onItemSelected(s);
-//								// }
-//								dialog.dismiss();
-//
-//							}
-//						});
-//			} else {
-//				mDefaultPassValue.setText(getString(R.string.no_default_key));
-//
-//				((Button) dialog.findViewById(R.id.copyPasswordButton))
-//						.setEnabled(false);
-//			}
-//		} else {
-//			mDefaultPassValue.setText(getString(R.string.no_default_key));
-//			((Button) dialog.findViewById(R.id.copyPasswordButton))
-//					.setEnabled(false);
-//		}
+							}
+						});
+			} else {
+				mDefaultPassValue.setText(getString(R.string.no_default_key));
+				((Button) dialog.findViewById(R.id.copyPasswordButton))
+						.setEnabled(false);
+			}
+		} else {
+			mDefaultPassValue.setText(getString(R.string.no_default_key));
+			((Button) dialog.findViewById(R.id.copyPasswordButton))
+					.setEnabled(false);
+		}
+
 		dialog.show();
 
 	}
-
 
 	private void loadFakeWlan() {
 		for (int i = 0; i < 4; i++) {
@@ -559,7 +543,7 @@ public class ScanFragment extends SherlockFragment implements
 	}
 
 	@SuppressLint("NewApi")
-    private void copyClipboard(CharSequence text) {
+	private void copyClipboard(CharSequence text) {
 		int sdk = android.os.Build.VERSION.SDK_INT;
 		if (sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
 			android.text.ClipboardManager clipboard = (android.text.ClipboardManager) getActivity()

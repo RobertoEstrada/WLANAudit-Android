@@ -25,9 +25,16 @@ import com.google.ads.AdView;
 
 import es.glasspixel.wlanaudit.R;
 import es.glasspixel.wlanaudit.ads.Key;
+import es.glasspixel.wlanaudit.database.KeysSQliteHelper;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.text.ClipboardManager;
 import android.view.Gravity;
 import android.view.View;
@@ -54,6 +61,16 @@ public class KeyListActivity extends SherlockListActivity {
 	private List<String> mKeyList;
 
 	/**
+	 * name and address of the network
+	 */
+	private String wlan_name, wlan_address;
+
+	/**
+	 * latitude and longitude of the network
+	 */
+	private float wlan_latitude, wlan_longitude;
+
+	/**
 	 * Advertisement
 	 */
 	private AdView mAd;
@@ -73,12 +90,19 @@ public class KeyListActivity extends SherlockListActivity {
 		if (savedInstanceState != null
 				&& savedInstanceState.get(KEY_LIST_KEY) != null) {
 			// Load the state
-			mKeyList = savedInstanceState
-					.getStringArrayList(KEY_LIST_KEY);
+			mKeyList = savedInstanceState.getStringArrayList(KEY_LIST_KEY);
+			wlan_name = savedInstanceState.getString("wlan_name");
+			wlan_address = savedInstanceState.getString("wlan_address");
+			wlan_latitude = savedInstanceState.getFloat("wlan_latitude");
+			wlan_longitude = savedInstanceState.getFloat("wlan_longitude");
 		} else {
 			// Read the network from the intent extra passed to this activity
 			mKeyList = (List<String>) getIntent().getExtras()
 					.getStringArrayList(KEY_LIST_KEY);
+			wlan_name = getIntent().getExtras().getString("wlan_name");
+			wlan_address = getIntent().getExtras().getString("wlan_address");
+			wlan_latitude = getIntent().getExtras().getFloat("wlan_latitude");
+			wlan_longitude = getIntent().getExtras().getFloat("wlan_longitude");
 		}
 
 		// Ads Initialization
@@ -112,8 +136,9 @@ public class KeyListActivity extends SherlockListActivity {
 	 */
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		// Clipboard copy
-		ClipboardManager clipBoard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-		clipBoard.setText(mKeyList.get(position));
+		this.copyClipboard(mKeyList.get(position));
+		this.saveWLANKey(wlan_name, mKeyList.get(position));
+
 		// Copy notification
 		Toast notificationToast = Toast.makeText(this, getResources()
 				.getString(R.string.key_copy_success), Toast.LENGTH_SHORT);
@@ -121,14 +146,64 @@ public class KeyListActivity extends SherlockListActivity {
 		notificationToast.show();
 	}
 
+	@SuppressLint("NewApi")
+	private void copyClipboard(CharSequence text) {
+		int sdk = android.os.Build.VERSION.SDK_INT;
+		if (sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
+			android.text.ClipboardManager clipboard = (android.text.ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+			clipboard.setText(text);
+		} else {
+			android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+			android.content.ClipData clip = android.content.ClipData
+					.newPlainText("text label", text);
+			clipboard.setPrimaryClip(clip);
+		}
+
+	}
+
+	private void saveWLANKey(String name, CharSequence key) {
+		KeysSQliteHelper usdbh = new KeysSQliteHelper(this, "DBKeys", null, 1);
+
+		SQLiteDatabase db = usdbh.getWritableDatabase();
+		if (db != null) {
+			Cursor c = db.query("Keys", new String[] { "nombre", "key" },
+					"nombre like ?", new String[] { name }, null, null,
+					"nombre ASC");
+			if (c.getCount() > 0) {
+
+			} else {
+
+				try {
+					db.execSQL("INSERT INTO Keys (nombre, key,address,latitude,longitude) "
+							+ "VALUES ('"
+							+ name
+							+ "', '"
+							+ key
+							+ "','"
+							+ wlan_address
+							+ ","
+							+ wlan_latitude
+							+ "', '"
+							+ wlan_longitude + "')");
+
+				} catch (SQLException e) {
+					Toast.makeText(
+							getApplicationContext(),
+							getResources().getString(R.string.error_saving_key),
+							Toast.LENGTH_LONG).show();
+				}
+				db.close();
+			}
+		}
+		usdbh.close();
+
+	}
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
-			// app icon in action bar clicked; go home
-			// Intent intent = new Intent(this, NetworkListActivity.class);
-			// intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			// startActivity(intent);
+			NavUtils.navigateUpFromSameTask(this);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

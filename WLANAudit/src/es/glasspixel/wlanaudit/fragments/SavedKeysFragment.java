@@ -12,6 +12,7 @@ import com.actionbarsherlock.view.MenuItem;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -93,7 +94,7 @@ public class SavedKeysFragment extends SherlockFragment {
 						R.string.no_data_saved_keys));
 
 		((ListView) myFragmentView.findViewById(R.id.listView1))
-				.setEmptyView(getSherlockActivity().findViewById(R.id.empty));
+				.setEmptyView(myFragmentView.findViewById(R.id.empty));
 		((ListView) myFragmentView.findViewById(R.id.listView1))
 				.setAdapter(new KeysSavedAdapter(getSherlockActivity(),
 						R.layout.network_list_element_layout,
@@ -131,7 +132,6 @@ public class SavedKeysFragment extends SherlockFragment {
 						String mDefaultPassValue = ((TextView) arg1
 								.findViewById(R.id.networkKey)).getText()
 								.toString();
-
 						int sdk = android.os.Build.VERSION.SDK_INT;
 						if (sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
 							android.text.ClipboardManager clipboard = (android.text.ClipboardManager) getActivity()
@@ -156,13 +156,6 @@ public class SavedKeysFragment extends SherlockFragment {
 
 		screenIsLarge = getSherlockActivity().getResources().getBoolean(
 				R.bool.screen_large);
-		if (!screenIsLarge) {
-			// if(getSherlockActivity().getResources().getConfiguration().orientation
-			// == Configuration.ORIENTATION_LANDSCAPE)
-			// {
-
-			// }
-		}
 
 		setHasOptionsMenu(true);
 		// setRetainInstance(true);
@@ -198,6 +191,7 @@ public class SavedKeysFragment extends SherlockFragment {
 		}
 
 	};
+	private Editor e;
 
 	protected List<SavedKey> getSavedKeys() {
 		mKeys = new ArrayList<SavedKey>();
@@ -209,11 +203,28 @@ public class SavedKeysFragment extends SherlockFragment {
 				"longitude" }, null, null, null, null, "nombre ASC");
 		// if (c.moveToFirst()) {
 		while (c.moveToNext()) {
-			SavedKey k = new SavedKey(c.getString(c.getColumnIndex("nombre")),
-					c.getString(c.getColumnIndex("key")), c.getFloat(c
-							.getColumnIndex("latitude")), c.getFloat(c
-							.getColumnIndex("longitude")));
-			mKeys.add(k);
+
+			String name = c.getString(c.getColumnIndex("nombre"));
+			boolean nueva = true;
+			for (SavedKey s : mKeys) {
+				if (name.equals(s.getWlan_name())) {
+					s.getKeys().add(c.getString(c.getColumnIndex("key")));
+					nueva = false;
+					break;
+				}
+			}
+
+			if (nueva) {
+				List<String> a = new ArrayList<String>();
+				a.add(c.getString(c.getColumnIndex("key")));
+				SavedKey k = new SavedKey(c.getString(c
+						.getColumnIndex("nombre")), c.getString(c
+						.getColumnIndex("address")), a, c.getFloat(c
+						.getColumnIndex("latitude")), c.getFloat(c
+						.getColumnIndex("longitude")));
+				mKeys.add(k);
+			}
+
 		}
 		// }
 		c.close();
@@ -240,14 +251,26 @@ public class SavedKeysFragment extends SherlockFragment {
 		case R.id.preferenceOption:
 			i = new Intent(getSherlockActivity(),
 					WLANAuditPreferencesActivity.class);
+			e = getSherlockActivity().getSharedPreferences("viewpager",
+					Context.MODE_PRIVATE).edit();
+			e.putInt("viewpager_index", 1);
+			e.commit();
 			startActivity(i);
 			return true;
 		case R.id.aboutOption:
 			i = new Intent(getSherlockActivity(), AboutActivity.class);
+			e = getSherlockActivity().getSharedPreferences("viewpager",
+					Context.MODE_PRIVATE).edit();
+			e.putInt("viewpager_index", 1);
+			e.commit();
 			startActivity(i);
 			return true;
 		case R.id.mapOption:
 			i = new Intent(getSherlockActivity(), MapActivity.class);
+			e = getSherlockActivity().getSharedPreferences("viewpager",
+					Context.MODE_PRIVATE).edit();
+			e.putInt("viewpager_index", 1);
+			e.commit();
 			startActivity(i);
 			return true;
 		default:
@@ -334,27 +357,40 @@ public class SavedKeysFragment extends SherlockFragment {
 						"DBKeys", null, 1);
 				SQLiteDatabase db = usdbh.getWritableDatabase();
 
-				String nombre_wlan,
+				String address_wlan,
 				clave;
-				nombre_wlan = mKey.getWlan_name();
-				clave = mKey.getKey();
-				db.delete("keys", "nombre like ? AND key like ?", new String[] {
-						nombre_wlan, clave });
+				address_wlan = mKey.getAddress();
 
-				((ListView) myFragmentView.findViewById(R.id.listView1))
-						.setAdapter(new KeysSavedAdapter(getSherlockActivity(),
-								R.layout.network_list_element_layout,
-								android.R.layout.simple_list_item_1,
-								getSavedKeys()));
+				if (mKey.getKeys().size() == 1) {
+
+					clave = mKey.getKeys().get(0);
+					db.delete("keys", "address like ? ",
+							new String[] { address_wlan });
+
+					((ListView) myFragmentView.findViewById(R.id.listView1))
+							.setAdapter(new KeysSavedAdapter(
+									getSherlockActivity(),
+									R.layout.network_list_element_layout,
+									android.R.layout.simple_list_item_1,
+									getSavedKeys()));
+				} else {
+					// TODO mostrar dialogo para borrar una o todas las claves
+				}
 				mode.finish();
 
 				return true;
 			case R.id.copy_context_menu:
-				copyClipboard(mKey.getKey());
+				if (mKey.getKeys().size() == 1) {
+					copyClipboard(mKey.getKeys().get(0));
+					saveWLANKey(
+							((TextView) myFragmentView.findViewById(R.id.networkName))
+									.getText().toString(), mKey.getKeys()
+									.get(0));
+				} else {
+					// TODO mostrar en un diálogo todas las claves posibles y al
+					// tocar que se copien
+				}
 
-				saveWLANKey(
-						((TextView) myFragmentView.findViewById(R.id.networkName))
-								.getText().toString(), mKey.getKey());
 				mode.finish();
 				return true;
 			default:

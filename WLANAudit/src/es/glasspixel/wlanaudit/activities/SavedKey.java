@@ -1,14 +1,18 @@
 package es.glasspixel.wlanaudit.activities;
 
+import java.util.List;
+
 public class SavedKey {
 
-	private String wlan_name, key;
+	private String wlan_name, address;
+	private List<String> keys;
 	private float latitude, longitude;
 
-	public SavedKey(String wlan_name, String key, float latitude,
-			float longitude) {
+	public SavedKey(String wlan_name, String wlan_address, List<String> keys,
+			float latitude, float longitude) {
+		this.address = wlan_address;
 		this.wlan_name = wlan_name;
-		this.key = key;
+		this.setKeys(keys);
 		this.latitude = latitude;
 		this.longitude = longitude;
 	}
@@ -19,14 +23,6 @@ public class SavedKey {
 
 	public void setWlan_name(String wlan_name) {
 		this.wlan_name = wlan_name;
-	}
-
-	public String getKey() {
-		return key;
-	}
-
-	public void setKey(String key) {
-		this.key = key;
 	}
 
 	public float getLatitude() {
@@ -43,6 +39,22 @@ public class SavedKey {
 
 	public void setLongitude(float longitude) {
 		this.longitude = longitude;
+	}
+
+	public List<String> getKeys() {
+		return keys;
+	}
+
+	public void setKeys(List<String> keys) {
+		this.keys = keys;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 }

@@ -57,9 +57,18 @@ public class MapElementsAdapter extends BaseAdapter {
 			((TextView) listItem.findViewById(R.id.networkName))
 					.setText(elements.get(position).getWlan_name());
 			((TextView) listItem.findViewById(R.id.networkKey))
-					.setText(elements.get(position).getKey());
+					.setText(elements.get(position).getKeys().size() == 1 ? elements
+							.get(position).getKeys().get(0)
+							: printKeys(elements.get(position).getKeys()));
 		}
 		return listItem;
 	}
 
+	private String printKeys(List<String> keys) {
+		String r = "";
+		for (String s : keys) {
+			r += s + ",";
+		}
+		return r;
+	}
 }

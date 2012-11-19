@@ -13,6 +13,8 @@ import es.glasspixel.wlanaudit.R.layout;
 import es.glasspixel.wlanaudit.R.string;
 import es.glasspixel.wlanaudit.fragments.SavedKeysFragment;
 import es.glasspixel.wlanaudit.fragments.ScanFragment;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.net.wifi.ScanResult;
 import android.os.Bundle;
@@ -47,6 +49,7 @@ public class NetworkListActivitySwipe extends SherlockFragmentActivity
 
 	private boolean screenIsLarge = false;
 	protected int position = 0;
+	private SharedPreferences settings;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -54,6 +57,11 @@ public class NetworkListActivitySwipe extends SherlockFragmentActivity
 		setContentView(R.layout.activity_network_list_activity_swipe);
 
 		res = getResources();
+
+		settings = getSharedPreferences("viewpager", Context.MODE_PRIVATE);
+
+		int currentIndex = settings.getInt("viewpager_index", 0);
+
 		screenIsLarge = res.getBoolean(R.bool.screen_large);
 
 		mViewPager = (ViewPager) findViewById(R.id.pager);
@@ -67,44 +75,10 @@ public class NetworkListActivitySwipe extends SherlockFragmentActivity
 			mSectionsPagerAdapter = new SectionsPagerAdapter(
 					getSupportFragmentManager());
 
-			// mViewPager.setOnPageChangeListener(new OnPageChangeListener() {
-			//
-			// @Override
-			// public void onPageScrollStateChanged(int arg0) {
-			// // TODO Auto-generated method stub
-			//
-			// }
-			//
-			// @Override
-			// public void onPageScrolled(int arg0, float arg1, int arg2) {
-			// // TODO Auto-generated method stub
-			//
-			// }
-			//
-			// @Override
-			// public void onPageSelected(int arg0) {
-			// if (arg0 != position) {
-			// position = arg0;
-			// mViewPager.setCurrentItem(position);
-			// }
-			// }
-			// });
-			//
-			// // Set up the ViewPager with the sections adapter.
-			//
-			// mViewPager.post(new Runnable() {
-			//
-			// @Override
-			// public void run() {
-			// if (mViewPager.getCurrentItem() != position) {
-			// mViewPager.setCurrentItem(position);
-			//
-			// }
-			//
-			// }
-			// });
-
 			mViewPager.setAdapter(mSectionsPagerAdapter);
+			
+			// if (currentIndex != 0)
+			// mViewPager.setCurrentItem(currentIndex);
 
 		} else {
 			SherlockFragment fragment = new SavedKeysFragment();
