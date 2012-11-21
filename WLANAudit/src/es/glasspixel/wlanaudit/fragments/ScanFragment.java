@@ -587,7 +587,7 @@ public class ScanFragment extends SherlockFragment implements
 				} catch (SQLException e) {
 					Toast.makeText(
 							getActivity().getApplicationContext(),
-							getResources().getString(R.string.error_saving_key),
+							getResources().getString(R.string.error_saving_key)+" "+e.getMessage(),
 							Toast.LENGTH_LONG).show();
 				}
 				db.close();
