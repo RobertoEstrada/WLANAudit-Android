@@ -490,7 +490,7 @@ public class ScanFragment extends SherlockFragment implements
 
 									copyClipboard(mDefaultPassValue.getText()
 											.toString());
-									saveWLANKey(scannedNetwork.SSID,
+									saveWLANKey(scannedNetwork,
 											mDefaultPassValue.getText()
 													.toString());
 
@@ -562,33 +562,39 @@ public class ScanFragment extends SherlockFragment implements
 
 	}
 
-	private void saveWLANKey(String name, CharSequence key) {
+	private void saveWLANKey(ScanResult s, CharSequence key) {
 		KeysSQliteHelper usdbh = new KeysSQliteHelper(getActivity(), "DBKeys",
 				null, 1);
 
 		SQLiteDatabase db = usdbh.getWritableDatabase();
 		if (db != null) {
-			Cursor c = db.query("Keys", new String[] { "nombre", "key" },
-					"nombre like ?", new String[] { name }, null, null,
+			Cursor c = db.query("Keys", new String[] { "address" },
+					"address like ?", new String[] { s.BSSID }, null, null,
 					"nombre ASC");
 			if (c.getCount() > 0) {
 
 			} else {
 
 				try {
-					db.execSQL("INSERT INTO Keys (nombre, key,latitude,longitude) "
+					db.execSQL("INSERT INTO Keys (nombre, key,address,latitude,longitude) "
 							+ "VALUES ('"
-							+ name
+							+ s.SSID
 							+ "', '"
 							+ key
 							+ "','"
-							+ mLatitude + "', '" + mLongitude + "')");
+							+ s.BSSID
+							+ "','"
+							+ mLatitude
+							+ "', '"
+							+ mLongitude
+							+ "')");
 
 				} catch (SQLException e) {
 					Toast.makeText(
 							getActivity().getApplicationContext(),
-							getResources().getString(R.string.error_saving_key)+" "+e.getMessage(),
-							Toast.LENGTH_LONG).show();
+							getResources().getString(R.string.error_saving_key)
+									+ " " + e.getMessage(), Toast.LENGTH_LONG)
+							.show();
 				}
 				db.close();
 			}

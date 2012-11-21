@@ -108,6 +108,7 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 			items = new ArrayList<Object>();
 			items.add(new Category(getResources().getString(R.string.action2)
 					.toUpperCase()));
+			
 			((LinearLayout) findViewById(R.id.swipeBezelMap))
 					.setOnClickListener(new OnClickListener() {
 

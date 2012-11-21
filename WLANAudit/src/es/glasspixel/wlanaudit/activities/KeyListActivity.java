@@ -164,7 +164,7 @@ public class KeyListActivity extends SherlockListActivity implements
 
 	private void copyKey(String string) {
 		this.copyClipboard(string);
-		this.saveWLANKey(wlan_name, string);
+		this.saveWLANKey(wlan_name, wlan_address, string);
 
 		// Copy notification
 		Toast notificationToast = Toast.makeText(this, getResources()
@@ -189,14 +189,14 @@ public class KeyListActivity extends SherlockListActivity implements
 
 	}
 
-	private void saveWLANKey(String name, CharSequence key) {
+	private void saveWLANKey(String name, String address, CharSequence key) {
 		KeysSQliteHelper usdbh = new KeysSQliteHelper(this, "DBKeys", null, 1);
 
 		SQLiteDatabase db = usdbh.getWritableDatabase();
 		if (db != null) {
-			Cursor c = db.query("Keys", new String[] { "nombre", "key" },
-					"nombre like ?", new String[] { name }, null, null,
-					"nombre ASC");
+			Cursor c = db.query("Keys", new String[] { "address" },
+					"address like ?", new String[] { address }, null, null,
+					"address ASC");
 			if (c.getCount() > 0) {
 
 			} else {
@@ -217,8 +217,8 @@ public class KeyListActivity extends SherlockListActivity implements
 				} catch (SQLException e) {
 					Toast.makeText(
 							getApplicationContext(),
-							getResources().getString(R.string.error_saving_key),
-							Toast.LENGTH_LONG).show();
+							getResources().getString(R.string.error_saving_key)
+									+ e.getMessage(), Toast.LENGTH_LONG).show();
 				}
 				db.close();
 			}
