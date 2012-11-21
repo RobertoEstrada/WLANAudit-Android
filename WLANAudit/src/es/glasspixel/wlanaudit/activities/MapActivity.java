@@ -108,7 +108,7 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 			items = new ArrayList<Object>();
 			items.add(new Category(getResources().getString(R.string.action2)
 					.toUpperCase()));
-			
+
 			((LinearLayout) findViewById(R.id.swipeBezelMap))
 					.setOnClickListener(new OnClickListener() {
 
@@ -356,8 +356,10 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 		KeysSQliteHelper usdbh = new KeysSQliteHelper(this, "DBKeys", null, 1);
 
 		SQLiteDatabase db = usdbh.getReadableDatabase();
-		Cursor c = db.query("Keys", new String[] { "nombre", "key", "latitude",
-				"longitude" }, null, null, null, null, "nombre ASC");
+		Cursor c = db
+				.query("Keys", new String[] { "address", "nombre", "key",
+						"latitude", "longitude" }, null, null, null, null,
+						"nombre ASC");
 		// if (c.moveToFirst()) {
 		while (c.moveToNext()) {
 
