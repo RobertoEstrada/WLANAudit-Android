@@ -45,8 +45,12 @@ public class KeysSavedAdapter extends ArrayAdapter<SavedKey> {
 
 	private CharSequence getListString(SavedKey item) {
 		String result = "";
-		for (String s : item.getKeys()) {
-			result += s + ",";
+		if (item.getKeys().size() > 1) {
+			for (String s : item.getKeys()) {
+				result += s + ",";
+			}
+		} else {
+			result = item.getKeys().get(0);
 		}
 		return result;
 	}
