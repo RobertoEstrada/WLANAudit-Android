@@ -201,28 +201,6 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 
 	}
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == 1) {
-			String wlan_selected = DataUtils.getInstance(
-					getApplicationContext()).getSavedkeyselected();
-			Log.d("MapActivity", "wlan selected on menu: " + wlan_selected);
-			int i = 0;
-			for (SavedKey s : mKeys) {
-				if (s.getWlan_name().equals(wlan_selected)) {
-					this.centerMap(
-							new GeoPoint(s.getLatitude(), s.getLongitude()),
-							false);
-					// centerMap(anotherOverlayItemArray.get(i).mGeoPoint);
-					break;
-				}
-				i++;
-			}
-
-		}
-		super.onActivityResult(requestCode, resultCode, data);
-	}
-
 	private void showLocation(Location l) {
 		final GeoPoint gp = new GeoPoint(l.getLatitude(), l.getLongitude());
 
@@ -236,8 +214,8 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 	}
 
 	private void centerMap(GeoPoint g, boolean zoom) {
-		myMapController.animateTo(g);
-		// myMapController.setCenter(g);
+		// myMapController.animateTo(g);
+		myMapController.setCenter(g);
 
 		if (zoom)
 			myMapController.setZoom(myOpenMapView.getMaxZoomLevel() - 5);
@@ -399,26 +377,19 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 			mActivePosition = position - 1;
 			mMenuDrawer.setActiveView(view, mActivePosition);
 
-			// String wlan_selected = mKeys.get(mActivePosition).getWlan_name();
-			// Log.d("MapActivity", "wlan selected on menu: " + wlan_selected);
-			// int i = 0;
-			// for (SavedKey s : mKeys) {
-			// if (s.getWlan_name().equals(wlan_selected)) {
-			// centerMap(new GeoPoint(s.getLatitude(), s.getLongitude()));
-			// // centerMap(anotherOverlayItemArray.get(i).mGeoPoint);
-			// break;
-			// }
-			// i++;
-			// }
+			centerMap(anotherItemizedIconOverlay.getItem(mActivePosition)
+					.getPoint(), true);
+			anotherItemizedIconOverlay.setFocusedItem(mActivePosition);
 
-			hideBaloons();
+			myOpenMapView.invalidate();
 
-			centerMap(anotherOverlayItemArray.get(mActivePosition).mGeoPoint,
-					true);
+			Log.d("MapActivity", anotherItemizedIconOverlay.getFocusedItem()
+					.getTitle());
 
 			mMenuDrawer.closeMenu();
 		}
 	};
+	private ItemizedOverlayWithFocus<OverlayItem> anotherItemizedIconOverlay;
 
 	private void loadElements() {
 
@@ -449,7 +420,7 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 			mMenuDrawer.setMenuView(mList);
 		}
 
-		ItemizedOverlayWithFocus<OverlayItem> anotherItemizedIconOverlay = new ItemizedOverlayWithFocus<OverlayItem>(
+		anotherItemizedIconOverlay = new ItemizedOverlayWithFocus<OverlayItem>(
 				this, anotherOverlayItemArray, myOnItemGestureListener);
 		myOpenMapView.getOverlays().add(anotherItemizedIconOverlay);
 		anotherItemizedIconOverlay.setFocusItemsOnTap(true);
@@ -474,8 +445,9 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 							centerMap(
 									anotherOverlayItemArray.get(arg2).mGeoPoint,
 									true);
-							myOnItemGestureListener.onItemSingleTapUp(arg2,
-									anotherOverlayItemArray.get(arg2));
+
+							// myOnItemGestureListener.onItemSingleTapUp(arg2,
+							// anotherOverlayItemArray.get(arg2));
 
 						}
 
