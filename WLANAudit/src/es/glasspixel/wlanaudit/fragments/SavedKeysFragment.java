@@ -199,8 +199,10 @@ public class SavedKeysFragment extends SherlockFragment {
 				null, 1);
 
 		SQLiteDatabase db = usdbh.getReadableDatabase();
-		Cursor c = db.query("Keys", new String[] { "nombre", "key", "latitude",
-				"longitude" }, null, null, null, null, "nombre ASC");
+		Cursor c = db
+				.query("Keys", new String[] { "address", "nombre", "key",
+						"latitude", "longitude" }, null, null, null, null,
+						"nombre ASC");
 		// if (c.moveToFirst()) {
 		while (c.moveToNext()) {
 
