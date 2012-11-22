@@ -108,7 +108,7 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 			items = new ArrayList<Object>();
 			items.add(new Category(getResources().getString(R.string.action2)
 					.toUpperCase()));
-			
+
 			((LinearLayout) findViewById(R.id.swipeBezelMap))
 					.setOnClickListener(new OnClickListener() {
 
@@ -236,7 +236,8 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 	}
 
 	private void centerMap(GeoPoint g, boolean zoom) {
-		myMapController.setCenter(g);
+		myMapController.animateTo(g);
+		// myMapController.setCenter(g);
 
 		if (zoom)
 			myMapController.setZoom(myOpenMapView.getMaxZoomLevel() - 5);
@@ -408,6 +409,8 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 			// i++;
 			// }
 
+			hideBaloons();
+
 			centerMap(anotherOverlayItemArray.get(mActivePosition).mGeoPoint,
 					true);
 
@@ -469,10 +472,19 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 							centerMap(
 									anotherOverlayItemArray.get(arg2).mGeoPoint,
 									true);
+							myOnItemGestureListener.onItemSingleTapUp(arg2,
+									anotherOverlayItemArray.get(arg2));
 
 						}
 
 					});
+
+		}
+
+	}
+
+	protected void hideBaloons() {
+		for (OverlayItem o : anotherOverlayItemArray) {
 
 		}
 
@@ -496,12 +508,6 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 
 		@Override
 		public boolean onItemSingleTapUp(int index, OverlayItem item) {
-			// SavedKey s = mKeys.get(index - 1);
-
-			// centerMap(new GeoPoint(mKeys.get(index - 1).getLatitude(), mKeys
-			// .get(index - 1).getLongitude()));
-
-			// centerMap(anotherOverlayItemArray.get(index-1).mGeoPoint);
 
 			return true;
 		}
