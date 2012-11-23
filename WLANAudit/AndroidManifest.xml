@@ -49,7 +49,7 @@
                 android:value="es.glasspixel.wlanaudit.activities.NetworkListActivitySwipe" />
         </activity>
         <activity
-            android:name="es.glasspixel.wlanaudit.activities.MapActivity"
+            android:name="es.glasspixel.wlanaudit.activities.SlidingMapActivity"
             android:label="@string/title_activity_map" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

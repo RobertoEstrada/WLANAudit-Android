@@ -45,8 +45,9 @@ import android.widget.Toast;
 import es.glasspixel.wlanaudit.R;
 
 import es.glasspixel.wlanaudit.activities.AboutActivity;
-import es.glasspixel.wlanaudit.activities.MapActivity;
+
 import es.glasspixel.wlanaudit.activities.SavedKey;
+import es.glasspixel.wlanaudit.activities.SlidingMapActivity;
 import es.glasspixel.wlanaudit.activities.WLANAuditPreferencesActivity;
 import es.glasspixel.wlanaudit.adapters.KeysSavedAdapter;
 import es.glasspixel.wlanaudit.database.KeysSQliteHelper;
@@ -93,16 +94,16 @@ public class SavedKeysFragment extends SherlockFragment {
 				.setText(getSherlockActivity().getResources().getString(
 						R.string.no_data_saved_keys));
 
-		((ListView) myFragmentView.findViewById(R.id.listView1))
+		((ListView) myFragmentView.findViewById(android.R.id.list))
 				.setEmptyView(myFragmentView.findViewById(R.id.empty));
-		((ListView) myFragmentView.findViewById(R.id.listView1))
+		((ListView) myFragmentView.findViewById(android.R.id.list))
 				.setAdapter(new KeysSavedAdapter(getSherlockActivity(),
 						R.layout.network_list_element_layout,
 						android.R.layout.simple_list_item_1, getSavedKeys()));
-		((ListView) myFragmentView.findViewById(R.id.listView1))
+		((ListView) myFragmentView.findViewById(android.R.id.list))
 				.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
-		((ListView) myFragmentView.findViewById(R.id.listView1))
+		((ListView) myFragmentView.findViewById(android.R.id.list))
 				.setOnItemLongClickListener(new OnItemLongClickListener() {
 
 					@Override
@@ -123,7 +124,7 @@ public class SavedKeysFragment extends SherlockFragment {
 					}
 				});
 
-		((ListView) myFragmentView.findViewById(R.id.listView1))
+		((ListView) myFragmentView.findViewById(android.R.id.list))
 				.setOnItemClickListener(new OnItemClickListener() {
 
 					@Override
@@ -268,11 +269,8 @@ public class SavedKeysFragment extends SherlockFragment {
 			startActivity(i);
 			return true;
 		case R.id.mapOption:
-			i = new Intent(getSherlockActivity(), MapActivity.class);
-			e = getSherlockActivity().getSharedPreferences("viewpager",
-					Context.MODE_PRIVATE).edit();
-			e.putInt("viewpager_index", 1);
-			e.commit();
+			i = new Intent(getSherlockActivity(), SlidingMapActivity.class);
+			
 			startActivity(i);
 			return true;
 		default:
@@ -369,7 +367,7 @@ public class SavedKeysFragment extends SherlockFragment {
 					db.delete("keys", "address like ? ",
 							new String[] { address_wlan });
 
-					((ListView) myFragmentView.findViewById(R.id.listView1))
+					((ListView) myFragmentView.findViewById(android.R.id.list))
 							.setAdapter(new KeysSavedAdapter(
 									getSherlockActivity(),
 									R.layout.network_list_element_layout,

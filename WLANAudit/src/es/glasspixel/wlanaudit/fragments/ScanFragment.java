@@ -68,7 +68,8 @@ import es.glasspixel.wlanaudit.actions.AutoScanAction;
 import es.glasspixel.wlanaudit.actions.RefreshAction;
 import es.glasspixel.wlanaudit.activities.AboutActivity;
 import es.glasspixel.wlanaudit.activities.KeyListActivity;
-import es.glasspixel.wlanaudit.activities.MapActivity;
+import es.glasspixel.wlanaudit.activities.SlidingMapActivity;
+
 
 import es.glasspixel.wlanaudit.activities.SavedKey;
 import es.glasspixel.wlanaudit.activities.WLANAuditPreferencesActivity;
@@ -228,10 +229,10 @@ public class ScanFragment extends SherlockFragment implements
 		((TextView) myFragmentView.findViewById(R.id.empty))
 				.setText(getSherlockActivity().getResources().getString(
 						R.string.no_networks_found));
-		((ListView) myFragmentView.findViewById(R.id.listView1))
+		((ListView) myFragmentView.findViewById(android.R.id.list))
 				.setEmptyView(getSherlockActivity().findViewById(R.id.empty));
 
-		((ListView) myFragmentView.findViewById(R.id.listView1))
+		((ListView) myFragmentView.findViewById(android.R.id.list))
 				.setAdapter(new WifiNetworkAdapter(getSherlockActivity(),
 						R.layout.network_list_element_layout,
 						new ArrayList<ScanResult>()));
@@ -250,7 +251,7 @@ public class ScanFragment extends SherlockFragment implements
 			editor.commit();
 		}
 
-		((ListView) myFragmentView.findViewById(R.id.listView1))
+		((ListView) myFragmentView.findViewById(android.R.id.list))
 				.setOnItemClickListener(this);
 
 		initScan();
@@ -292,7 +293,7 @@ public class ScanFragment extends SherlockFragment implements
 			((TextView) myFragmentView.findViewById(R.id.empty))
 					.setText(getSherlockActivity().getResources().getString(
 							R.string.no_networks_found));
-			((ListView) myFragmentView.findViewById(R.id.listView1))
+			((ListView) myFragmentView.findViewById(android.R.id.list))
 					.setEmptyView(getSherlockActivity()
 							.findViewById(R.id.empty));
 		}
@@ -323,13 +324,13 @@ public class ScanFragment extends SherlockFragment implements
 
 				if (myFragmentView != null && getSherlockActivity() != null) {
 					if (mWifiManager.getScanResults().size() > 0) {
-						((ListView) myFragmentView.findViewById(R.id.listView1))
+						((ListView) myFragmentView.findViewById(android.R.id.list))
 								.setAdapter(new WifiNetworkAdapter(
 										getSherlockActivity(),
 										R.layout.network_list_element_layout,
 										res));
 					} else {
-						((ListView) myFragmentView.findViewById(R.id.listView1))
+						((ListView) myFragmentView.findViewById(android.R.id.list))
 								.setEmptyView(getSherlockActivity()
 										.findViewById(R.id.empty));
 					}
@@ -390,7 +391,7 @@ public class ScanFragment extends SherlockFragment implements
 			startActivity(i);
 			return true;
 		case R.id.mapOption:
-			i = new Intent(getSherlockActivity(), MapActivity.class);
+			i = new Intent(getSherlockActivity(), SlidingMapActivity.class);
 			e = getSherlockActivity().getSharedPreferences("viewpager",
 					Context.MODE_PRIVATE).edit();
 			e.putInt("viewpager_index", 0);
