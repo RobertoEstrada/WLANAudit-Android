@@ -49,13 +49,13 @@ public class SlidingMapActivity extends SlidingFragmentActivity {
 			mContent = getSupportFragmentManager().getFragment(
 					savedInstanceState, "mContent");
 		if (mContent == null)
-			mContent = new BirdGridFragment(0);
+			mContent = new MapFragment(0);
 		getSupportFragmentManager().beginTransaction()
 				.replace(R.id.content_frame, mContent).commit();
 
 		// set the Behind View Fragment
 		getSupportFragmentManager().beginTransaction()
-				.replace(R.id.menu_frame, new BirdMenuFragment()).commit();
+				.replace(R.id.menu_frame, new SavedKeysMenuFragment()).commit();
 
 		// customize the SlidingMenu
 		SlidingMenu sm = getSlidingMenu();
