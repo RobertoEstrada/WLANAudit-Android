@@ -59,9 +59,8 @@ public class ScanFragment extends RoboSherlockFragment implements OnItemClickLis
          * was selected on this fragment.
          * 
          * @param networkData The network data of the selected item.
-         * @param networkLocation TODO
          */
-        public void onNetworkSelected(ScanResult networkData, Location networkLocation);
+        public void onNetworkSelected(ScanResult networkData);
     }
 
     /**
@@ -79,11 +78,6 @@ public class ScanFragment extends RoboSherlockFragment implements OnItemClickLis
      * Broadcast receiver to control the completion of a scan
      */
     private BroadcastReceiver mNetworkScanCallBackReceiver;
-    
-    /**
-     * Broadcast receiver to watch for location updates
-     */
-    private BroadcastReceiver mLocationAvailableCallBackReceiver;
 
     /**
      * Application preferences
@@ -111,16 +105,6 @@ public class ScanFragment extends RoboSherlockFragment implements OnItemClickLis
      * Autoscan toggle actionbar button
      */
     private MenuItem mAutoScanMenuItem;
-    
-    /**
-     * Handle to power-efficient location services
-     */
-    private Locator mLocator;
-    
-    /**
-     * Last known location
-     */
-    private Location mLastKnownLocation;
     
     /**
      * Network list widget
@@ -156,9 +140,7 @@ public class ScanFragment extends RoboSherlockFragment implements OnItemClickLis
      */
     public void onResume() {
         super.onResume();
-        setupNetworkScanCallBack();
-        setupLocationServices();
-        startReceivingLocationUpdates();
+        setupNetworkScanCallBack();        
         initScan();
         startScan();
         // mAd.loadAd(new AdRequest());
@@ -171,8 +153,7 @@ public class ScanFragment extends RoboSherlockFragment implements OnItemClickLis
     @Override
     public void onPause() {
         super.onPause();
-        getSherlockActivity().getApplicationContext().unregisterReceiver(mNetworkScanCallBackReceiver);
-        stopReceivingLocationUpdates();
+        getSherlockActivity().getApplicationContext().unregisterReceiver(mNetworkScanCallBackReceiver);        
     }
 
     public void onDestroy() {
@@ -186,39 +167,7 @@ public class ScanFragment extends RoboSherlockFragment implements OnItemClickLis
                 Log.d("ScanFragment", e.getMessage().toString());
             }
         }
-    }
-
-    private void setupLocationServices() {
-        LocatorSettings settings = new LocatorSettings(WLANAuditApplication.PACKAGE_NAME,
-                WLANAuditApplication.LOCATION_UPDATE_ACTION);
-        settings.setUpdatesInterval(3 * 60 * 1000);
-        settings.setUpdatesDistance(50);
-        mLocator = LocatorFactory.getInstance();
-        mLocator.prepare(getSherlockActivity(), settings);
-        mLocationAvailableCallBackReceiver = new BroadcastReceiver() {
-            
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                mLastKnownLocation = mLocator.getLocation();                
-            }
-        };
-    }
-
-    private void startReceivingLocationUpdates() {
-        IntentFilter f = new IntentFilter();
-        f.addAction(WLANAuditApplication.LOCATION_UPDATE_ACTION);
-        getSherlockActivity().getApplicationContext().registerReceiver(mLocationAvailableCallBackReceiver, f);
-        try {
-            mLocator.startLocationUpdates();
-        } catch (NoProviderAvailable np) {
-            Log.d(TAG, "No location provider available at this time");
-        }
-    }
-
-    private void stopReceivingLocationUpdates() {
-        getSherlockActivity().getApplicationContext().unregisterReceiver(mLocationAvailableCallBackReceiver);
-        mLocator.stopLocationUpdates();
-    }
+    }    
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -387,6 +336,6 @@ public class ScanFragment extends RoboSherlockFragment implements OnItemClickLis
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        mCallback.onNetworkSelected((ScanResult) parent.getItemAtPosition(position), mLastKnownLocation);
+        mCallback.onNetworkSelected((ScanResult) parent.getItemAtPosition(position));
     }
 }

@@ -21,7 +21,10 @@ import java.util.List;
 import roboguice.fragment.RoboDialogFragment;
 import roboguice.inject.InjectView;
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -29,15 +32,23 @@ import android.location.Location;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.novoda.location.Locator;
+import com.novoda.location.LocatorFactory;
+import com.novoda.location.LocatorSettings;
+import com.novoda.location.exception.NoProviderAvailable;
+
 import es.glasspixel.wlanaudit.R;
+import es.glasspixel.wlanaudit.WLANAuditApplication;
 import es.glasspixel.wlanaudit.adapters.WifiNetworkAdapter;
 import es.glasspixel.wlanaudit.database.KeysSQliteHelper;
 import es.glasspixel.wlanaudit.keyframework.IKeyCalculator;
@@ -47,14 +58,14 @@ import es.glasspixel.wlanaudit.util.ChannelCalculator;
 
 public class NetworkDetailsDialogFragment extends RoboDialogFragment {
     /**
-     * Key to store and recover from dialog bundle the network data to displau
+     * Tag to identify the class in logcat
      */
-    private static String NETWORK_DETAILS_DATA_KEY = "NetworkDetailsData";
-
+    private static final String TAG = NetworkDetailsDialogFragment.class.getName();
+    
     /**
      * Key to store and recover from dialog bundle the network data to displau
      */
-    private static String NETWORK_LOCATION_DATA_KEY = "NetworkLocationData";
+    private static String NETWORK_DETAILS_DATA_KEY = "NetworkDetailsData";
 
     /**
      * The network data to display on the dialog
@@ -62,9 +73,19 @@ public class NetworkDetailsDialogFragment extends RoboDialogFragment {
     private ScanResult mNetworkData;
 
     /**
-     * The approximate netowrk location
+     * Last known location
      */
-    private Location mNetworkLocation;
+    private Location mLastKnownLocation;
+    
+    /**
+     * Handle to power-efficient location services
+     */
+    private Locator mLocator;
+    
+    /**
+     * Broadcast receiver to watch for location updates
+     */
+    private BroadcastReceiver mLocationAvailableCallBackReceiver;
 
     @InjectView(R.id.networkIcon)
     private ImageView mNetworkIcon;
@@ -99,12 +120,10 @@ public class NetworkDetailsDialogFragment extends RoboDialogFragment {
      * @param network The network data to display on the dialog
      * @return A ready to use instance of the dialog
      */
-    public static NetworkDetailsDialogFragment newInstance(ScanResult network,
-            Location networkLocation) {
+    public static NetworkDetailsDialogFragment newInstance(ScanResult network) {
         NetworkDetailsDialogFragment frag = new NetworkDetailsDialogFragment();
         Bundle args = new Bundle();
         args.putParcelable(NETWORK_DETAILS_DATA_KEY, network);
-        args.putParcelable(NETWORK_LOCATION_DATA_KEY, networkLocation);
         frag.setArguments(args);
         return frag;
     }
@@ -113,7 +132,6 @@ public class NetworkDetailsDialogFragment extends RoboDialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mNetworkData = getArguments().getParcelable(NETWORK_DETAILS_DATA_KEY);
-        mNetworkLocation = getArguments().getParcelable(NETWORK_LOCATION_DATA_KEY);
     }
 
     @Override
@@ -121,6 +139,19 @@ public class NetworkDetailsDialogFragment extends RoboDialogFragment {
         getDialog().setTitle(R.string.scan_fragment_dialog_title);
         View v = inflater.inflate(R.layout.network_details_dialog, container, false);
         return v;
+    }
+    
+    @Override
+    public void onResume() {
+        super.onResume();
+        setupLocationServices();
+        startReceivingLocationUpdates();
+    }
+    
+    @Override
+    public void onPause() {
+        super.onPause();
+        stopReceivingLocationUpdates();
     }
 
     @Override
@@ -169,6 +200,38 @@ public class NetworkDetailsDialogFragment extends RoboDialogFragment {
             mCopyPasswordButton.setEnabled(false);
         }
     }
+    
+    private void setupLocationServices() {
+        LocatorSettings settings = new LocatorSettings(WLANAuditApplication.PACKAGE_NAME,
+                WLANAuditApplication.LOCATION_UPDATE_ACTION);
+        settings.setUpdatesInterval(3 * 60 * 1000);
+        settings.setUpdatesDistance(50);
+        mLocator = LocatorFactory.getInstance();
+        mLocator.prepare(getActivity().getApplicationContext(), settings);
+        mLocationAvailableCallBackReceiver = new BroadcastReceiver() {
+            
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                mLastKnownLocation = mLocator.getLocation();                
+            }
+        };
+    }
+
+    private void startReceivingLocationUpdates() {
+        IntentFilter f = new IntentFilter();
+        f.addAction(WLANAuditApplication.LOCATION_UPDATE_ACTION);
+        getActivity().getApplicationContext().registerReceiver(mLocationAvailableCallBackReceiver, f);
+        try {
+            mLocator.startLocationUpdates();
+        } catch (NoProviderAvailable np) {
+            Log.d(TAG, "No location provider available at this time");
+        }
+    }
+
+    private void stopReceivingLocationUpdates() {
+        getActivity().getApplicationContext().unregisterReceiver(mLocationAvailableCallBackReceiver);
+        mLocator.stopLocationUpdates();
+    }
 
     @SuppressWarnings("deprecation")
     @SuppressLint("NewApi")
@@ -205,8 +268,8 @@ public class NetworkDetailsDialogFragment extends RoboDialogFragment {
 
                 try {
 
-                    double latitude = mNetworkLocation.getLatitude();
-                    double longitude = mNetworkLocation.getLongitude();
+                    double latitude = mLastKnownLocation.getLatitude();
+                    double longitude = mLastKnownLocation.getLongitude();
 
                     db.execSQL("INSERT INTO Keys (nombre, key,latitude,longitude) " + "VALUES ('"
                             + name + "', '" + key + "','" + latitude + "', '" + longitude + "')");

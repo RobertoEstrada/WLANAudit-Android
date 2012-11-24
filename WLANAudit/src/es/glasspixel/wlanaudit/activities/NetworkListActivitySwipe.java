@@ -4,6 +4,8 @@ package es.glasspixel.wlanaudit.activities;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import roboguice.inject.InjectView;
 import android.annotation.SuppressLint;
 import android.content.res.Resources;
@@ -52,6 +54,7 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity imple
      * The {@link ViewPager} that will host the activty fragments.
      */
     @InjectView(R.id.pager)
+    @Nullable
     private ViewPager mViewPager;
 
     /**
@@ -112,7 +115,7 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity imple
      * {@inheritDoc}
      */
     @Override
-    public void onNetworkSelected(ScanResult networkData, Location networkLocation) {
+    public void onNetworkSelected(ScanResult networkData) {
         /*if (mScreenIsLarge) {
             SherlockFragment fragment = new SavedKeysFragment();
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -128,7 +131,7 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity imple
         ft.addToBackStack(null);
 
         // Create and show the dialog.
-        NetworkDetailsDialogFragment detailsDlg = NetworkDetailsDialogFragment.newInstance(networkData,networkLocation);
+        NetworkDetailsDialogFragment detailsDlg = NetworkDetailsDialogFragment.newInstance(networkData);
         detailsDlg.show(ft, "detailsDialog");
     }
 
