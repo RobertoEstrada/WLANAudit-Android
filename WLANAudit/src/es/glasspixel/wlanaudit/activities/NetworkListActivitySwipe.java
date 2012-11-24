@@ -7,8 +7,10 @@ import java.util.List;
 import roboguice.inject.InjectView;
 import android.annotation.SuppressLint;
 import android.content.res.Resources;
+import android.location.Location;
 import android.net.wifi.ScanResult;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
@@ -19,6 +21,7 @@ import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockFragmen
 import com.google.inject.Inject;
 
 import es.glasspixel.wlanaudit.R;
+import es.glasspixel.wlanaudit.dialogs.NetworkDetailsDialogFragment;
 import es.glasspixel.wlanaudit.fragments.SavedKeysFragment;
 import es.glasspixel.wlanaudit.fragments.ScanFragment;
 
@@ -109,7 +112,7 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity imple
      * {@inheritDoc}
      */
     @Override
-    public void onItemSelected(ScanResult s) {
+    public void onNetworkSelected(ScanResult networkData, Location networkLocation) {
         /*if (mScreenIsLarge) {
             SherlockFragment fragment = new SavedKeysFragment();
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -117,6 +120,16 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity imple
         } else {
             mViewPager.setAdapter(mSectionsPagerAdapter);
         }*/
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        Fragment prev = getSupportFragmentManager().findFragmentByTag("detailsDialog");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+
+        // Create and show the dialog.
+        NetworkDetailsDialogFragment detailsDlg = NetworkDetailsDialogFragment.newInstance(networkData,networkLocation);
+        detailsDlg.show(ft, "detailsDialog");
     }
 
     /**

@@ -58,9 +58,10 @@ public class ScanFragment extends RoboSherlockFragment implements OnItemClickLis
          * Observers must implement this method to be notified of which network
          * was selected on this fragment.
          * 
-         * @param s The network data of the selected item.
+         * @param networkData The network data of the selected item.
+         * @param networkLocation TODO
          */
-        public void onItemSelected(ScanResult s);
+        public void onNetworkSelected(ScanResult networkData, Location networkLocation);
     }
 
     /**
@@ -156,25 +157,22 @@ public class ScanFragment extends RoboSherlockFragment implements OnItemClickLis
     public void onResume() {
         super.onResume();
         setupNetworkScanCallBack();
-        // mWifiManager.startScan();
+        setupLocationServices();
+        startReceivingLocationUpdates();
         initScan();
         startScan();
         // mAd.loadAd(new AdRequest());
     }
-
+    
     /**
-     * Lifecycle management: Activity is being stopped, we need to unregister
-     * the broadcast receiver
+     * Lifecycle management: Activity is being paused, we need to unregister
+     * the broadcast receivers to avoid leaking them
      */
-    public void onStop() {
-        super.onStop();
-        // Unsubscribing from receiving updates about changes of the WiFi
-        // networks
-        try {
-            getSherlockActivity().unregisterReceiver(mNetworkScanCallBackReceiver);
-        } catch (IllegalArgumentException e) {
-            // Do nothing
-        }
+    @Override
+    public void onPause() {
+        super.onPause();
+        getSherlockActivity().getApplicationContext().unregisterReceiver(mNetworkScanCallBackReceiver);
+        stopReceivingLocationUpdates();
     }
 
     public void onDestroy() {
@@ -183,7 +181,7 @@ public class ScanFragment extends RoboSherlockFragment implements OnItemClickLis
             mAutoScanAction.stopAutoScan();
         if (mNetworkScanCallBackReceiver != null) {
             try {
-                getActivity().unregisterReceiver(mNetworkScanCallBackReceiver);
+                getSherlockActivity().getApplicationContext().unregisterReceiver(mNetworkScanCallBackReceiver);
             } catch (IllegalArgumentException e) {
                 Log.d("ScanFragment", e.getMessage().toString());
             }
@@ -209,7 +207,7 @@ public class ScanFragment extends RoboSherlockFragment implements OnItemClickLis
     private void startReceivingLocationUpdates() {
         IntentFilter f = new IntentFilter();
         f.addAction(WLANAuditApplication.LOCATION_UPDATE_ACTION);
-        getSherlockActivity().registerReceiver(mLocationAvailableCallBackReceiver, f);
+        getSherlockActivity().getApplicationContext().registerReceiver(mLocationAvailableCallBackReceiver, f);
         try {
             mLocator.startLocationUpdates();
         } catch (NoProviderAvailable np) {
@@ -218,7 +216,7 @@ public class ScanFragment extends RoboSherlockFragment implements OnItemClickLis
     }
 
     private void stopReceivingLocationUpdates() {
-        getSherlockActivity().unregisterReceiver(mLocationAvailableCallBackReceiver);
+        getSherlockActivity().getApplicationContext().unregisterReceiver(mLocationAvailableCallBackReceiver);
         mLocator.stopLocationUpdates();
     }
 
@@ -253,7 +251,7 @@ public class ScanFragment extends RoboSherlockFragment implements OnItemClickLis
                 R.string.no_networks_found));
         mNetworkListView.setEmptyView(mEmptyListMessageTextView);
 
-        mNetworkListView.setAdapter(new WifiNetworkAdapter(getSherlockActivity(),
+        mNetworkListView.setAdapter(new WifiNetworkAdapter(getSherlockActivity().getApplicationContext(),
                 R.layout.network_list_element_layout, new ArrayList<ScanResult>()));
         
         mNetworkListView.setOnItemClickListener(this);
@@ -304,7 +302,7 @@ public class ScanFragment extends RoboSherlockFragment implements OnItemClickLis
                 // ListView refreshed
 
                 if (mWifiManager.getScanResults().size() > 0) {
-                    mNetworkListView.setAdapter(new WifiNetworkAdapter(getSherlockActivity(),
+                    mNetworkListView.setAdapter(new WifiNetworkAdapter(context,
                             R.layout.network_list_element_layout, mWifiManager.getScanResults()));
                 } else {
                     mNetworkListView.setEmptyView(mEmptyListMessageTextView);
@@ -314,16 +312,16 @@ public class ScanFragment extends RoboSherlockFragment implements OnItemClickLis
                     mRefreshMenuItem.setActionView(null);
             }
         };
-        getSherlockActivity().registerReceiver(mNetworkScanCallBackReceiver, i);
+        getSherlockActivity().getApplicationContext().registerReceiver(mNetworkScanCallBackReceiver, i);
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.networklistactivity_menu, menu);
         mRefreshMenuItem = (MenuItem) menu.findItem(R.id.scanOption);
         mAutoScanMenuItem = (MenuItem) menu.findItem(R.id.toggleAutoscanOption);
         checkAutoScanStatus();
-        super.onCreateOptionsMenu(menu, inflater);
     }
 
     /**
@@ -380,11 +378,15 @@ public class ScanFragment extends RoboSherlockFragment implements OnItemClickLis
                     + " must implement OnNetworkSelectedListener");
         }
     }
+    
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallback = null;
+    }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        ScanResult clickedNetwork = (ScanResult) parent.getItemAtPosition(position);
-        NetworkDetailsDialogFragment detailsDlg = NetworkDetailsDialogFragment.newInstance(clickedNetwork, mLastKnownLocation);
-        detailsDlg.show(getFragmentManager(), getTag());
+        mCallback.onNetworkSelected((ScanResult) parent.getItemAtPosition(position), mLastKnownLocation);
     }
 }
