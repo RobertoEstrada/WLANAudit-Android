@@ -8,5 +8,9 @@
 	<classpathentry kind="lib" path="libs/osmdroid-android-3.0.3.jar"/>
 	<classpathentry kind="lib" path="libs/slf4j-android-1.6.1-RC1.jar"/>
 	<classpathentry kind="lib" path="libs/GoogleAdMobAdsSdk-6.1.0.jar"/>
+	<classpathentry kind="lib" path="libs/guice-3.0-no_aop.jar"/>
+	<classpathentry kind="lib" path="libs/roboguice-2.0.jar"/>
+	<classpathentry kind="lib" path="libs/novocation-core-1.0.6.jar"/>
+	<classpathentry kind="lib" path="libs/javax.inject.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

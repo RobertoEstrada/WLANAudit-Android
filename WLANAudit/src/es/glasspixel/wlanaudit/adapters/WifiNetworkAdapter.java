@@ -59,8 +59,7 @@ public class WifiNetworkAdapter extends ArrayAdapter<ScanResult> {
 		View listItem = convertView;
 		// If the view is null, we need to inflate it from XML layout
 		if (listItem == null) {
-			LayoutInflater inflater = (LayoutInflater) getContext()
-					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			LayoutInflater inflater = LayoutInflater.from(getContext());
 			listItem = inflater.inflate(R.layout.network_list_element_layout,
 					null);
 		}
