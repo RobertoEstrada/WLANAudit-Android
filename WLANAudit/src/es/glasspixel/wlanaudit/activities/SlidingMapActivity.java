@@ -31,7 +31,7 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
 		OnSavedKeySelectedListener {
 
 	private static final int SHOW_MENU = 0;
-	private Fragment mContent;
+	private MapFragment mContent;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -43,10 +43,12 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
 
 		// check if the content frame contains the menu frame
 		if (findViewById(R.id.menu_frame) == null) {
+
 			setBehindContentView(R.layout.menu_frame);
+			setSlidingActionBarEnabled(false);
 			getSlidingMenu().setSlidingEnabled(true);
-			getSlidingMenu().setMode(SlidingMenu.RIGHT);
-			getSlidingMenu().setShadowDrawable(R.drawable.shadowright);
+			getSlidingMenu().setMode(SlidingMenu.LEFT);
+			// getSlidingMenu().setShadowDrawable(R.drawable.shadowright);
 			getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
 			// show home as up so we can toggle
 
@@ -55,13 +57,12 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
 			View v = new View(this);
 			setBehindContentView(v);
 			getSlidingMenu().setSlidingEnabled(false);
-			
 			getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
 		}
 
 		// set the Above View Fragment
 		if (savedInstanceState != null)
-			mContent = getSupportFragmentManager().getFragment(
+			mContent = (MapFragment) getSupportFragmentManager().getFragment(
 					savedInstanceState, "mContent");
 		if (mContent == null)
 			mContent = new MapFragment(0);
@@ -69,8 +70,10 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
 				.replace(R.id.content_frame, mContent).commit();
 
 		// set the Behind View Fragment
+		SavedKeysMenuFragment s = new SavedKeysMenuFragment();
+		s.addListener(this);
 		getSupportFragmentManager().beginTransaction()
-				.replace(R.id.menu_frame, new SavedKeysMenuFragment()).commit();
+				.replace(R.id.menu_frame,s ).commit();
 
 		// customize the SlidingMenu
 		SlidingMenu sm = getSlidingMenu();
@@ -90,8 +93,10 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
 	public boolean onCreateOptionsMenu(Menu menu) {
 
 		getSupportMenuInflater().inflate(R.menu.menu_map_location, menu);
-		if (findViewById(R.id.menu_frame) != null) {
+		if (getSlidingMenu().isSlidingEnabled()) {
 			menu.add(0, SHOW_MENU, 1, "Show keys menu");
+			menu.getItem(1).setIcon(R.drawable.ic_about);
+			menu.getItem(1).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
 		}
 
@@ -125,7 +130,7 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
 	}
 
 	public void switchContent(final Fragment fragment) {
-		mContent = fragment;
+		mContent = (MapFragment) fragment;
 		getSupportFragmentManager().beginTransaction()
 				.replace(R.id.content_frame, fragment).commit();
 		Handler h = new Handler();
@@ -138,7 +143,8 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
 
 	@Override
 	public void onSavedKeySelected(SavedKey s) {
-		// TODO Auto-generated method stub
+		
+		getSlidingMenu().showAbove();
 
 	}
 }

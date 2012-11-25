@@ -13,7 +13,7 @@
         android:paddingRight="7dip"
         android:text="@string/key_list_title"
         android:textColor="#0099cc" />
-    
+
     <ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
@@ -25,7 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="@string/no_data_scan_keys"
+        android:text="@string/no_data_saved_keys"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </LinearLayout>

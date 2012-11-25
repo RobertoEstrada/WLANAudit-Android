@@ -135,11 +135,11 @@ public class SavedKeysFragment extends SherlockFragment {
 								.toString();
 						int sdk = android.os.Build.VERSION.SDK_INT;
 						if (sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
-							android.text.ClipboardManager clipboard = (android.text.ClipboardManager) getActivity()
+							android.text.ClipboardManager clipboard = (android.text.ClipboardManager) getSherlockActivity()
 									.getSystemService(Context.CLIPBOARD_SERVICE);
 							clipboard.setText(mDefaultPassValue);
 						} else {
-							android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getActivity()
+							android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getSherlockActivity()
 									.getSystemService(Context.CLIPBOARD_SERVICE);
 							android.content.ClipData clip = android.content.ClipData
 									.newPlainText("text label",

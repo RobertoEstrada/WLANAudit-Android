@@ -3,22 +3,13 @@ package es.glasspixel.wlanaudit.fragments;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
-import org.osmdroid.views.overlay.OverlayItem;
-
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockListFragment;
 
 import es.glasspixel.wlanaudit.R;
-import es.glasspixel.wlanaudit.activities.MenuListView;
 import es.glasspixel.wlanaudit.activities.SavedKey;
 import es.glasspixel.wlanaudit.activities.SlidingMapActivity;
-import es.glasspixel.wlanaudit.adapters.MapElementsAdapter;
 import es.glasspixel.wlanaudit.database.KeysSQliteHelper;
 
-import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -27,10 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
@@ -39,6 +27,7 @@ public class SavedKeysMenuFragment extends SherlockListFragment implements
 	private List<SavedKey> mKeys;
 	private SlidingMapActivity listener;
 	private int mPosition;
+	LayoutInflater mInflater;
 
 	public SavedKeysMenuFragment(int i) {
 		mPosition = i;
@@ -51,6 +40,7 @@ public class SavedKeysMenuFragment extends SherlockListFragment implements
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		mInflater = inflater;
 		return inflater.inflate(R.layout.menu_saved_keys_fragment, null);
 	}
 
@@ -65,6 +55,14 @@ public class SavedKeysMenuFragment extends SherlockListFragment implements
 		mKeys = loadSavedKeys();
 
 		setListAdapter(new MenuAdapter());
+
+		View empty = mInflater.inflate(R.layout.empty_list, null);
+
+		((TextView) empty.findViewById(R.id.textView1))
+				.setText(getSherlockActivity().getResources().getString(
+						R.string.no_data_saved_keys));
+
+		getListView().setEmptyView(empty);
 
 		getListView().setOnItemClickListener(this);
 	}

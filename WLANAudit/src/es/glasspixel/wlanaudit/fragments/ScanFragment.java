@@ -70,7 +70,6 @@ import es.glasspixel.wlanaudit.activities.AboutActivity;
 import es.glasspixel.wlanaudit.activities.KeyListActivity;
 import es.glasspixel.wlanaudit.activities.SlidingMapActivity;
 
-
 import es.glasspixel.wlanaudit.activities.SavedKey;
 import es.glasspixel.wlanaudit.activities.WLANAuditPreferencesActivity;
 import es.glasspixel.wlanaudit.adapters.KeysSavedAdapter;
@@ -166,12 +165,16 @@ public class ScanFragment extends SherlockFragment implements
 		bestProvider = locationManager.getBestProvider(criteria, false);
 		Log.d("MapActivity", "best provider: " + bestProvider);
 
-		Location location = locationManager.getLastKnownLocation(bestProvider);
-		if (location != null) {
-			showLocation(location);
-		}
+		if (locationManager != null) {
+			Location location = locationManager
+					.getLastKnownLocation(bestProvider);
+			if (location != null) {
+				showLocation(location);
+			}
 
-		locationManager.requestLocationUpdates(bestProvider, 20, 0, listener);
+			locationManager.requestLocationUpdates(bestProvider, 20, 0,
+					listener);
+		}
 		Log.d("ScanFragment", "showing menu..");
 		setHasOptionsMenu(true);
 
@@ -324,13 +327,15 @@ public class ScanFragment extends SherlockFragment implements
 
 				if (myFragmentView != null && getSherlockActivity() != null) {
 					if (mWifiManager.getScanResults().size() > 0) {
-						((ListView) myFragmentView.findViewById(android.R.id.list))
+						((ListView) myFragmentView
+								.findViewById(android.R.id.list))
 								.setAdapter(new WifiNetworkAdapter(
 										getSherlockActivity(),
 										R.layout.network_list_element_layout,
 										res));
 					} else {
-						((ListView) myFragmentView.findViewById(android.R.id.list))
+						((ListView) myFragmentView
+								.findViewById(android.R.id.list))
 								.setEmptyView(getSherlockActivity()
 										.findViewById(R.id.empty));
 					}

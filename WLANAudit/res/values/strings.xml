@@ -41,6 +41,7 @@
     <string name="wifi_autostart_active_summary">WiFi will be turned on automatically if it was inactive on application\'s start</string>
     <string name="wifi_autostart">WiFi autostart</string>
     <string name="no_networks_found">No WiFi networks found</string>
+    
     <string name="oss_licenses_show_button">Show software licenses</string>
     <string name="oss_licenses_dialog_title">Software licenses</string>
     <string name="network_channel">Channel:</string>

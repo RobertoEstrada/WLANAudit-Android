@@ -44,6 +44,7 @@ import android.text.ClipboardManager;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
@@ -57,7 +58,7 @@ import java.util.List;
 
 @SuppressWarnings("deprecation")
 public class KeyListActivity extends SherlockListActivity implements
-		OnItemLongClickListener {
+		OnItemLongClickListener, OnItemClickListener {
 
 	/**
 	 * Unique identifier of the scan result inside the intent extra or the
@@ -311,4 +312,26 @@ public class KeyListActivity extends SherlockListActivity implements
 
 		}
 	};
+
+	@Override
+	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+		String mDefaultPassValue = ((TextView) arg1
+				.findViewById(R.id.networkKey)).getText().toString();
+		int sdk = android.os.Build.VERSION.SDK_INT;
+		if (sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
+			android.text.ClipboardManager clipboard = (android.text.ClipboardManager) this
+					.getSystemService(Context.CLIPBOARD_SERVICE);
+			clipboard.setText(mDefaultPassValue);
+		} else {
+			android.content.ClipboardManager clipboard = (android.content.ClipboardManager) this
+					.getSystemService(Context.CLIPBOARD_SERVICE);
+			android.content.ClipData clip = android.content.ClipData
+					.newPlainText("text label", mDefaultPassValue);
+			clipboard.setPrimaryClip(clip);
+		}
+		Toast.makeText(this,
+				getResources().getString(R.string.key_copy_success),
+				Toast.LENGTH_SHORT).show();
+
+	}
 }

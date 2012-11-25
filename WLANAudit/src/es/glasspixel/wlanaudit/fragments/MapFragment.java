@@ -96,43 +96,30 @@ public class MapFragment extends SherlockFragment {
 		return v;
 	}
 
-	// @Override
-	// public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-	// inflater.inflate(R.menu.menu_map_location, menu);
-	// super.onCreateOptionsMenu(menu, inflater);
-	// }
-	//
-	//
-	//
-	// @Override
-	// public boolean onOptionsItemSelected(MenuItem item) {
-	// switch (item.getItemId()) {
-	//
-	// case R.id.check_location_menu:
-	// Location lastKnownLocation = locationManager
-	// .getLastKnownLocation(bestProvider);
-	// if (lastKnownLocation != null) {
-	// this.showLocation(lastKnownLocation);
-	// }
-	// break;
-	// case R.id.show_keys_menu:
-	// toggle();
-	// break;
-	//
-	// default:
-	// return super.onOptionsItemSelected(item);
-	// }
-	// return true;
-	// }
-
 	public void showLocation() {
 		Location lastKnownLocation = locationManager
 				.getLastKnownLocation(bestProvider);
 		if (lastKnownLocation != null)
 			showLocation(lastKnownLocation);
 	}
+	
+	public void setFocused(SavedKey s)
+	{
+		int i = 0;
+		for(SavedKey sk : mKeys)
+		{
+			if(sk.getAddress().equals(s.getAddress()))
+			{
+				break;
+			}
+			i++;
+		}
+		anotherItemizedIconOverlay.setFocusedItem(i);
+		centerMap(anotherOverlayItemArray.get(i).getPoint(),false);
+		
+	}
 
-	private void showLocation(Location l) {
+	public void showLocation(Location l) {
 		final GeoPoint gp = new GeoPoint(l.getLatitude(), l.getLongitude());
 
 		Toast.makeText(getSherlockActivity(),
@@ -144,7 +131,7 @@ public class MapFragment extends SherlockFragment {
 
 	}
 
-	private void centerMap(GeoPoint g, boolean zoom) {
+	public void centerMap(GeoPoint g, boolean zoom) {
 		// myMapController.animateTo(g);
 		myMapController.setCenter(g);
 
