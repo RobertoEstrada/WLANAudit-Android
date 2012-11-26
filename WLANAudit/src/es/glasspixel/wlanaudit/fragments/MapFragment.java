@@ -102,20 +102,24 @@ public class MapFragment extends SherlockFragment {
 		if (lastKnownLocation != null)
 			showLocation(lastKnownLocation);
 	}
-	
-	public void setFocused(SavedKey s)
-	{
+
+	public void setFocused(SavedKey s) {
 		int i = 0;
-		for(SavedKey sk : mKeys)
-		{
-			if(sk.getAddress().equals(s.getAddress()))
-			{
+		for (SavedKey sk : mKeys) {
+			if (sk.getAddress().equals(s.getAddress())) {
 				break;
 			}
 			i++;
 		}
 		anotherItemizedIconOverlay.setFocusedItem(i);
-		centerMap(anotherOverlayItemArray.get(i).getPoint(),false);
+		centerMap(anotherOverlayItemArray.get(i).getPoint(), false);
+
+	}
+
+	public void clearAllFocused() {
+		// for(int i = 0; i< anotherItemizedIconOverlay.size();i++)
+		// {
+		anotherItemizedIconOverlay.unSetFocusedItem();
 		
 	}
 

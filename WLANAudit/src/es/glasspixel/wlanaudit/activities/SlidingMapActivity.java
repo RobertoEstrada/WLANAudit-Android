@@ -73,7 +73,7 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
 		SavedKeysMenuFragment s = new SavedKeysMenuFragment();
 		s.addListener(this);
 		getSupportFragmentManager().beginTransaction()
-				.replace(R.id.menu_frame,s ).commit();
+				.replace(R.id.menu_frame, s).commit();
 
 		// customize the SlidingMenu
 		SlidingMenu sm = getSlidingMenu();
@@ -94,7 +94,7 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
 
 		getSupportMenuInflater().inflate(R.menu.menu_map_location, menu);
 		if (getSlidingMenu().isSlidingEnabled()) {
-			menu.add(0, SHOW_MENU, 1, "Show keys menu");
+			menu.add(0, SHOW_MENU, 1, getResources().getString(R.string.show_keys_list));
 			menu.getItem(1).setIcon(R.drawable.ic_about);
 			menu.getItem(1).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
@@ -113,6 +113,8 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
 
 			((MapFragment) getSupportFragmentManager().findFragmentById(
 					R.id.content_frame)).showLocation();
+			((MapFragment) getSupportFragmentManager().findFragmentById(
+					R.id.content_frame)).clearAllFocused();
 
 			break;
 		case SHOW_MENU:
@@ -143,8 +145,10 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
 
 	@Override
 	public void onSavedKeySelected(SavedKey s) {
-		
+
 		getSlidingMenu().showAbove();
+		((MapFragment) getSupportFragmentManager().findFragmentById(
+				R.id.content_frame)).setFocused(s);
 
 	}
 }

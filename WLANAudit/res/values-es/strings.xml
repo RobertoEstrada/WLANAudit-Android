@@ -50,6 +50,7 @@
     <string name="action2">Claves almacenadas</string>
     <string name="delete">Borrar</string>
     <string name="copy">Copiar</string>
+    <string name="show_keys_list">Mostrar claves en el menú</string>
     <string name="no_data_saved_keys">No hay claves almacenadas</string>
     <string name="show_current_position">Mostrando posición actual..</string>
     <string name="map_layout_locations_list_title">Localización de claves</string>
