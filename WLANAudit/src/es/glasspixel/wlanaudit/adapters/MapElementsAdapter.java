@@ -2,18 +2,14 @@ package es.glasspixel.wlanaudit.adapters;
 
 import java.util.List;
 
-import es.glasspixel.wlanaudit.R;
-import es.glasspixel.wlanaudit.activities.SavedKey;
-
 import android.content.Context;
-import android.net.wifi.ScanResult;
-import android.net.wifi.WifiManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
+import es.glasspixel.wlanaudit.R;
+import es.glasspixel.wlanaudit.activities.SavedKey;
 
 public class MapElementsAdapter extends BaseAdapter {
 
@@ -56,7 +52,7 @@ public class MapElementsAdapter extends BaseAdapter {
 		if (elements.get(position) != null) {
 			((TextView) listItem.findViewById(R.id.networkName))
 					.setText(elements.get(position).getWlan_name());
-			((TextView) listItem.findViewById(R.id.networkKey))
+			((TextView) listItem.findViewById(R.id.networkAddress))
 					.setText(elements.get(position).getKey());
 		}
 		return listItem;

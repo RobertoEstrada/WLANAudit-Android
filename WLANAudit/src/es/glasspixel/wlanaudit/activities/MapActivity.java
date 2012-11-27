@@ -14,25 +14,9 @@ import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
 import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.SimpleLocationOverlay;
 
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
-
-import es.glasspixel.wlanaudit.R;
-import es.glasspixel.wlanaudit.adapters.MapElementsAdapter;
-import es.glasspixel.wlanaudit.database.KeysSQliteHelper;
-import es.glasspixel.wlanaudit.dominio.ActivityConstants;
-import es.glasspixel.wlanaudit.dominio.DataUtils;
-import es.glasspixel.wlanaudit.interfaces.SavedKeyListener;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Point;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -46,16 +30,25 @@ import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
+
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+
+import es.glasspixel.wlanaudit.R;
+import es.glasspixel.wlanaudit.adapters.MapElementsAdapter;
+import es.glasspixel.wlanaudit.dominio.DataUtils;
+import es.glasspixel.wlanaudit.interfaces.SavedKeyListener;
 
 public class MapActivity extends SherlockActivity implements OnGestureListener,
 		SavedKeyListener {
@@ -349,7 +342,7 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 	};
 
 	protected void loadSavedKeys() {
-		mKeys = new ArrayList<SavedKey>();
+		/*mKeys = new ArrayList<SavedKey>();
 		KeysSQliteHelper usdbh = new KeysSQliteHelper(this, "DBKeys", null, 1);
 
 		SQLiteDatabase db = usdbh.getReadableDatabase();
@@ -363,7 +356,7 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 			mKeys.add(k);
 
 		}
-		c.close();
+		c.close();*/
 
 		// if (mKeys.isEmpty()) {
 		// for (int i = 0; i < 4; i++) {
@@ -651,7 +644,7 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 
 				((TextView) v.findViewById(R.id.networkName))
 						.setText(((Item) item).mTitle);
-				((TextView) v.findViewById(R.id.networkKey))
+				((TextView) v.findViewById(R.id.networkAddress))
 						.setText(((Item) item).mSubTitle);
 
 				// TextView tv = (TextView) v;

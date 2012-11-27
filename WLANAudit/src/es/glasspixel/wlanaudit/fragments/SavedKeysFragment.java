@@ -1,33 +1,14 @@
+
 package es.glasspixel.wlanaudit.fragments;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.view.ActionMode;
-import com.actionbarsherlock.view.ActionMode.Callback;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
+import org.orman.mapper.Model;
 
-import android.content.Context;
+import roboguice.inject.InjectView;
+import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.database.Cursor;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.location.LocationProvider;
-import android.net.wifi.ScanResult;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.util.Log;
-import android.util.SparseBooleanArray;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,339 +16,183 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-//import com.actionbarsherlock.app.SherlockFragment;
-//import com.actionbarsherlock.app.SherlockListFragment;
+import com.actionbarsherlock.view.ActionMode;
+import com.actionbarsherlock.view.ActionMode.Callback;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
+import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockListFragment;
 
 import es.glasspixel.wlanaudit.R;
-
 import es.glasspixel.wlanaudit.activities.AboutActivity;
 import es.glasspixel.wlanaudit.activities.MapActivity;
-import es.glasspixel.wlanaudit.activities.SavedKey;
 import es.glasspixel.wlanaudit.activities.WLANAuditPreferencesActivity;
-import es.glasspixel.wlanaudit.adapters.KeysSavedAdapter;
-import es.glasspixel.wlanaudit.database.KeysSQliteHelper;
+import es.glasspixel.wlanaudit.adapters.SavedNetworksAdapter;
+import es.glasspixel.wlanaudit.database.entities.Network;
+import es.glasspixel.wlanaudit.interfaces.OnDataSourceModifiedListener;
 
-public class SavedKeysFragment extends SherlockFragment {
+public class SavedKeysFragment extends RoboSherlockListFragment implements OnDataSourceModifiedListener {
 
-	View myFragmentView;
-	protected ActionMode mActionMode;
-	protected int context_menu_item_position;
-	private boolean screenIsLarge;
-	private ArrayList<SavedKey> mKeys;
-	protected SavedKey mKey;
-	private LocationManager locationManager;
-	private LocationProvider provider;
-	protected double keyLatitude = 0f;
-	protected double keyLongitude = 0f;
-	private String bestProvider;
+    protected ActionMode mActionMode;
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+    protected int context_menu_item_position;
 
-		locationManager = (LocationManager) getSherlockActivity()
-				.getSystemService(Context.LOCATION_SERVICE);
-		locationManager = (LocationManager) getSherlockActivity()
-				.getSystemService(Context.LOCATION_SERVICE);
+    private List<Network> mSavedNetworks;
 
-		// List all providers:
-		List<String> providers = locationManager.getAllProviders();
-		// for (String provider : providers) {
-		// printProvider(provider);
-		// }
+    protected Network mSelectedNetwork;
+    
+    private OnDataSourceModifiedListener mCallback;
 
-		Criteria criteria = new Criteria();
-		bestProvider = locationManager.getBestProvider(criteria, false);
+    @InjectView(android.R.id.list)
+    private ListView mNetworkListView;
+    
+    private SavedNetworksAdapter mListAdapter;
+    
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mCallback = (OnDataSourceModifiedListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnDataSourceModifiedListener");
+        }
+    }
 
-		Log.d("MapActivity", "best provider: " + bestProvider);
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Cargamos datos desde la BD
+        mSavedNetworks = Model.fetchAll(Network.class);
+        // Creamos el adapter
+        mListAdapter = new SavedNetworksAdapter(getSherlockActivity(),
+                R.layout.key_saved_list_element, mSavedNetworks);
+        // Conectamos el adapter a la lista
+        setListAdapter(mListAdapter);
+    }
 
-		locationManager.requestLocationUpdates(bestProvider, 100, 50, listener);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+        setHasOptionsMenu(true);
 
-		myFragmentView = inflater.inflate(R.layout.saved_keys_fragment,
-				container, false);
-		((TextView) myFragmentView.findViewById(R.id.empty))
-				.setText(getSherlockActivity().getResources().getString(
-						R.string.no_data_saved_keys));
+        return inflater.inflate(R.layout.saved_keys_fragment, container, false);
+    }
 
-		((ListView) myFragmentView.findViewById(R.id.listView1))
-				.setEmptyView(getSherlockActivity().findViewById(R.id.empty));
-		((ListView) myFragmentView.findViewById(R.id.listView1))
-				.setAdapter(new KeysSavedAdapter(getSherlockActivity(),
-						R.layout.network_list_element_layout,
-						android.R.layout.simple_list_item_1, getSavedKeys()));
-		((ListView) myFragmentView.findViewById(R.id.listView1))
-				.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mNetworkListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        mNetworkListView.setOnItemLongClickListener(new OnItemLongClickListener() {
 
-		((ListView) myFragmentView.findViewById(R.id.listView1))
-				.setOnItemLongClickListener(new OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                if (mActionMode != null) {
+                    return false;
+                }
+                context_menu_item_position = position;
 
-					@Override
-					public boolean onItemLongClick(AdapterView<?> arg0,
-							View view, int position, long arg3) {
-						if (mActionMode != null) {
-							return false;
-						}
-						context_menu_item_position = position;
+                // Start the CAB using the ActionMode.Callback defined
+                // above
+                mActionMode = getSherlockActivity().startActionMode(mActionCallBack);
+                mSelectedNetwork = mSavedNetworks.get(position);
+                view.setSelected(true);
+                return true;
+            }
+        });
 
-						// Start the CAB using the ActionMode.Callback defined
-						// above
-						mActionMode = getSherlockActivity().startActionMode(
-								mActionCallBack);
-						mKey = mKeys.get(position);
-						view.setSelected(true);
-						return true;
-					}
-				});
+        mNetworkListView.setOnItemClickListener(new OnItemClickListener() {
 
-		((ListView) myFragmentView.findViewById(R.id.listView1))
-				.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //TODO: Show details
+            }
+        });
+    }
 
-					@Override
-					public void onItemClick(AdapterView<?> arg0, View arg1,
-							int arg2, long arg3) {
-						String mDefaultPassValue = ((TextView) arg1
-								.findViewById(R.id.networkKey)).getText()
-								.toString();
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.networklistactivity_savedkeys_menu, menu);
+    }
 
-						int sdk = android.os.Build.VERSION.SDK_INT;
-						if (sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
-							android.text.ClipboardManager clipboard = (android.text.ClipboardManager) getActivity()
-									.getSystemService(Context.CLIPBOARD_SERVICE);
-							clipboard.setText(mDefaultPassValue);
-						} else {
-							android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getActivity()
-									.getSystemService(Context.CLIPBOARD_SERVICE);
-							android.content.ClipData clip = android.content.ClipData
-									.newPlainText("text label",
-											mDefaultPassValue);
-							clipboard.setPrimaryClip(clip);
-						}
-						Toast.makeText(
-								getActivity(),
-								getResources().getString(
-										R.string.key_copy_success),
-								Toast.LENGTH_SHORT).show();
+    /**
+     * Menu option handling
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent i;
+        // Handle item selection
+        switch (item.getItemId()) {
 
-					}
-				});
+            case R.id.preferenceOption:
+                i = new Intent(getSherlockActivity(), WLANAuditPreferencesActivity.class);
+                startActivity(i);
+                return true;
+            case R.id.aboutOption:
+                i = new Intent(getSherlockActivity(), AboutActivity.class);
+                startActivity(i);
+                return true;
+            case R.id.mapOption:
+                i = new Intent(getSherlockActivity(), MapActivity.class);
+                startActivity(i);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
-		screenIsLarge = getSherlockActivity().getResources().getBoolean(
-				R.bool.screen_large);
-		if (!screenIsLarge) {
-			// if(getSherlockActivity().getResources().getConfiguration().orientation
-			// == Configuration.ORIENTATION_LANDSCAPE)
-			// {
+    private ActionMode.Callback mActionCallBack = new Callback() {
 
-			// }
-		}
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            MenuInflater inflater = mode.getMenuInflater();
+            inflater.inflate(R.menu.saved_keys_elements_context_menu, menu);
+            return true;
+        }
 
-		setHasOptionsMenu(true);
-		// setRetainInstance(true);
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
 
-		return myFragmentView;
-	}
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.delete_context_menu:
+                    mSelectedNetwork.delete();
+                    mCallback.dataSourceShouldRefresh();
+                    mode.finish();
+                    return true;
+                case R.id.copy_context_menu:
+                    // TODO
+                    /*
+                     * copyClipboard(mSelectedNetwork.getKey()); saveWLANKey(
+                     * ((TextView)
+                     * myFragmentView.findViewById(R.id.networkName))
+                     * .getText().toString(), mSelectedNetwork.getKey());
+                     */
+                    mode.finish();
+                    return true;
+                default:
+                    return true;
+            }
 
-	private final LocationListener listener = new LocationListener() {
+        }
 
-		@Override
-		public void onLocationChanged(Location location) {
-			keyLatitude = location.getLatitude();
-			keyLongitude = location.getLongitude();
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            mActionMode = null;
 
-		}
+        }
+    };
 
-		@Override
-		public void onProviderDisabled(String provider) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void onProviderEnabled(String provider) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void onStatusChanged(String provider, int status, Bundle extras) {
-			// TODO Auto-generated method stub
-
-		}
-
-	};
-
-	protected List<SavedKey> getSavedKeys() {
-		mKeys = new ArrayList<SavedKey>();
-		KeysSQliteHelper usdbh = new KeysSQliteHelper(getActivity(), "DBKeys",
-				null, 1);
-
-		SQLiteDatabase db = usdbh.getReadableDatabase();
-		Cursor c = db.query("Keys", new String[] { "nombre", "key", "latitude",
-				"longitude" }, null, null, null, null, "nombre ASC");
-		// if (c.moveToFirst()) {
-		while (c.moveToNext()) {
-			SavedKey k = new SavedKey(c.getString(c.getColumnIndex("nombre")),
-					c.getString(c.getColumnIndex("key")), c.getFloat(c
-							.getColumnIndex("latitude")), c.getFloat(c
-							.getColumnIndex("longitude")));
-			mKeys.add(k);
-		}
-		// }
-		c.close();
-		return mKeys;
-
-	}
-
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-
-		super.onCreateOptionsMenu(menu, inflater);
-		inflater.inflate(R.menu.networklistactivity_savedkeys_menu, menu);
-	}
-
-	/**
-	 * Menu option handling
-	 */
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		Intent i;
-		// Handle item selection
-		switch (item.getItemId()) {
-
-		case R.id.preferenceOption:
-			i = new Intent(getSherlockActivity(),
-					WLANAuditPreferencesActivity.class);
-			startActivity(i);
-			return true;
-		case R.id.aboutOption:
-			i = new Intent(getSherlockActivity(), AboutActivity.class);
-			startActivity(i);
-			return true;
-		case R.id.mapOption:
-			i = new Intent(getSherlockActivity(), MapActivity.class);
-			startActivity(i);
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
-		}
-	}
-
-	private void copyClipboard(CharSequence text) {
-		int sdk = android.os.Build.VERSION.SDK_INT;
-		if (sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
-			android.text.ClipboardManager clipboard = (android.text.ClipboardManager) getActivity()
-					.getSystemService(Context.CLIPBOARD_SERVICE);
-			clipboard.setText(text);
-		} else {
-			android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getActivity()
-					.getSystemService(Context.CLIPBOARD_SERVICE);
-			android.content.ClipData clip = android.content.ClipData
-					.newPlainText("text label", text);
-			clipboard.setPrimaryClip(clip);
-		}
-		Toast.makeText(getSherlockActivity(),
-				getResources().getString(R.string.key_copy_success),
-				Toast.LENGTH_SHORT).show();
-
-	}
-
-	private void saveWLANKey(String name, CharSequence key) {
-		KeysSQliteHelper usdbh = new KeysSQliteHelper(getActivity(), "DBKeys",
-				null, 1);
-
-		SQLiteDatabase db = usdbh.getWritableDatabase();
-
-		// Si hemos abierto correctamente la
-		// base de
-		// datos
-		if (db != null) {
-			Cursor c = db.query("Keys", new String[] { "nombre", "key" },
-					"nombre like ?", new String[] { name }, null, null,
-					"nombre ASC");
-			if (c.getCount() > 0) {
-
-			} else {
-
-				try {
-					db.execSQL("INSERT INTO Keys (nombre, key) " + "VALUES ('"
-							+ name + "', '" + key + "', '" + keyLatitude
-							+ "', '" + keyLongitude + "')");
-
-					// Cerramos la base de
-					// datos
-				} catch (SQLException e) {
-					Toast.makeText(
-							getActivity().getApplicationContext(),
-							getResources().getString(R.string.error_saving_key),
-							Toast.LENGTH_LONG).show();
-				}
-				db.close();
-			}
-		}
-
-	}
-
-	private ActionMode.Callback mActionCallBack = new Callback() {
-
-		@Override
-		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-			MenuInflater inflater = mode.getMenuInflater();
-			inflater.inflate(R.menu.saved_keys_elements_context_menu, menu);
-			return true;
-		}
-
-		@Override
-		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-			switch (item.getItemId()) {
-			case R.id.delete_context_menu:
-
-				KeysSQliteHelper usdbh = new KeysSQliteHelper(getActivity(),
-						"DBKeys", null, 1);
-				SQLiteDatabase db = usdbh.getWritableDatabase();
-
-				String nombre_wlan,
-				clave;
-				nombre_wlan = mKey.getWlan_name();
-				clave = mKey.getKey();
-				db.delete("keys", "nombre like ? AND key like ?", new String[] {
-						nombre_wlan, clave });
-
-				((ListView) myFragmentView.findViewById(R.id.listView1))
-						.setAdapter(new KeysSavedAdapter(getSherlockActivity(),
-								R.layout.network_list_element_layout,
-								android.R.layout.simple_list_item_1,
-								getSavedKeys()));
-				mode.finish();
-
-				return true;
-			case R.id.copy_context_menu:
-				copyClipboard(mKey.getKey());
-
-				saveWLANKey(
-						((TextView) myFragmentView.findViewById(R.id.networkName))
-								.getText().toString(), mKey.getKey());
-				mode.finish();
-				return true;
-			default:
-				return true;
-			}
-
-		}
-
-		@Override
-		public void onDestroyActionMode(ActionMode mode) {
-			mActionMode = null;
-
-		}
-	};
-
+    @Override
+    public void dataSourceShouldRefresh() {
+        mSavedNetworks = Model.fetchAll(Network.class);
+        mListAdapter.clear();
+        mListAdapter.addAll(mSavedNetworks);
+        mListAdapter.notifyDataSetChanged();        
+    }
 }

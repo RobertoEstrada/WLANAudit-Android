@@ -16,17 +16,9 @@
 
 package es.glasspixel.wlanaudit.activities;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockListActivity;
-import com.actionbarsherlock.view.MenuItem;
-import com.google.ads.AdRequest;
-import com.google.ads.AdSize;
-import com.google.ads.AdView;
+import java.util.ArrayList;
+import java.util.List;
 
-import es.glasspixel.wlanaudit.R;
-import es.glasspixel.wlanaudit.ads.Key;
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.ClipboardManager;
 import android.view.Gravity;
@@ -36,8 +28,15 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockListActivity;
+import com.actionbarsherlock.view.MenuItem;
+import com.google.ads.AdRequest;
+import com.google.ads.AdSize;
+import com.google.ads.AdView;
+
+import es.glasspixel.wlanaudit.R;
+import es.glasspixel.wlanaudit.ads.Key;
 
 @SuppressWarnings("deprecation")
 public class KeyListActivity extends SherlockListActivity {

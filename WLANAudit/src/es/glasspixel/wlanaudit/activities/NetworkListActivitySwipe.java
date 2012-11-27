@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2012 Roberto Estrada
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package es.glasspixel.wlanaudit.activities;
 
@@ -9,7 +24,6 @@ import javax.annotation.Nullable;
 import roboguice.inject.InjectView;
 import android.annotation.SuppressLint;
 import android.content.res.Resources;
-import android.location.Location;
 import android.net.wifi.ScanResult;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,7 +32,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 
-import com.actionbarsherlock.app.SherlockFragment;
 import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockFragmentActivity;
 import com.google.inject.Inject;
 
@@ -26,9 +39,10 @@ import es.glasspixel.wlanaudit.R;
 import es.glasspixel.wlanaudit.dialogs.NetworkDetailsDialogFragment;
 import es.glasspixel.wlanaudit.fragments.SavedKeysFragment;
 import es.glasspixel.wlanaudit.fragments.ScanFragment;
+import es.glasspixel.wlanaudit.interfaces.OnDataSourceModifiedListener;
 
 public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity implements
-        ScanFragment.OnNetworkSelectedListener {
+        ScanFragment.OnNetworkSelectedListener, OnDataSourceModifiedListener {
     
     /**
      * Constant to define how many fragments this activity handles
@@ -48,7 +62,7 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity imple
     /**
      * The list of fragments that this activity has under its control
      */
-    private List<SherlockFragment> mFragments;
+    private List<Fragment> mFragments;
 
     /**
      * The {@link ViewPager} that will host the activty fragments.
@@ -63,21 +77,13 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity imple
     @Inject
     private Resources mResources;
     
-    /**
-     * Detects if this screen is large or not, it is loaded
-     * from a resource boolean value which is true in large screen devices
-     * and false otherwise.
-     */
-    private boolean mScreenIsLarge;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_network_list_activity_swipe);
-        mScreenIsLarge = mResources.getBoolean(R.bool.screen_large);
 
         if (mViewPager != null) {
-            mFragments = new ArrayList<SherlockFragment>();
+            mFragments = new ArrayList<Fragment>();
             mFragments.add(new ScanFragment());
             mFragments.add(new SavedKeysFragment());
 
@@ -86,7 +92,7 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity imple
             mViewPager.setAdapter(mSectionsPagerAdapter);
 
         } else {
-            SherlockFragment fragment = new SavedKeysFragment();
+            SavedKeysFragment fragment = new SavedKeysFragment();
 
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.item_detail_container, fragment, "tag").commit();
@@ -116,13 +122,6 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity imple
      */
     @Override
     public void onNetworkSelected(ScanResult networkData) {
-        /*if (mScreenIsLarge) {
-            SherlockFragment fragment = new SavedKeysFragment();
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.item_detail_container, fragment).commit();
-        } else {
-            mViewPager.setAdapter(mSectionsPagerAdapter);
-        }*/
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         Fragment prev = getSupportFragmentManager().findFragmentByTag("detailsDialog");
         if (prev != null) {
@@ -133,6 +132,19 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity imple
         // Create and show the dialog.
         NetworkDetailsDialogFragment detailsDlg = NetworkDetailsDialogFragment.newInstance(networkData);
         detailsDlg.show(ft, "detailsDialog");
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void dataSourceShouldRefresh() {
+        for(Fragment f : mFragments) {
+            if(f instanceof OnDataSourceModifiedListener) {
+                OnDataSourceModifiedListener listener = (OnDataSourceModifiedListener) f;
+                listener.dataSourceShouldRefresh();
+            }
+        }        
     }
 
     /**
@@ -146,7 +158,7 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity imple
         }
 
         @Override
-        public SherlockFragment getItem(int position) {
+        public Fragment getItem(int position) {
             return mFragments.get(position);
         }
 
@@ -160,12 +172,12 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity imple
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return getResources().getString(R.string.action1).toUpperCase();
+                    return mResources.getString(R.string.action1).toUpperCase();
                 case 1:
-                    return getResources().getString(R.string.action2).toUpperCase();
+                    return mResources.getString(R.string.action2).toUpperCase();
 
             }
             return null;
         }
-    }
+    }   
 }

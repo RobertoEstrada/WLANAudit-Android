@@ -18,16 +18,18 @@ package es.glasspixel.wlanaudit.dialogs;
 
 import java.util.List;
 
+import org.orman.mapper.Model;
+import org.orman.mapper.ModelQuery;
+import org.orman.sql.C;
+
 import roboguice.fragment.RoboDialogFragment;
 import roboguice.inject.InjectView;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.database.Cursor;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
@@ -50,7 +52,8 @@ import com.novoda.location.exception.NoProviderAvailable;
 import es.glasspixel.wlanaudit.R;
 import es.glasspixel.wlanaudit.WLANAuditApplication;
 import es.glasspixel.wlanaudit.adapters.WifiNetworkAdapter;
-import es.glasspixel.wlanaudit.database.KeysSQliteHelper;
+import es.glasspixel.wlanaudit.database.entities.Network;
+import es.glasspixel.wlanaudit.interfaces.OnDataSourceModifiedListener;
 import es.glasspixel.wlanaudit.keyframework.IKeyCalculator;
 import es.glasspixel.wlanaudit.keyframework.KeyCalculatorFactory;
 import es.glasspixel.wlanaudit.keyframework.NetData;
@@ -86,6 +89,11 @@ public class NetworkDetailsDialogFragment extends RoboDialogFragment {
      * Broadcast receiver to watch for location updates
      */
     private BroadcastReceiver mLocationAvailableCallBackReceiver;
+    
+    /**
+     * Callback handle to the datasource observer
+     */
+    private OnDataSourceModifiedListener mCallback;
 
     @InjectView(R.id.networkIcon)
     private ImageView mNetworkIcon;
@@ -126,6 +134,23 @@ public class NetworkDetailsDialogFragment extends RoboDialogFragment {
         args.putParcelable(NETWORK_DETAILS_DATA_KEY, network);
         frag.setArguments(args);
         return frag;
+    }
+    
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mCallback = (OnDataSourceModifiedListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnDataSourceModifiedListener");
+        }
+    }
+    
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallback = null;
     }
 
     @Override
@@ -186,8 +211,7 @@ public class NetworkDetailsDialogFragment extends RoboDialogFragment {
                     @Override
                     public void onClick(View v) {
                         copyClipboard(mNetworkDefaultPassTextView.getText().toString());
-                        saveWLANKey(mNetworkData.SSID, mNetworkDefaultPassTextView.getText()
-                                .toString());
+                        saveNetwork(mNetworkData, mLastKnownLocation);
                         dismiss();
                     }
                 });
@@ -252,36 +276,25 @@ public class NetworkDetailsDialogFragment extends RoboDialogFragment {
                 Toast.LENGTH_SHORT).show();
     }
 
-    private void saveWLANKey(String name, CharSequence key) {
-        KeysSQliteHelper usdbh = new KeysSQliteHelper(getActivity(), "DBKeys", null, 1);
+    private void saveNetwork(ScanResult networkData, Location networkLocation) {
+        // Existence check
+        int exists = Integer.parseInt((String) Model.fetchSingleValue(ModelQuery.select().from(Network.class)
+                .where(C.eq("m_bssid", networkData.BSSID)).count().getQuery()));
+        if (exists == 0) {
+            Network networkToSave = new Network();
+            networkToSave.mBSSID = networkData.BSSID;
+            networkToSave.mSSID = networkData.SSID;
+            networkToSave.mEncryption = networkData.capabilities;
+            networkToSave.mFrequency = networkData.frequency;
+            networkToSave.mChannel = ChannelCalculator.getChannelNumber(networkData.frequency);
+            networkToSave.mLatitude = networkLocation.getLatitude();
+            networkToSave.mLongitude = networkLocation.getLongitude();
 
-        SQLiteDatabase db = usdbh.getWritableDatabase();
-        if (db != null) {
-            Cursor c = db.query("Keys", new String[] {
-                    "nombre", "key"
-            }, "nombre like ?", new String[] {
-                name
-            }, null, null, "nombre ASC");
-            if (c.getCount() > 0) {
-
-            } else {
-
-                try {
-
-                    double latitude = mLastKnownLocation.getLatitude();
-                    double longitude = mLastKnownLocation.getLongitude();
-
-                    db.execSQL("INSERT INTO Keys (nombre, key,latitude,longitude) " + "VALUES ('"
-                            + name + "', '" + key + "','" + latitude + "', '" + longitude + "')");
-
-                } catch (SQLException e) {
-                    Toast.makeText(getActivity().getApplicationContext(),
-                            getResources().getString(R.string.error_saving_key), Toast.LENGTH_LONG)
-                            .show();
-                }
-                db.close();
-            }
+            // Insertion onto the DB
+            networkToSave.insert();
+            
+            // Notification to listeners
+            mCallback.dataSourceShouldRefresh();
         }
-        usdbh.close();
     }
 }

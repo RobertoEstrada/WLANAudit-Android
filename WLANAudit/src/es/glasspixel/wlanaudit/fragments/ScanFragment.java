@@ -10,7 +10,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.location.Location;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -28,20 +27,14 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
 import com.google.inject.Inject;
-import com.novoda.location.Locator;
-import com.novoda.location.LocatorFactory;
-import com.novoda.location.LocatorSettings;
-import com.novoda.location.exception.NoProviderAvailable;
 
 import es.glasspixel.wlanaudit.R;
-import es.glasspixel.wlanaudit.WLANAuditApplication;
 import es.glasspixel.wlanaudit.actions.AutoScanAction;
 import es.glasspixel.wlanaudit.actions.RefreshAction;
 import es.glasspixel.wlanaudit.activities.AboutActivity;
 import es.glasspixel.wlanaudit.activities.MapActivity;
 import es.glasspixel.wlanaudit.activities.WLANAuditPreferencesActivity;
 import es.glasspixel.wlanaudit.adapters.WifiNetworkAdapter;
-import es.glasspixel.wlanaudit.dialogs.NetworkDetailsDialogFragment;
 
 public class ScanFragment extends RoboSherlockFragment implements OnItemClickListener {    
     /**
@@ -109,10 +102,10 @@ public class ScanFragment extends RoboSherlockFragment implements OnItemClickLis
     /**
      * Network list widget
      */
-    @InjectView(R.id.listView1)
+    @InjectView(android.R.id.list)
     private ListView mNetworkListView;
     
-    @InjectView(R.id.empty)
+    @InjectView(android.R.id.empty)
     private TextView mEmptyListMessageTextView;
 
     public void onCreate(Bundle savedInstanceState) {
@@ -164,7 +157,7 @@ public class ScanFragment extends RoboSherlockFragment implements OnItemClickLis
             try {
                 getSherlockActivity().getApplicationContext().unregisterReceiver(mNetworkScanCallBackReceiver);
             } catch (IllegalArgumentException e) {
-                Log.d("ScanFragment", e.getMessage().toString());
+                Log.d(TAG, e.getMessage().toString());
             }
         }
     }    
