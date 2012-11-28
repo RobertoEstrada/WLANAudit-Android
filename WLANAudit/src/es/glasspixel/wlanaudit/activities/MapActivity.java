@@ -6,6 +6,7 @@ import java.util.List;
 import net.simonvt.widget.MenuDrawer;
 import net.simonvt.widget.MenuDrawerManager;
 
+import org.orman.mapper.Model;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
@@ -15,7 +16,6 @@ import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.SimpleLocationOverlay;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.location.Criteria;
 import android.location.Location;
@@ -47,7 +47,7 @@ import com.actionbarsherlock.view.MenuItem;
 
 import es.glasspixel.wlanaudit.R;
 import es.glasspixel.wlanaudit.adapters.MapElementsAdapter;
-import es.glasspixel.wlanaudit.dominio.DataUtils;
+import es.glasspixel.wlanaudit.database.entities.Network;
 import es.glasspixel.wlanaudit.interfaces.SavedKeyListener;
 
 public class MapActivity extends SherlockActivity implements OnGestureListener,
@@ -55,7 +55,7 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 
 	private MapView myOpenMapView;
 	private MapController myMapController;
-	private ArrayList<SavedKey> mKeys;
+	private List<Network> mSavedNetworks;
 	private ArrayList<OverlayItem> anotherOverlayItemArray;
 	private boolean screenIsLarge;
 	private LocationManager locationManager;
@@ -178,7 +178,7 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 
 		loadElements();
 
-		if (mKeys.size() == 0) {
+		if (mSavedNetworks.size() == 0) {
 
 			Location lastKnownLocation = locationManager
 					.getLastKnownLocation(bestProvider);
@@ -193,17 +193,17 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 
 	}
 
-	@Override
+	/*@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == 1) {
 			String wlan_selected = DataUtils.getInstance(
 					getApplicationContext()).getSavedkeyselected();
 			Log.d("MapActivity", "wlan selected on menu: " + wlan_selected);
 			int i = 0;
-			for (SavedKey s : mKeys) {
-				if (s.getWlan_name().equals(wlan_selected)) {
+			for (Network n : mSavedNetworks) {
+				if (n.mSSID.equals(wlan_selected)) {
 					this.centerMap(
-							new GeoPoint(s.getLatitude(), s.getLongitude()),
+							new GeoPoint(n.mLatitude, n.mLongitude),
 							false);
 					// centerMap(anotherOverlayItemArray.get(i).mGeoPoint);
 					break;
@@ -213,7 +213,7 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 
 		}
 		super.onActivityResult(requestCode, resultCode, data);
-	}
+	}*/
 
 	private void showLocation(Location l) {
 		final GeoPoint gp = new GeoPoint(l.getLatitude(), l.getLongitude());
@@ -342,30 +342,7 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 	};
 
 	protected void loadSavedKeys() {
-		/*mKeys = new ArrayList<SavedKey>();
-		KeysSQliteHelper usdbh = new KeysSQliteHelper(this, "DBKeys", null, 1);
-
-		SQLiteDatabase db = usdbh.getReadableDatabase();
-		Cursor c = db.query("Keys", new String[] { "nombre", "key", "latitude",
-				"longitude" }, null, null, null, null, "nombre ASC");
-		while (c.moveToNext()) {
-			SavedKey k = new SavedKey(c.getString(c.getColumnIndex("nombre")),
-					c.getString(c.getColumnIndex("key")), c.getFloat(c
-							.getColumnIndex("latitude")), c.getFloat(c
-							.getColumnIndex("longitude")));
-			mKeys.add(k);
-
-		}
-		c.close();*/
-
-		// if (mKeys.isEmpty()) {
-		// for (int i = 0; i < 4; i++) {
-		// SavedKey k = new SavedKey("Key " + i, "title " + i, i * 20,
-		// i * 60);
-		// mKeys.add(k);
-		// }
-		// }
-
+	    mSavedNetworks = Model.fetchAll(Network.class);
 	}
 
 	private AdapterView.OnItemClickListener mItemClickListener = new AdapterView.OnItemClickListener() {
@@ -398,12 +375,12 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 
 		this.loadSavedKeys();
 
-		for (SavedKey s : mKeys) {
+		for (Network n : mSavedNetworks) {
 			anotherOverlayItemArray
-					.add(new OverlayItem(s.getWlan_name(), s.getKey(),
-							new GeoPoint(s.getLatitude(), s.getLongitude())));
+					.add(new OverlayItem(n.mSSID, n.mBSSID,
+							new GeoPoint(n.mLatitude, n.mLongitude)));
 			if (!(screenIsLarge && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE))
-				items.add(new Item(s.getWlan_name(), s.getKey()));
+				items.add(new Item(n.mSSID, n.mBSSID));
 		}
 		if (l != null) {
 
@@ -432,7 +409,7 @@ public class MapActivity extends SherlockActivity implements OnGestureListener,
 					.findViewById(R.id.empty));
 
 			((ListView) findViewById(R.id.listViewMap))
-					.setAdapter(new MapElementsAdapter(this, mKeys));
+					.setAdapter(new MapElementsAdapter(this, mSavedNetworks));
 			((ListView) findViewById(R.id.listViewMap))
 					.setOnItemClickListener(new OnItemClickListener() {
 

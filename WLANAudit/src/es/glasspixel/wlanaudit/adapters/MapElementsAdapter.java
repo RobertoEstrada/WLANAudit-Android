@@ -9,14 +9,14 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import es.glasspixel.wlanaudit.R;
-import es.glasspixel.wlanaudit.activities.SavedKey;
+import es.glasspixel.wlanaudit.database.entities.Network;
 
 public class MapElementsAdapter extends BaseAdapter {
 
-	private List<SavedKey> elements;
+	private List<Network> elements;
 	private Context mContext;
 
-	public MapElementsAdapter(Context c, List<SavedKey> elements) {
+	public MapElementsAdapter(Context c, List<Network> elements) {
 		mContext = c;
 		this.elements = elements;
 	}
@@ -51,9 +51,9 @@ public class MapElementsAdapter extends BaseAdapter {
 
 		if (elements.get(position) != null) {
 			((TextView) listItem.findViewById(R.id.networkName))
-					.setText(elements.get(position).getWlan_name());
+					.setText(elements.get(position).mSSID);
 			((TextView) listItem.findViewById(R.id.networkAddress))
-					.setText(elements.get(position).getKey());
+					.setText(elements.get(position).mBSSID);
 		}
 		return listItem;
 	}
