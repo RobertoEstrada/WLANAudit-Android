@@ -605,10 +605,11 @@ public class ScanFragment extends SherlockFragment implements
 	 */
 	public void onResume() {
 		super.onResume();
-		setupNetworkScanCallBack();
+
 		// mWifiManager.startScan();
+
 		initScan();
-		startScan();
+
 		// mAd.loadAd(new AdRequest());
 	}
 
