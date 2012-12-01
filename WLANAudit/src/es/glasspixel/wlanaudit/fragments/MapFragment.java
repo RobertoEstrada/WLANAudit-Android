@@ -136,9 +136,10 @@ public class MapFragment extends SherlockFragment {
 	public void showLocation(Location l) {
 		final GeoPoint gp = new GeoPoint(l.getLatitude(), l.getLongitude());
 
-		Toast.makeText(getSherlockActivity(),
-				getResources().getString(R.string.position_refreshed),
-				Toast.LENGTH_LONG).show();
+		Toast.makeText(
+				getSherlockActivity(),
+				getSherlockActivity().getResources().getString(
+						R.string.position_refreshed), Toast.LENGTH_LONG).show();
 
 		changePositionInMap(l);
 		this.centerMap(gp, false);
@@ -232,9 +233,7 @@ public class MapFragment extends SherlockFragment {
 		public void onLocationChanged(Location location) {
 			keyLatitude = location.getLatitude();
 			keyLongitude = location.getLongitude();
-			// changePositionInMap(location);
-			// myMapController.setCenter(new GeoPoint(keyLatitude,
-			// keyLongitude));
+			showLocation(location);
 		}
 
 		@Override
