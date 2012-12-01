@@ -1,6 +1,5 @@
 package es.glasspixel.wlanaudit.fragments;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.actionbarsherlock.app.SherlockFragment;
@@ -13,22 +12,14 @@ import com.actionbarsherlock.view.MenuItem;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences.Editor;
-import android.content.res.Configuration;
-import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
-import android.net.wifi.ScanResult;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.util.SparseBooleanArray;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,9 +29,6 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-//import com.actionbarsherlock.app.SherlockFragment;
-//import com.actionbarsherlock.app.SherlockListFragment;
 
 import es.glasspixel.wlanaudit.R;
 
@@ -52,9 +40,6 @@ import es.glasspixel.wlanaudit.activities.WLANAuditPreferencesActivity;
 import es.glasspixel.wlanaudit.adapters.KeysSavedAdapter;
 import es.glasspixel.wlanaudit.database.KeysSQliteHelper;
 import es.glasspixel.wlanaudit.dominio.SavedKeysUtils;
-import es.glasspixel.wlanaudit.keyframework.IKeyCalculator;
-import es.glasspixel.wlanaudit.keyframework.KeyCalculatorFactory;
-import es.glasspixel.wlanaudit.keyframework.NetData;
 
 public class SavedKeysFragment extends SherlockFragment {
 
@@ -77,7 +62,7 @@ public class SavedKeysFragment extends SherlockFragment {
 		super.onCreate(savedInstanceState);
 		locationManager = (LocationManager) getSherlockActivity()
 				.getSystemService(Context.LOCATION_SERVICE);
-		locationManager = (LocationManager) getSherlockActivity()	
+		locationManager = (LocationManager) getSherlockActivity()
 				.getSystemService(Context.LOCATION_SERVICE);
 
 		Criteria criteria = new Criteria();
@@ -85,7 +70,11 @@ public class SavedKeysFragment extends SherlockFragment {
 
 		Log.d("MapActivity", "best provider: " + bestProvider);
 
-		locationManager.requestLocationUpdates(bestProvider, 100, 50, listener);
+		if (locationManager != null && bestProvider != null)
+		{
+			locationManager.requestLocationUpdates(bestProvider, 100, 50,
+					listener);
+		}
 		setHasOptionsMenu(true);
 	}
 
@@ -264,8 +253,6 @@ public class SavedKeysFragment extends SherlockFragment {
 
 	}
 
-	
-
 	private ActionMode.Callback mActionCallBack = new Callback() {
 
 		@Override
@@ -277,7 +264,7 @@ public class SavedKeysFragment extends SherlockFragment {
 
 		@Override
 		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-			
+
 			return false;
 		}
 

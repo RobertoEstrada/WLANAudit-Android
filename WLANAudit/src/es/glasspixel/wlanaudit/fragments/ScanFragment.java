@@ -166,7 +166,7 @@ public class ScanFragment extends SherlockFragment implements
 		bestProvider = locationManager.getBestProvider(criteria, false);
 		Log.d("MapActivity", "best provider: " + bestProvider);
 
-		if (locationManager != null) {
+		if (locationManager != null && bestProvider != null) {
 			Location location = locationManager
 					.getLastKnownLocation(bestProvider);
 			if (location != null) {
@@ -371,7 +371,7 @@ public class ScanFragment extends SherlockFragment implements
 		// Handle item selection
 		switch (item.getItemId()) {
 		case R.id.scanOption:
-			
+
 			startScan();
 			if (refresh != null)
 				refresh.setActionView(R.layout.indeterminate_progress_action);

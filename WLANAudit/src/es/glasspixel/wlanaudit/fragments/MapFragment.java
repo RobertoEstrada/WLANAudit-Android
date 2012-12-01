@@ -50,6 +50,7 @@ public class MapFragment extends SherlockFragment {
 	protected double keyLongitude;
 	private List<SavedKey> mKeys;
 	private ItemizedOverlayWithFocus<OverlayItem> anotherItemizedIconOverlay;
+	private Location location;
 
 	public MapFragment() {
 	}
@@ -80,16 +81,23 @@ public class MapFragment extends SherlockFragment {
 		anotherOverlayItemArray = new ArrayList<OverlayItem>();
 		positionOverlayItemArray = new ArrayList<OverlayItem>();
 
-		Location location = locationManager.getLastKnownLocation(bestProvider);
-		if (location != null) {
-			showLocation(location);
+		if (locationManager != null && bestProvider != null) {
+			location = locationManager.getLastKnownLocation(bestProvider);
+			if (location != null) {
+				showLocation(location);
+			} else {
+				Toast.makeText(getSherlockActivity(),
+						"Your location is unavailable now", Toast.LENGTH_LONG)
+						.show();
+			}
+
+			locationManager.requestLocationUpdates(bestProvider, 20, 0,
+					listener);
 		} else {
 			Toast.makeText(getSherlockActivity(),
 					"Your location is unavailable now", Toast.LENGTH_LONG)
 					.show();
 		}
-
-		locationManager.requestLocationUpdates(bestProvider, 20, 0, listener);
 
 		if (mPos == -1 && savedInstanceState != null)
 			mPos = savedInstanceState.getInt("mPos");
