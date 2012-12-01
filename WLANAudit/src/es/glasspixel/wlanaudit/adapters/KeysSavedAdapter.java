@@ -37,8 +37,10 @@ public class KeysSavedAdapter extends ArrayAdapter<SavedKey> {
 
 		((TextView) listItem.findViewById(R.id.networkName)).setText(getItem(
 				position).getWlan_name());
-		((TextView) listItem.findViewById(R.id.networkKey))
-				.setText(getListString(getItem(position)));
+		// ((TextView) listItem.findViewById(R.id.networkKey))
+		// .setText(getListString(getItem(position)));
+		((TextView) listItem.findViewById(R.id.networkKey)).setText(getItem(
+				position).getAddress());
 
 		return listItem;
 	}

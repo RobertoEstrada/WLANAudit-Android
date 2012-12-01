@@ -7,10 +7,6 @@ import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 import es.glasspixel.wlanaudit.R;
-import es.glasspixel.wlanaudit.R.bool;
-import es.glasspixel.wlanaudit.R.id;
-import es.glasspixel.wlanaudit.R.layout;
-import es.glasspixel.wlanaudit.R.string;
 import es.glasspixel.wlanaudit.fragments.SavedKeysFragment;
 import es.glasspixel.wlanaudit.fragments.ScanFragment;
 import android.content.Context;
@@ -20,10 +16,8 @@ import android.net.wifi.ScanResult;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
 
 public class NetworkListActivitySwipe extends SherlockFragmentActivity
 		implements ScanFragment.Callbacks {
@@ -60,23 +54,18 @@ public class NetworkListActivitySwipe extends SherlockFragmentActivity
 
 		settings = getSharedPreferences("viewpager", Context.MODE_PRIVATE);
 
-		int currentIndex = settings.getInt("viewpager_index", 0);
-
 		screenIsLarge = res.getBoolean(R.bool.screen_large);
 
 		mViewPager = (ViewPager) findViewById(R.id.pager);
 
-		fragments.add(new ScanFragment());
-		fragments.add(new SavedKeysFragment());
-
 		if (mViewPager != null) {
-			mFragments = new ArrayList<SherlockFragment>();
-
+			fragments.add(new ScanFragment());
+			fragments.add(new SavedKeysFragment());
 			mSectionsPagerAdapter = new SectionsPagerAdapter(
 					getSupportFragmentManager());
 
 			mViewPager.setAdapter(mSectionsPagerAdapter);
-			
+
 			// if (currentIndex != 0)
 			// mViewPager.setCurrentItem(currentIndex);
 
@@ -102,13 +91,6 @@ public class NetworkListActivitySwipe extends SherlockFragmentActivity
 
 		@Override
 		public SherlockFragment getItem(int position) {
-			// NetworkListActivitySwipe.this.position = position;
-
-			SherlockFragment fragment;
-			if (position == 0)
-				fragment = new ScanFragment();
-			else
-				fragment = new SavedKeysFragment();
 
 			return fragments.get(position);
 

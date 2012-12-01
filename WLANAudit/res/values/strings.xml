@@ -67,6 +67,7 @@
     <string name="no_data_scan_keys">There aren\'t AP near you</string>
     <string name="position_refreshed">Location updated</string>
     
+    <string name="key_already_store">This key is already stored</string>
     
 
 </resources>

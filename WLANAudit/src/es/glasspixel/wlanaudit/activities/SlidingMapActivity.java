@@ -95,7 +95,7 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
 		getSupportMenuInflater().inflate(R.menu.menu_map_location, menu);
 		if (getSlidingMenu().isSlidingEnabled()) {
 			menu.add(0, SHOW_MENU, 1, getResources().getString(R.string.show_keys_list));
-			menu.getItem(1).setIcon(R.drawable.ic_about);
+			menu.getItem(1).setIcon(R.drawable.ic_menu_account_list);
 			menu.getItem(1).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
 		}

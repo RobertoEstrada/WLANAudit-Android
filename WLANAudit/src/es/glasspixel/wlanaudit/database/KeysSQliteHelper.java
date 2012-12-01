@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class KeysSQliteHelper extends SQLiteOpenHelper {
 
-	String sqlCreate = "CREATE TABLE Keys (nombre TEXT not null , address TEXT not null , key TEXT not null , latitude REAL, longitude REAL, PRIMARY KEY (address))";
+	String sqlCreate = "CREATE TABLE Keys (nombre TEXT not null , address TEXT not null , latitude REAL, longitude REAL, PRIMARY KEY (address))";
 
 	public KeysSQliteHelper(Context context, String name,
 			CursorFactory factory, int version) {

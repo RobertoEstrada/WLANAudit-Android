@@ -33,6 +33,7 @@ import com.actionbarsherlock.view.MenuItem;
 import es.glasspixel.wlanaudit.R;
 import es.glasspixel.wlanaudit.activities.SavedKey;
 import es.glasspixel.wlanaudit.database.KeysSQliteHelper;
+import es.glasspixel.wlanaudit.dominio.SavedKeysUtils;
 
 public class MapFragment extends SherlockFragment {
 	private int mPos = -1;
@@ -47,6 +48,7 @@ public class MapFragment extends SherlockFragment {
 	private OverlayItem positionOverlay;
 	protected double keyLatitude;
 	protected double keyLongitude;
+	private List<SavedKey> mKeys;
 	private ItemizedOverlayWithFocus<OverlayItem> anotherItemizedIconOverlay;
 
 	public MapFragment() {
@@ -120,7 +122,7 @@ public class MapFragment extends SherlockFragment {
 		// for(int i = 0; i< anotherItemizedIconOverlay.size();i++)
 		// {
 		anotherItemizedIconOverlay.unSetFocusedItem();
-		
+
 	}
 
 	public void showLocation(Location l) {
@@ -246,45 +248,10 @@ public class MapFragment extends SherlockFragment {
 		}
 
 	};
-	private ArrayList<SavedKey> mKeys;
 
 	protected List<SavedKey> loadSavedKeys() {
-		mKeys = new ArrayList<SavedKey>();
-		KeysSQliteHelper usdbh = new KeysSQliteHelper(getSherlockActivity(),
-				"DBKeys", null, 1);
+		mKeys = SavedKeysUtils.loadSavedKeys(getSherlockActivity());
 
-		SQLiteDatabase db = usdbh.getReadableDatabase();
-		Cursor c = db
-				.query("Keys", new String[] { "address", "nombre", "key",
-						"latitude", "longitude" }, null, null, null, null,
-						"nombre ASC");
-		// if (c.moveToFirst()) {
-		while (c.moveToNext()) {
-
-			String name = c.getString(c.getColumnIndex("nombre"));
-			boolean nueva = true;
-			for (SavedKey s : mKeys) {
-				if (name.equals(s.getWlan_name())) {
-					s.getKeys().add(c.getString(c.getColumnIndex("key")));
-					nueva = false;
-					break;
-				}
-			}
-
-			if (nueva) {
-				List<String> a = new ArrayList<String>();
-				a.add(c.getString(c.getColumnIndex("key")));
-				SavedKey k = new SavedKey(c.getString(c
-						.getColumnIndex("nombre")), c.getString(c
-						.getColumnIndex("address")), a, c.getFloat(c
-						.getColumnIndex("latitude")), c.getFloat(c
-						.getColumnIndex("longitude")));
-				mKeys.add(k);
-			}
-
-		}
-		// }
-		c.close();
 		return mKeys;
 
 	}

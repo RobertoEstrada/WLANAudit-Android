@@ -6,10 +6,17 @@ import java.util.List;
 import com.actionbarsherlock.app.SherlockListFragment;
 
 import es.glasspixel.wlanaudit.R;
+import es.glasspixel.wlanaudit.activities.KeyListActivity;
 import es.glasspixel.wlanaudit.activities.SavedKey;
 import es.glasspixel.wlanaudit.activities.SlidingMapActivity;
 import es.glasspixel.wlanaudit.database.KeysSQliteHelper;
+import es.glasspixel.wlanaudit.dominio.SavedKeysUtils;
+import es.glasspixel.wlanaudit.keyframework.IKeyCalculator;
+import es.glasspixel.wlanaudit.keyframework.KeyCalculatorFactory;
+import es.glasspixel.wlanaudit.keyframework.NetData;
 
+import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -17,8 +24,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
@@ -72,43 +81,8 @@ public class SavedKeysMenuFragment extends SherlockListFragment implements
 	}
 
 	protected List<SavedKey> loadSavedKeys() {
-		mKeys = new ArrayList<SavedKey>();
-		KeysSQliteHelper usdbh = new KeysSQliteHelper(getSherlockActivity(),
-				"DBKeys", null, 1);
 
-		SQLiteDatabase db = usdbh.getReadableDatabase();
-		Cursor c = db
-				.query("Keys", new String[] { "address", "nombre", "key",
-						"latitude", "longitude" }, null, null, null, null,
-						"nombre ASC");
-		// if (c.moveToFirst()) {
-		while (c.moveToNext()) {
-
-			String name = c.getString(c.getColumnIndex("nombre"));
-			boolean nueva = true;
-			for (SavedKey s : mKeys) {
-				if (name.equals(s.getWlan_name())) {
-					s.getKeys().add(c.getString(c.getColumnIndex("key")));
-					nueva = false;
-					break;
-				}
-			}
-
-			if (nueva) {
-				List<String> a = new ArrayList<String>();
-				a.add(c.getString(c.getColumnIndex("key")));
-				SavedKey k = new SavedKey(c.getString(c
-						.getColumnIndex("nombre")), c.getString(c
-						.getColumnIndex("address")), a, c.getFloat(c
-						.getColumnIndex("latitude")), c.getFloat(c
-						.getColumnIndex("longitude")));
-				mKeys.add(k);
-			}
-
-		}
-		// }
-		c.close();
-		return mKeys;
+		return SavedKeysUtils.loadSavedKeys(getSherlockActivity());
 
 	}
 
@@ -148,25 +122,19 @@ public class SavedKeysMenuFragment extends SherlockListFragment implements
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View v = convertView;
-			Object item = getItem(position);
 
-			if (v == null) {
-				// v = getLayoutInflater().inflate(R.layout.menu_row_item,
-				// parent, false);
+			if (v == null) {				
 				v = getSherlockActivity().getLayoutInflater().inflate(
 						R.layout.key_saved_list_element, parent, false);
 			}
 
 			((TextView) v.findViewById(R.id.networkName)).setText(mKeys.get(
 					position).getWlan_name());
-			((TextView) v.findViewById(R.id.networkKey))
-					.setText(printKeys(mKeys.get(position).getKeys()));
+			// ((TextView) v.findViewById(R.id.networkKey))
+			// .setText(printKeys(mKeys.get(position).getKeys()));
 
-			// TextView tv = (TextView) v;
-			// tv.setText(((Item) item).mTitle);
-			// tv.setCompoundDrawablesWithIntrinsicBounds(
-			// ((Item) item).mIconRes, 0, 0, 0);
-
+			((TextView) v.findViewById(R.id.networkKey)).setText(mKeys.get(
+					position).getAddress());
 			return v;
 		}
 	}
