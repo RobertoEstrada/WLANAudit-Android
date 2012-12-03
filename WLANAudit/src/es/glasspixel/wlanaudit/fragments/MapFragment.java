@@ -205,10 +205,7 @@ public class MapFragment extends SherlockFragment {
 	};
 
 	private void changePositionInMap(Location l) {
-		// IF (POSITIONOVERLAY != NULL
-		// && POSITIONOVERLAYITEMARRAY.CONTAINS(POSITIONOVERLAY)) {
-		// POSITIONOVERLAYITEMARRAY.REMOVE(POSITIONOVERLAY);
-		// }
+		
 		if (positionOverlay != null
 				&& positionOverlayItemArray.contains(positionOverlay)) {
 			positionOverlayItemArray.remove(positionOverlay);
@@ -220,7 +217,8 @@ public class MapFragment extends SherlockFragment {
 				.getDrawable(R.drawable.marker_blue));
 		// anotherOverlayItemArray.add(positionOverlay);
 		// anotherOverlayItemArray.add(0, positionOverlay);
-		positionOverlayItemArray.add(positionOverlay);
+		// positionOverlayItemArray.add(positionOverlay);
+		positionOverlayItemArray.add(0, positionOverlay);
 		ItemizedOverlayWithFocus<OverlayItem> positiontemizedIconOverlay = new ItemizedOverlayWithFocus<OverlayItem>(
 				getSherlockActivity(), positionOverlayItemArray, null);
 		// myOpenMapView.getOverlays().clear();
