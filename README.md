@@ -39,6 +39,14 @@ Contributing to the project
 =============================
 Fork the project, make your changes and send a pull request for code review. Your pull requests must be self contained, otherwise they will be rejected until they meet that criteria.
 
+In order to achieve that requirement do the following:
+
+	1. Fork the project
+	2. Create a topic branch, based on any of the existing brancges, for the feature that you want de develop
+	3. Make the essential changes that your new feature requires
+	4. Issue a pull request, be clear about the changes you've made.
+	5. If your contribution passes code review, it will be integrated into the mainline.
+
 More info on how to work with pull requests can be found in the article ['Using Pull Requests'] (https://help.github.com/articles/using-pull-requests)
 
 Developed by
