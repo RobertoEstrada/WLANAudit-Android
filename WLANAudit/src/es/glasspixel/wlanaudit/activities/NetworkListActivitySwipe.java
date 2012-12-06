@@ -77,6 +77,9 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity imple
     @Inject
     private Resources mResources;
     
+    /**
+     * Lifecycle management: Activity is being created
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,6 +99,15 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity imple
                     .replace(R.id.item_detail_container, mFragments.get(1), "tag").commit();
         }
 
+    }
+    
+    /**
+     * Lifecycle management: Activity must save its state
+     */
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.remove("android:support:fragments");
     }
 
     /**
