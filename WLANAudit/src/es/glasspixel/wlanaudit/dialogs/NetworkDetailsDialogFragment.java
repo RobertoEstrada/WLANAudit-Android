@@ -40,6 +40,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -121,6 +122,9 @@ public class NetworkDetailsDialogFragment extends RoboDialogFragment {
 
     @InjectView(R.id.copyPasswordButton)
     private Button mCopyPasswordButton;
+    
+    @InjectView(R.id.starNetworkButton)
+    private ImageButton mStarNetworkButton;
 
     /**
      * Gets a new instance of the dialog
@@ -161,6 +165,7 @@ public class NetworkDetailsDialogFragment extends RoboDialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
         getDialog().setTitle(R.string.scan_fragment_dialog_title);
         View v = inflater.inflate(R.layout.network_details_dialog, container, false);
         return v;
@@ -193,6 +198,22 @@ public class NetworkDetailsDialogFragment extends RoboDialogFragment {
         mNetworkChannelTextView.setText(String.valueOf(ChannelCalculator
                 .getChannelNumber(mNetworkData.frequency)));
         mNetworkIntensityTextView.setText(mNetworkData.level + " dBm");
+        
+        // Setting up button callbacks
+        mCopyPasswordButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                copyClipboard(mNetworkDefaultPassTextView.getText().toString());
+                dismiss();
+            }
+        });
+        mStarNetworkButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveNetwork(mNetworkData, mLastKnownLocation);
+                dismiss();
+            }
+        });
 
         // Calculating key
         IKeyCalculator keyCalculator = KeyCalculatorFactory.getKeyCalculator(new NetData(
@@ -206,15 +227,7 @@ public class NetworkDetailsDialogFragment extends RoboDialogFragment {
                             + getText(R.string.number_of_keys_found));
                 } else if (keyList.size() == 1) {
                     mNetworkDefaultPassTextView.setText(keyList.get(0));
-                }
-                mCopyPasswordButton.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        copyClipboard(mNetworkDefaultPassTextView.getText().toString());
-                        saveNetwork(mNetworkData, mLastKnownLocation);
-                        dismiss();
-                    }
-                });
+                }                
             } else {
                 mNetworkDefaultPassTextView.setText(getString(R.string.no_default_key));
                 mCopyPasswordButton.setEnabled(false);

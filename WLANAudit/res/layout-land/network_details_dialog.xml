@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical" >
 
     <LinearLayout
@@ -42,6 +42,12 @@
             android:layout_marginTop="10dip"
             android:gravity="right" >
 
+            <ImageButton
+                android:id="@+id/starNetworkButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@android:drawable/btn_star_big_on" />
+
             <Button
                 android:id="@+id/copyPasswordButton"
                 android:layout_width="wrap_content"
@@ -51,183 +57,157 @@
         </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
+    <ScrollView
         android:id="@+id/detail_contents"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingBottom="5dp" >
+        android:scrollbarAlwaysDrawVerticalTrack="true" >
 
+        <TableLayout
+            android:id="@+id/networkParamsLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dip" >
 
-        <!-- <View -->
-        <!-- android:id="@+id/divider" -->
-        <!-- android:layout_width="fill_parent" -->
-        <!-- android:layout_height="1dp" -->
-        <!-- android:background="@drawable/layout_divider" /> -->
-
-
-        <ScrollView
-            android:id="@+id/scrollView1"
-            android:layout_width="match_parent"
-            android:layout_height="0dip"
-            android:layout_weight="1"
-            android:scrollbarAlwaysDrawVerticalTrack="true" >
-
-            <TableLayout
-                android:id="@+id/networkParamsLayout"
-                android:layout_width="fill_parent"
+            <TableRow
+                android:id="@+id/bssidRow"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dip" >
+                android:paddingBottom="10dip"
+                android:paddingLeft="20dip" >
 
-                <TableRow
-                    android:id="@+id/bssidRow"
+                <TextView
+                    android:id="@+id/bssid_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="10dip"
-                    android:paddingLeft="20dip" >
+                    android:paddingRight="5dip"
+                    android:text="@string/network_bssid_label"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
-                    <TextView
-                        android:id="@+id/bssid_label"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingRight="5dip"
-                        android:text="@string/network_bssid_label"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                    <TextView
-                        android:id="@+id/bssid_value"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="TextView"
-                        tools:ignore="HardcodedText" />
-                </TableRow>
-
-                <TableRow
-                    android:id="@+id/encryptionRow"
+                <TextView
+                    android:id="@+id/bssid_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="10dip"
-                    android:paddingLeft="20dip" >
+                    android:text="TextView"
+                    tools:ignore="HardcodedText" />
+            </TableRow>
 
-                    <TextView
-                        android:id="@+id/encryption_label"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingRight="5dip"
-                        android:text="@string/network_encryption_label"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TableRow
+                android:id="@+id/encryptionRow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dip"
+                android:paddingLeft="20dip" >
 
-                    <TextView
-                        android:id="@+id/encryption_value"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="TextView"
-                        tools:ignore="HardcodedText" />
-                </TableRow>
-
-                <TableRow
-                    android:id="@+id/frequencyRow"
+                <TextView
+                    android:id="@+id/encryption_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="10dip"
-                    android:paddingLeft="20dip" >
+                    android:paddingRight="5dip"
+                    android:text="@string/network_encryption_label"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
-                    <TextView
-                        android:id="@+id/frequency_label"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingRight="5dip"
-                        android:text="@string/network_frequency"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                    <TextView
-                        android:id="@+id/frequency_value"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="TextView"
-                        tools:ignore="HardcodedText" />
-                </TableRow>
-
-                <TableRow
-                    android:id="@+id/TableRow01"
+                <TextView
+                    android:id="@+id/encryption_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="10dip"
-                    android:paddingLeft="20dip" >
+                    android:text="TextView"
+                    tools:ignore="HardcodedText" />
+            </TableRow>
 
-                    <TextView
-                        android:id="@+id/channel_label"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingRight="5dip"
-                        android:text="@string/network_channel"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TableRow
+                android:id="@+id/frequencyRow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dip"
+                android:paddingLeft="20dip" >
 
-                    <TextView
-                        android:id="@+id/channel_value"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="TextView"
-                        tools:ignore="HardcodedText" />
-                </TableRow>
-
-                <TableRow
-                    android:id="@+id/intensityRow"
+                <TextView
+                    android:id="@+id/frequency_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="10dip"
-                    android:paddingLeft="20dip" >
+                    android:paddingRight="5dip"
+                    android:text="@string/network_frequency"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
-                    <TextView
-                        android:id="@+id/intensity_label"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingRight="5dip"
-                        android:text="@string/signal_level_label"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                    <TextView
-                        android:id="@+id/intensity_value"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="TextView"
-                        tools:ignore="HardcodedText" />
-                </TableRow>
-
-                <TableRow
-                    android:id="@+id/defaultPasswordRow"
+                <TextView
+                    android:id="@+id/frequency_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="10dip"
-                    android:paddingLeft="18dip" >
+                    android:text="TextView"
+                    tools:ignore="HardcodedText" />
+            </TableRow>
 
-                    <TextView
-                        android:id="@+id/password_label"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingRight="5dip"
-                        android:text="@string/default_password_label"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TableRow
+                android:id="@+id/TableRow01"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dip"
+                android:paddingLeft="20dip" >
 
-                    <TextView
-                        android:id="@+id/password_value"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="2dip"
-                        android:text="TextView"
-                        tools:ignore="HardcodedText" />
-                </TableRow>
-            </TableLayout>
-        </ScrollView>
+                <TextView
+                    android:id="@+id/channel_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="5dip"
+                    android:text="@string/network_channel"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
+                <TextView
+                    android:id="@+id/channel_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TextView"
+                    tools:ignore="HardcodedText" />
+            </TableRow>
 
-        <!-- <View -->
-        <!-- android:id="@+id/divider2" -->
-        <!-- android:layout_width="fill_parent" -->
-        <!-- android:layout_height="1dp" -->
-        <!-- android:layout_marginTop="5dip" -->
-        <!-- android:background="@drawable/layout_divider" /> -->
+            <TableRow
+                android:id="@+id/intensityRow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dip"
+                android:paddingLeft="20dip" >
 
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/intensity_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="5dip"
+                    android:text="@string/signal_level_label"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/intensity_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TextView"
+                    tools:ignore="HardcodedText" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/defaultPasswordRow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dip"
+                android:paddingLeft="18dip" >
+
+                <TextView
+                    android:id="@+id/password_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="5dip"
+                    android:text="@string/default_password_label"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/password_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dip"
+                    android:text="TextView"
+                    tools:ignore="HardcodedText" />
+            </TableRow>
+        </TableLayout>
+    </ScrollView>
 
 </LinearLayout>

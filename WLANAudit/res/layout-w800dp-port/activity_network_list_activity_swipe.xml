@@ -26,9 +26,8 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/white" />
 
-        <fragment
+        <FrameLayout
             android:id="@+id/scan_fragment"
-            android:name="es.glasspixel.wlanaudit.fragments.ScanFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="9dp"

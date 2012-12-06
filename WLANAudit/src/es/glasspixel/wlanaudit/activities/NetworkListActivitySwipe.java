@@ -81,21 +81,19 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity imple
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_network_list_activity_swipe);
+        
+        mFragments = new ArrayList<Fragment>();
+        mFragments.add(new ScanFragment());
+        mFragments.add(new SavedKeysFragment());
 
         if (mViewPager != null) {
-            mFragments = new ArrayList<Fragment>();
-            mFragments.add(new ScanFragment());
-            mFragments.add(new SavedKeysFragment());
-
             mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-
             mViewPager.setAdapter(mSectionsPagerAdapter);
-
         } else {
-            SavedKeysFragment fragment = new SavedKeysFragment();
-
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.item_detail_container, fragment, "tag").commit();
+            .replace(R.id.scan_fragment, mFragments.get(0), "tag").commit();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.item_detail_container, mFragments.get(1), "tag").commit();
         }
 
     }
