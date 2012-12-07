@@ -36,13 +36,15 @@ import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockFragmen
 import com.google.inject.Inject;
 
 import es.glasspixel.wlanaudit.R;
+import es.glasspixel.wlanaudit.database.entities.Network;
 import es.glasspixel.wlanaudit.dialogs.NetworkDetailsDialogFragment;
+import es.glasspixel.wlanaudit.dialogs.SavedNetworkDetailsDialogFragment;
 import es.glasspixel.wlanaudit.fragments.SavedKeysFragment;
 import es.glasspixel.wlanaudit.fragments.ScanFragment;
 import es.glasspixel.wlanaudit.interfaces.OnDataSourceModifiedListener;
 
 public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity implements
-        ScanFragment.OnNetworkSelectedListener, OnDataSourceModifiedListener {
+        ScanFragment.ScanFragmentListener, SavedKeysFragment.SavedNetworkFragmentListener {
     
     /**
      * Constant to define how many fragments this activity handles
@@ -144,6 +146,20 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity imple
         detailsDlg.show(ft, "detailsDialog");
     }
     
+    @Override
+    public void onNetworkSelected(Network networkData) {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        Fragment prev = getSupportFragmentManager().findFragmentByTag("detailsDialog");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+
+        // Create and show the dialog.
+        SavedNetworkDetailsDialogFragment detailsDlg = SavedNetworkDetailsDialogFragment.newInstance(networkData);
+        detailsDlg.show(ft, "detailsDialog");        
+    }
+    
     /**
      * {@inheritDoc}
      */
@@ -189,5 +205,5 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity imple
             }
             return null;
         }
-    }   
+    }       
 }

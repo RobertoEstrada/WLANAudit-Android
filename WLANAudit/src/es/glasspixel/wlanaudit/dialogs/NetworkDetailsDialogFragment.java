@@ -16,6 +16,7 @@
 
 package es.glasspixel.wlanaudit.dialogs;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.orman.mapper.Model;
@@ -52,6 +53,7 @@ import com.novoda.location.exception.NoProviderAvailable;
 
 import es.glasspixel.wlanaudit.R;
 import es.glasspixel.wlanaudit.WLANAuditApplication;
+import es.glasspixel.wlanaudit.activities.KeyListActivity;
 import es.glasspixel.wlanaudit.adapters.WifiNetworkAdapter;
 import es.glasspixel.wlanaudit.database.entities.Network;
 import es.glasspixel.wlanaudit.interfaces.OnDataSourceModifiedListener;
@@ -75,6 +77,11 @@ public class NetworkDetailsDialogFragment extends RoboDialogFragment {
      * The network data to display on the dialog
      */
     private ScanResult mNetworkData;
+    
+    /**
+     * A list with the possible default keys of the network being detailed
+     */
+    private List<String> mKeyList;
 
     /**
      * Last known location
@@ -203,7 +210,15 @@ public class NetworkDetailsDialogFragment extends RoboDialogFragment {
         mCopyPasswordButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                copyClipboard(mNetworkDefaultPassTextView.getText().toString());
+                if (mKeyList.size() == 1) {
+                    copyClipboard(mNetworkDefaultPassTextView.getText().toString());
+                } else if (mKeyList.size() > 1) {
+                    Intent i = new Intent(getActivity(), KeyListActivity.class);
+                    i.putStringArrayListExtra(KeyListActivity.KEY_LIST_KEY,
+                            (ArrayList<String>) mKeyList);
+                    startActivity(i);
+
+                }
                 dismiss();
             }
         });
@@ -219,14 +234,14 @@ public class NetworkDetailsDialogFragment extends RoboDialogFragment {
         IKeyCalculator keyCalculator = KeyCalculatorFactory.getKeyCalculator(new NetData(
                 mNetworkData.SSID, mNetworkData.BSSID));
         if (keyCalculator != null) {
-            List<String> keyList = keyCalculator.getKey(new NetData(mNetworkData.SSID,
+            mKeyList = keyCalculator.getKey(new NetData(mNetworkData.SSID,
                     mNetworkData.BSSID));
-            if (keyList != null) {
-                if (keyList.size() > 1) {
-                    mNetworkDefaultPassTextView.setText(String.valueOf(keyList.size()) + " "
+            if (mKeyList != null) {
+                if (mKeyList.size() > 1) {
+                    mNetworkDefaultPassTextView.setText(String.valueOf(mKeyList.size()) + " "
                             + getText(R.string.number_of_keys_found));
-                } else if (keyList.size() == 1) {
-                    mNetworkDefaultPassTextView.setText(keyList.get(0));
+                } else if (mKeyList.size() == 1) {
+                    mNetworkDefaultPassTextView.setText(mKeyList.get(0));
                 }                
             } else {
                 mNetworkDefaultPassTextView.setText(getString(R.string.no_default_key));

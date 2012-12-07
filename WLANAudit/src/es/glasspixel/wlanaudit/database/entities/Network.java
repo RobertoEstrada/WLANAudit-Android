@@ -16,6 +16,7 @@
 
 package es.glasspixel.wlanaudit.database.entities;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.orman.mapper.Model;
@@ -31,8 +32,9 @@ import es.glasspixel.wlanaudit.keyframework.NetData;
  * Maps to the saved networks table on the database
  */
 @Entity
-public class Network extends Model<Network> {
+public class Network extends Model<Network> implements Serializable {
     
+    private transient static final long serialVersionUID = 8043495355710840188L;
     @PrimaryKey(autoIncrement = true)
     public int id;
     public String mSSID;

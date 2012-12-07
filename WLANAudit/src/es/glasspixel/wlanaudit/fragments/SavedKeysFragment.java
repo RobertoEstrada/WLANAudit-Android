@@ -33,6 +33,25 @@ import es.glasspixel.wlanaudit.database.entities.Network;
 import es.glasspixel.wlanaudit.interfaces.OnDataSourceModifiedListener;
 
 public class SavedKeysFragment extends RoboSherlockListFragment implements OnDataSourceModifiedListener {
+    
+    /**
+     * Interface to pass fragment callbacks to parent activity. Parent activity
+     * must implement this to be aware of the events of the fragment.
+     */
+    public interface SavedNetworkFragmentListener extends OnDataSourceModifiedListener{
+        /**
+         * Observers must implement this method to be notified of which network
+         * was selected on this fragment.
+         * 
+         * @param networkData The network data of the selected item.
+         */
+        public void onNetworkSelected(Network networkData);
+        /**
+         * Fragments which use a shared datasource with other
+         * fragments, should notify them using this method.
+         */
+        public void dataSourceShouldRefresh();
+    }
 
     protected ActionMode mActionMode;
 
@@ -42,7 +61,7 @@ public class SavedKeysFragment extends RoboSherlockListFragment implements OnDat
 
     protected Network mSelectedNetwork;
     
-    private OnDataSourceModifiedListener mCallback;
+    private SavedNetworkFragmentListener mCallback;
 
     @InjectView(android.R.id.list)
     private ListView mNetworkListView;
@@ -53,7 +72,7 @@ public class SavedKeysFragment extends RoboSherlockListFragment implements OnDat
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mCallback = (OnDataSourceModifiedListener) activity;
+            mCallback = (SavedNetworkFragmentListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnDataSourceModifiedListener");
@@ -106,7 +125,7 @@ public class SavedKeysFragment extends RoboSherlockListFragment implements OnDat
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //TODO: Show details
+                mCallback.onNetworkSelected((Network) parent.getItemAtPosition(position));
             }
         });
     }

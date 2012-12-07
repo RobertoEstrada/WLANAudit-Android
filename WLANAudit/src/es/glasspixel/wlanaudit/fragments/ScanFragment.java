@@ -46,7 +46,7 @@ public class ScanFragment extends RoboSherlockFragment implements OnItemClickLis
      * Interface to pass fragment callbacks to parent activity. Parent activity
      * must implement this to be aware of the events of the fragment.
      */
-    public interface OnNetworkSelectedListener {
+    public interface ScanFragmentListener {
         /**
          * Observers must implement this method to be notified of which network
          * was selected on this fragment.
@@ -59,7 +59,7 @@ public class ScanFragment extends RoboSherlockFragment implements OnItemClickLis
     /**
      * The parent activity that listens for this fragment callbacks
      */
-    private OnNetworkSelectedListener mCallback;
+    private ScanFragmentListener mCallback;
 
     /**
      * Manager of the wifi network interface
@@ -314,7 +314,7 @@ public class ScanFragment extends RoboSherlockFragment implements OnItemClickLis
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mCallback = (OnNetworkSelectedListener) activity;
+            mCallback = (ScanFragmentListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnNetworkSelectedListener");
