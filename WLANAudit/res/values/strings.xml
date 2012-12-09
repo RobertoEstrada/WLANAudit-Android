@@ -41,7 +41,6 @@
     <string name="wifi_autostart_active_summary">WiFi will be turned on automatically if it was inactive on application\'s start</string>
     <string name="wifi_autostart">WiFi autostart</string>
     <string name="no_networks_found">No WiFi networks found</string>
-    
     <string name="oss_licenses_show_button">Show software licenses</string>
     <string name="oss_licenses_dialog_title">Software licenses</string>
     <string name="network_channel">Channel:</string>
@@ -66,8 +65,9 @@
     <string name="menu_map_option">Show saved keys in map</string>
     <string name="no_data_scan_keys">There aren\'t AP near you</string>
     <string name="position_refreshed">Location updated</string>
-    
     <string name="key_already_store">This key is already stored</string>
-    
+    <string name="improve_precision_dialog_title">Improve precision of location</string>
+    <string name="improve_precision_dialog_message">To set your location, please select the Location option in their settings. You can access them by clicking the Settings button</string>
+    <string name="settings">Settings</string>
 
 </resources>

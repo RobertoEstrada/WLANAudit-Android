@@ -123,7 +123,7 @@ public class SavedKeysMenuFragment extends SherlockListFragment implements
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View v = convertView;
 
-			if (v == null) {				
+			if (v == null) {
 				v = getSherlockActivity().getLayoutInflater().inflate(
 						R.layout.key_saved_list_element, parent, false);
 			}
@@ -149,7 +149,9 @@ public class SavedKeysMenuFragment extends SherlockListFragment implements
 
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-		listener.onSavedKeySelected(mKeys.get(arg2));
+		if (mKeys.get(arg2).getLatitude() > -1
+				&& mKeys.get(arg2).getLongitude() > -1)
+			listener.onSavedKeySelected(mKeys.get(arg2));
 
 	}
 }

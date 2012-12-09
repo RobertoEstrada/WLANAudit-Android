@@ -1,21 +1,14 @@
 package es.glasspixel.wlanaudit.fragments;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.MapView;
-import org.osmdroid.views.overlay.OverlayItem;
-
-import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.AlertDialog.Builder;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -23,27 +16,17 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.content.res.Configuration;
-import android.database.Cursor;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.location.LocationProvider;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
+import android.provider.Settings;
 import android.util.Log;
-import android.util.SparseBooleanArray;
-import android.view.ActionMode;
-import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.ViewConfiguration;
 import android.view.Window;
 
 import android.view.View;
@@ -55,10 +38,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView.OnItemClickListener;
 
-import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
@@ -70,16 +51,12 @@ import es.glasspixel.wlanaudit.activities.AboutActivity;
 import es.glasspixel.wlanaudit.activities.KeyListActivity;
 import es.glasspixel.wlanaudit.activities.SlidingMapActivity;
 
-import es.glasspixel.wlanaudit.activities.SavedKey;
 import es.glasspixel.wlanaudit.activities.WLANAuditPreferencesActivity;
-import es.glasspixel.wlanaudit.adapters.KeysSavedAdapter;
 import es.glasspixel.wlanaudit.adapters.WifiNetworkAdapter;
-import es.glasspixel.wlanaudit.database.KeysSQliteHelper;
 import es.glasspixel.wlanaudit.dominio.SavedKeysUtils;
 import es.glasspixel.wlanaudit.keyframework.IKeyCalculator;
 import es.glasspixel.wlanaudit.keyframework.KeyCalculatorFactory;
 import es.glasspixel.wlanaudit.keyframework.NetData;
-import es.glasspixel.wlanaudit.keyframework.WLANXXXXKeyCalculator;
 import es.glasspixel.wlanaudit.util.ChannelCalculator;
 
 public class ScanFragment extends SherlockFragment implements
@@ -98,6 +75,8 @@ public class ScanFragment extends SherlockFragment implements
 		public void onItemSelected(ScanResult s) {
 		}
 	};
+
+	private static final int LOCATION_SETTINGS = 2;
 
 	View myFragmentView;
 
@@ -130,7 +109,7 @@ public class ScanFragment extends SherlockFragment implements
 
 	private boolean screenIsLarge;
 
-	private double mLatitude = 0, mLongitude = 0;
+	private double mLatitude = -1, mLongitude = -1;
 
 	private LocationManager locationManager;
 
@@ -156,26 +135,52 @@ public class ScanFragment extends SherlockFragment implements
 		locationManager = (LocationManager) getSherlockActivity()
 				.getSystemService(Context.LOCATION_SERVICE);
 
-		// List all providers:
-		List<String> providers = locationManager.getAllProviders();
-		for (String provider : providers) {
-			printProvider(provider);
+		// // List all providers:
+		// List<String> providers = locationManager.getAllProviders();
+		// for (String provider : providers) {
+		// printProvider(provider);
+		// }
+		//
+		// Criteria criteria = new Criteria();
+		// bestProvider = locationManager.getBestProvider(criteria, false);
+		// Log.d("MapActivity", "best provider: " + bestProvider);
+
+		// if (locationManager != null && bestProvider != null) {
+
+		// if (bestProvider.equals(LocationManager.NETWORK_PROVIDER)) {
+		if (!locationManager
+				.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+			AlertDialog.Builder dialogo1 = new AlertDialog.Builder(
+					getSherlockActivity());
+			dialogo1.setTitle(getSherlockActivity().getResources().getString(
+					R.string.improve_precision_dialog_title));
+			dialogo1.setMessage(getSherlockActivity().getResources().getString(
+					R.string.improve_precision_dialog_message));
+			dialogo1.setCancelable(false);
+			dialogo1.setPositiveButton(getSherlockActivity().getResources()
+					.getString(R.string.settings),
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialogo1, int id) {
+							Intent intent = new Intent(
+									Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+							startActivityForResult(intent, LOCATION_SETTINGS);
+						}
+					});
+			dialogo1.setNegativeButton(getSherlockActivity().getResources()
+					.getString(android.R.string.cancel),
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialogo1, int id) {
+							dialogo1.dismiss();
+						}
+					});
+			dialogo1.show();
+
+		} else {
+
+			initLocation();
+
 		}
-
-		Criteria criteria = new Criteria();
-		bestProvider = locationManager.getBestProvider(criteria, false);
-		Log.d("MapActivity", "best provider: " + bestProvider);
-
-		if (locationManager != null && bestProvider != null) {
-			Location location = locationManager
-					.getLastKnownLocation(bestProvider);
-			if (location != null) {
-				showLocation(location);
-			}
-
-			locationManager.requestLocationUpdates(bestProvider, 20, 0,
-					listener);
-		}
+		// }
 		Log.d("ScanFragment", "showing menu..");
 		setHasOptionsMenu(true);
 
@@ -213,6 +218,8 @@ public class ScanFragment extends SherlockFragment implements
 	private MenuItem automatic_scan;
 
 	private Editor e;
+
+	private Location myLocation;
 
 	private void printProvider(String provider) {
 		// LocationProvider info = locationManager.getProvider(provider);
@@ -590,6 +597,21 @@ public class ScanFragment extends SherlockFragment implements
 
 	}
 
+	private void initLocation() {
+		myLocation = locationManager
+				.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+		locationManager.requestLocationUpdates(
+				LocationManager.NETWORK_PROVIDER, 20, 0, listener);
+		if (myLocation != null) {
+			showLocation(myLocation);
+		} else {
+			Toast.makeText(getSherlockActivity(),
+					"Your location is unavailable now", Toast.LENGTH_LONG)
+					.show();
+		}
+
+	}
+
 	/**
 	 * Lifecycle management: Activity is about to be shown
 	 */
@@ -622,7 +644,7 @@ public class ScanFragment extends SherlockFragment implements
 		// Unsubscribing from receiving updates about changes of the WiFi
 		// networks
 		try {
-			getSherlockActivity().unregisterReceiver(mCallBackReceiver);
+			locationManager.removeUpdates(listener);
 		} catch (IllegalArgumentException e) {
 			// Do nothing
 		}

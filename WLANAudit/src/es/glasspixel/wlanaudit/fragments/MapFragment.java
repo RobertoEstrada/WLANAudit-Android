@@ -10,7 +10,10 @@ import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
 import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.ItemizedIconOverlay.OnItemGestureListener;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -19,6 +22,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,6 +40,7 @@ import es.glasspixel.wlanaudit.database.KeysSQliteHelper;
 import es.glasspixel.wlanaudit.dominio.SavedKeysUtils;
 
 public class MapFragment extends SherlockFragment {
+	private static final int LOCATION_SETTINGS = 2;
 	private int mPos = -1;
 	private int mImgRes;
 	private LocationManager locationManager;
@@ -76,9 +81,9 @@ public class MapFragment extends SherlockFragment {
 		locationManager = (LocationManager) getSherlockActivity()
 				.getSystemService(Context.LOCATION_SERVICE);
 
-		Criteria criteria = new Criteria();
-		bestProvider = locationManager.getBestProvider(criteria, false);
-		Log.d("MapActivity", "best provider: " + bestProvider);
+		// Criteria criteria = new Criteria();
+		// bestProvider = locationManager
+		// .getProvider(LocationManager.NETWORK_PROVIDER);
 
 		myOpenMapView = (MapView) v.findViewById(R.id.openmapview);
 		myOpenMapView.setBuiltInZoomControls(true);
@@ -89,23 +94,49 @@ public class MapFragment extends SherlockFragment {
 		anotherOverlayItemArray = new ArrayList<OverlayItem>();
 		positionOverlayItemArray = new ArrayList<OverlayItem>();
 
-		if (locationManager != null && bestProvider != null) {
-			myLocation = locationManager.getLastKnownLocation(bestProvider);
-			if (myLocation != null) {
-				showLocation(myLocation);
-			} else {
-				Toast.makeText(getSherlockActivity(),
-						"Your location is unavailable now", Toast.LENGTH_LONG)
-						.show();
-			}
+//		if (locationManager != null && bestProvider != null) {
 
-			locationManager.requestLocationUpdates(bestProvider, 20, 0,
-					listener);
-		} else {
-			Toast.makeText(getSherlockActivity(),
-					"Your location is unavailable now", Toast.LENGTH_LONG)
-					.show();
-		}
+			// if (bestProvider.equals(LocationManager.NETWORK_PROVIDER)) {
+			if (!locationManager
+					.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+				AlertDialog.Builder dialogo1 = new AlertDialog.Builder(
+						getSherlockActivity());
+				dialogo1.setTitle(getSherlockActivity().getResources()
+						.getString(R.string.improve_precision_dialog_title));
+				dialogo1.setMessage(getSherlockActivity().getResources()
+						.getString(R.string.improve_precision_dialog_message));
+				dialogo1.setCancelable(false);
+				dialogo1.setPositiveButton(getSherlockActivity().getResources()
+						.getString(R.string.settings),
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialogo1, int id) {
+								Intent intent = new Intent(
+										Settings.ACTION_SECURITY_SETTINGS);
+								startActivityForResult(intent,
+										LOCATION_SETTINGS);
+							}
+						});
+				dialogo1.setNegativeButton(getSherlockActivity().getResources()
+						.getString(android.R.string.cancel),
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialogo1, int id) {
+								dialogo1.dismiss();
+							}
+						});
+				dialogo1.show();
+
+			} else {
+
+				initLocation();
+
+			}
+			// }
+
+		// } else {
+		// Toast.makeText(getSherlockActivity(),
+		// "Your location is unavailable now", Toast.LENGTH_LONG)
+		// .show();
+		// }
 
 		if (mPos == -1 && savedInstanceState != null)
 			mPos = savedInstanceState.getInt("mPos");
@@ -114,9 +145,43 @@ public class MapFragment extends SherlockFragment {
 		return v;
 	}
 
+	private void initLocation() {
+		myLocation = locationManager
+				.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+		locationManager.requestLocationUpdates(
+				LocationManager.NETWORK_PROVIDER, 20, 0, listener);
+		if (myLocation != null) {
+			showLocation(myLocation);
+		} else {
+			Toast.makeText(getSherlockActivity(),
+					"Your location is unavailable now", Toast.LENGTH_LONG)
+					.show();
+		}
+
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == LOCATION_SETTINGS) {
+
+			if (!locationManager
+					.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+				Intent intent = new Intent(
+						Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+				startActivityForResult(intent, LOCATION_SETTINGS);
+			} else {
+
+				initLocation();
+
+			}
+		}
+
+		super.onActivityResult(requestCode, resultCode, data);
+	}
+
 	public void showLocation() {
 		Location lastKnownLocation = locationManager
-				.getLastKnownLocation(bestProvider);
+				.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 		if (lastKnownLocation != null)
 			showLocation(lastKnownLocation);
 	}
@@ -205,7 +270,7 @@ public class MapFragment extends SherlockFragment {
 	};
 
 	private void changePositionInMap(Location l) {
-		
+
 		if (positionOverlay != null
 				&& positionOverlayItemArray.contains(positionOverlay)) {
 			positionOverlayItemArray.remove(positionOverlay);
@@ -262,6 +327,14 @@ public class MapFragment extends SherlockFragment {
 		}
 
 	};
+	
+	
+
+	@Override
+	public void onStop() {
+		locationManager.removeUpdates(listener);
+		super.onStop();
+	}
 
 	protected List<SavedKey> loadSavedKeys() {
 		mKeys = SavedKeysUtils.loadSavedKeys(getSherlockActivity());
