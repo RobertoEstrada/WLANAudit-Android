@@ -61,5 +61,6 @@
     <string name="position_refreshed">Posición actualizada</string>
     
     <string name="key_already_store">Red ya almacenada</string>
+    <string name="settings">Ajustes</string>
 
 </resources>

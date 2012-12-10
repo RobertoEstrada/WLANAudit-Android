@@ -28,6 +28,7 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
@@ -130,6 +131,10 @@ public class SavedKeysMenuFragment extends SherlockListFragment implements
 
 			((TextView) v.findViewById(R.id.networkName)).setText(mKeys.get(
 					position).getWlan_name());
+			if (mKeys.get(position).getLatitude() > -999999999
+					&& mKeys.get(position).getLongitude() > -999999999)
+				((ImageView) v.findViewById(R.id.location_icon_saved_key))
+						.setVisibility(View.VISIBLE);
 			// ((TextView) v.findViewById(R.id.networkKey))
 			// .setText(printKeys(mKeys.get(position).getKeys()));
 

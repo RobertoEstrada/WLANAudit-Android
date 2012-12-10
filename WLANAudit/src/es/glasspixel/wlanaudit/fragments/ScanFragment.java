@@ -109,7 +109,7 @@ public class ScanFragment extends SherlockFragment implements
 
 	private boolean screenIsLarge;
 
-	private double mLatitude = -1, mLongitude = -1;
+	private double mLatitude = -999999999, mLongitude = -999999999;
 
 	private LocationManager locationManager;
 
@@ -147,7 +147,7 @@ public class ScanFragment extends SherlockFragment implements
 
 		// if (locationManager != null && bestProvider != null) {
 
-		// if (bestProvider.equals(LocationManager.NETWORK_PROVIDER)) {
+		// if (bestProvider.equals(LocationManager.NETWORK_PROsaveVIDER)) {
 		if (!locationManager
 				.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
 			AlertDialog.Builder dialogo1 = new AlertDialog.Builder(

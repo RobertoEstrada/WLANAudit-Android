@@ -94,43 +94,42 @@ public class MapFragment extends SherlockFragment {
 		anotherOverlayItemArray = new ArrayList<OverlayItem>();
 		positionOverlayItemArray = new ArrayList<OverlayItem>();
 
-//		if (locationManager != null && bestProvider != null) {
+		// if (locationManager != null && bestProvider != null) {
 
-			// if (bestProvider.equals(LocationManager.NETWORK_PROVIDER)) {
-			if (!locationManager
-					.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-				AlertDialog.Builder dialogo1 = new AlertDialog.Builder(
-						getSherlockActivity());
-				dialogo1.setTitle(getSherlockActivity().getResources()
-						.getString(R.string.improve_precision_dialog_title));
-				dialogo1.setMessage(getSherlockActivity().getResources()
-						.getString(R.string.improve_precision_dialog_message));
-				dialogo1.setCancelable(false);
-				dialogo1.setPositiveButton(getSherlockActivity().getResources()
-						.getString(R.string.settings),
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialogo1, int id) {
-								Intent intent = new Intent(
-										Settings.ACTION_SECURITY_SETTINGS);
-								startActivityForResult(intent,
-										LOCATION_SETTINGS);
-							}
-						});
-				dialogo1.setNegativeButton(getSherlockActivity().getResources()
-						.getString(android.R.string.cancel),
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialogo1, int id) {
-								dialogo1.dismiss();
-							}
-						});
-				dialogo1.show();
+		// if (bestProvider.equals(LocationManager.NETWORK_PROVIDER)) {
+		if (!locationManager
+				.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+			AlertDialog.Builder dialogo1 = new AlertDialog.Builder(
+					getSherlockActivity());
+			dialogo1.setTitle(getSherlockActivity().getResources().getString(
+					R.string.improve_precision_dialog_title));
+			dialogo1.setMessage(getSherlockActivity().getResources().getString(
+					R.string.improve_precision_dialog_message));
+			dialogo1.setCancelable(false);
+			dialogo1.setPositiveButton(getSherlockActivity().getResources()
+					.getString(R.string.settings),
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialogo1, int id) {
+							Intent intent = new Intent(
+									Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+							startActivityForResult(intent, LOCATION_SETTINGS);
+						}
+					});
+			dialogo1.setNegativeButton(getSherlockActivity().getResources()
+					.getString(android.R.string.cancel),
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialogo1, int id) {
+							dialogo1.dismiss();
+						}
+					});
+			dialogo1.show();
 
-			} else {
+		} else {
 
-				initLocation();
+			initLocation();
 
-			}
-			// }
+		}
+		// }
 
 		// } else {
 		// Toast.makeText(getSherlockActivity(),
@@ -327,8 +326,6 @@ public class MapFragment extends SherlockFragment {
 		}
 
 	};
-	
-	
 
 	@Override
 	public void onStop() {

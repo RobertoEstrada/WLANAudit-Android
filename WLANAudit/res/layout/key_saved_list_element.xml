@@ -1,32 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingRight="6dp"
     tools:ignore="HardcodedText" >
 
-    <TextView
-        android:id="@+id/networkName"
-        android:layout_width="fill_parent"
+    <ImageView
+        android:id="@+id/location_icon_saved_key"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:paddingLeft="10dip"
-        android:paddingTop="5dip"
-        android:text="TextView"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        tools:ignore="HardcodedText" >
-    </TextView>
+        android:layout_alignBottom="@+id/networkKey"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/location_black"
+        android:visibility="invisible" />
 
-    <TextView
-        android:id="@+id/networkKey"
-        android:layout_width="fill_parent"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/networkName"
-        android:layout_below="@+id/networkName"
-        android:paddingBottom="5dip"
-        android:paddingLeft="12dip"
-        android:text="TextView" >
-    </TextView>
+        android:layout_toLeftOf="@id/location_icon_saved_key"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/networkName"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:paddingLeft="10dip"
+            android:paddingTop="5dip"
+            android:text="TextView"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            tools:ignore="HardcodedText" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/networkKey"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/networkName"
+            android:layout_below="@+id/networkName"
+            android:paddingBottom="5dip"
+            android:paddingLeft="12dip"
+            android:text="TextView" >
+        </TextView>
+    </LinearLayout>
 
 </RelativeLayout>
