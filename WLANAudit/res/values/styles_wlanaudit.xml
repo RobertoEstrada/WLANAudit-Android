@@ -19,7 +19,7 @@
 
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="Theme.wlanaudit" parent="@style/Theme.Sherlock.Light.DarkActionBar">
+    <style name="Theme.wlanaudit" parent="Theme.Sherlock.Light.DarkActionBar">
 
         <!-- <item name="actionBarItemBackground">@drawable/selectable_background_wlanaudit</item> -->
         <!-- <item name="popupMenuStyle">@style/wlanaudit_PopupMenu</item> -->
