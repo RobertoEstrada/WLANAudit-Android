@@ -152,6 +152,7 @@ public class SavedNetworkDetailsDialogFragment extends RoboDialogFragment {
         } else {
             mNetworkDefaultPassTextView.setText(getString(R.string.no_default_key));
             mCopyPasswordButton.setEnabled(false);
+            
         }
     } 
 

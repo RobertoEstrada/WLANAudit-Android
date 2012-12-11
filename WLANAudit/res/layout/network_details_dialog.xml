@@ -5,23 +5,23 @@
     android:layout_height="wrap_content"
     android:orientation="vertical" >
 
+    <!-- <TextView -->
+    <!-- android:layout_width="fill_parent" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:layout_marginLeft="4dp" -->
+    <!-- android:layout_marginRight="4dp" -->
+    <!-- android:gravity="left" -->
+    <!-- android:padding="6dp" -->
+    <!-- android:text="@string/scan_fragment_dialog_title" -->
+    <!-- android:textAppearance="?android:attr/textAppearanceLarge" -->
+    <!-- android:textColor="@color/lightblue" /> -->
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:gravity="left"
-        android:padding="6dp"
-        android:text="@string/scan_fragment_dialog_title"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@color/lightblue" />
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="3dp"
-        android:background="@color/lightblue" >
-    </LinearLayout>
+    <!-- <LinearLayout -->
+    <!-- android:layout_width="fill_parent" -->
+    <!-- android:layout_height="3dp" -->
+    <!-- android:background="@color/lightblue" > -->
+    <!-- </LinearLayout> -->
 
     <LinearLayout
         android:id="@+id/viewHeaderLayout"
@@ -236,7 +236,7 @@
             android:id="@+id/starNetworkButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@android:drawable/btn_star_big_on" />
+            android:src="@drawable/btn_star_selector"  />
 
         <Button
             android:id="@+id/copyPasswordButton"

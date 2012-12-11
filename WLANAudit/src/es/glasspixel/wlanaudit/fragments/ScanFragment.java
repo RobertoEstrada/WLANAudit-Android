@@ -244,11 +244,7 @@ public class ScanFragment extends RoboSherlockFragment implements
 
 	private Location myLocation;
 
-	private void printProvider(String provider) {
-		// LocationProvider info = locationManager.getProvider(provider);
-		// Log.d("MapActivity", info.getName());
-	}
-
+	
 	private void showLocation(Location l) {
 		mLatitude = l.getLatitude();
 		mLongitude = l.getLongitude();
@@ -458,133 +454,9 @@ public class ScanFragment extends RoboSherlockFragment implements
 	@Override
 	public void onItemClick(final AdapterView<?> parent, View arg1,
 			final int position, long arg3) {
-		Context mContext = getActivity();
-		final Dialog dialog = new Dialog(mContext);
-		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		dialog.setContentView(R.layout.network_details_dialog);
-		// dialog.setTitle(getActivity().getResources().getString(
-		// R.string.scan_fragment_dialog_title));
-
-		mDefaultPassValue = (TextView) dialog.findViewById(R.id.password_value);
-
-		final ScanResult scannedNetwork = (ScanResult) parent
-				.getItemAtPosition(position);
-
-		int signalLevel = WifiManager.calculateSignalLevel(
-				scannedNetwork.level,
-				WifiNetworkAdapter.MAX_SIGNAL_STRENGTH_LEVEL);
-
-		((ImageView) dialog.findViewById(R.id.networkIcon))
-				.setImageLevel(signalLevel);
-		if (WifiNetworkAdapter.getSecurity(scannedNetwork) != WifiNetworkAdapter.SECURITY_NONE) {
-			// Set an icon of encrypted wi-fi hotspot
-			((ImageView) dialog.findViewById(R.id.networkIcon)).setImageState(
-					WifiNetworkAdapter.ENCRYPTED_STATE_SET, false);
-		}
-		// Setting network's values
-		((TextView) dialog.findViewById(R.id.networkName))
-				.setText(scannedNetwork.SSID);
-		((TextView) dialog.findViewById(R.id.bssid_value))
-				.setText(scannedNetwork.BSSID);
-		((TextView) dialog.findViewById(R.id.encryption_value))
-				.setText(scannedNetwork.capabilities);
-		((TextView) dialog.findViewById(R.id.frequency_value))
-				.setText(scannedNetwork.frequency + " MHz");
-		((TextView) dialog.findViewById(R.id.channel_value)).setText(String
-				.valueOf(ChannelCalculator
-						.getChannelNumber(scannedNetwork.frequency)));
-		((TextView) dialog.findViewById(R.id.intensity_value))
-				.setText(scannedNetwork.level + " dBm");
-
-		// TODO Comprobar si esta red no está ya almacenada
-
-		if (!SavedKeysUtils.existSavedNetwork(scannedNetwork.BSSID,
-				getSherlockActivity())) {
-			// Calculating key
-			IKeyCalculator keyCalculator = KeyCalculatorFactory
-					.getKeyCalculator(new NetData(scannedNetwork.SSID,
-							scannedNetwork.BSSID));
-			if (keyCalculator != null) {
-				mKeyList = keyCalculator.getKey(new NetData(
-						scannedNetwork.SSID, scannedNetwork.BSSID));
-				if (mKeyList != null) {
-					if (mKeyList.size() > 1) {
-						mDefaultPassValue.setText(String.valueOf(mKeyList
-								.size())
-								+ " "
-								+ getText(R.string.number_of_keys_found));
-						((Button) dialog.findViewById(R.id.copyPasswordButton))
-								.setText(String.valueOf(mKeyList.size())
-										+ " "
-										+ getText(R.string.number_of_keys_found));
-					} else if (mKeyList.size() == 1) {
-						mDefaultPassValue.setText(mKeyList.get(0));
-					}
-					// TODO: REFACTOR!!! NO SIRVE PARA CLAVES DE MAS DE UN
-					// RESULTADO
-					((Button) dialog.findViewById(R.id.copyPasswordButton))
-							.setOnClickListener(new OnClickListener() {
-
-								@Override
-								public void onClick(View v) {
-
-									if (mKeyList.size() == 1) {
-
-										copyClipboard(mDefaultPassValue
-												.getText().toString());
-										saveWLANKey(scannedNetwork);
-
-										// if (screenIsLarge == true) {
-										mCallback
-												.onNetworkSelected((ScanResult) parent
-														.getItemAtPosition(position));
-										// }
-										dialog.dismiss();
-									} else {
-										Intent i = new Intent(
-												getSherlockActivity(),
-												KeyListActivity.class);
-										i.putExtra("wlan_name",
-												scannedNetwork.SSID);
-										i.putExtra("wlan_address",
-												scannedNetwork.BSSID);
-										i.putExtra("wlan_latitude", mLatitude);
-										i.putExtra("wlan_longitude", mLongitude);
-										i.putStringArrayListExtra(
-												KeyListActivity.KEY_LIST_KEY,
-												(ArrayList<String>) mKeyList);
-										e = getSherlockActivity()
-												.getSharedPreferences(
-														"viewpager",
-														Context.MODE_PRIVATE)
-												.edit();
-										e.putInt("viewpager_index", 0);
-										e.commit();
-										startActivity(i);
-									}
-
-								}
-							});
-				} else {
-					mDefaultPassValue
-							.setText(getString(R.string.no_default_key));
-					((Button) dialog.findViewById(R.id.copyPasswordButton))
-							.setEnabled(false);
-				}
-			} else {
-				mDefaultPassValue.setText(getString(R.string.no_default_key));
-				((Button) dialog.findViewById(R.id.copyPasswordButton))
-						.setEnabled(false);
-			}
-		} else {
-			((Button) dialog.findViewById(R.id.copyPasswordButton))
-					.setText(getSherlockActivity().getResources().getString(
-							R.string.key_already_store));
-			((Button) dialog.findViewById(R.id.copyPasswordButton))
-					.setEnabled(false);
-		}
-
-		dialog.show();
+		
+		mCallback.onNetworkSelected((ScanResult) parent
+				.getItemAtPosition(position));
 
 	}
 
@@ -608,12 +480,6 @@ public class ScanFragment extends RoboSherlockFragment implements
 
 	}
 
-	private void saveWLANKey(ScanResult s) {
-
-		SavedKeysUtils.saveWLANKey(getSherlockActivity(), s, mLatitude,
-				mLongitude);
-
-	}
 
 	private void initLocation() {
 		myLocation = locationManager
