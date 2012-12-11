@@ -13,11 +13,11 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
+<ProgressBar xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ScanProgressIndicator"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/progress_action_padding"
+    android:layout_marginRight="@dimen/progress_action_padding"
+    android:indeterminate="true" />
 
-<ProgressBar
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="wrap_content"
-  android:layout_height="wrap_content"
-  android:indeterminate="true"
-  android:layout_marginLeft="@dimen/progress_action_padding"
-  android:layout_marginRight="@dimen/progress_action_padding" />

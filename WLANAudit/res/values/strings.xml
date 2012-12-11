@@ -49,7 +49,7 @@
     <string name="delete">Delete</string>
     <string name="copy">Copy</string>
     <string name="title_section3">Section 3</string>
-    <string name="scan_fragment_dialog_title">Information about access point</string>
+    <string name="scan_fragment_dialog_title">Network details</string>
     <string name="title_section2">Section 2</string>
     <string name="title_section1">Section 1</string>
     <string name="hello_world">Hello world!</string>

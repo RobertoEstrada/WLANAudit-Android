@@ -33,13 +33,14 @@ import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
 
 import es.glasspixel.wlanaudit.R;
 import es.glasspixel.wlanaudit.activities.SavedKey;
 import es.glasspixel.wlanaudit.database.KeysSQliteHelper;
 import es.glasspixel.wlanaudit.dominio.SavedKeysUtils;
 
-public class MapFragment extends SherlockFragment {
+public class MapFragment extends RoboSherlockFragment {
 	private static final int LOCATION_SETTINGS = 2;
 	private int mPos = -1;
 	private int mImgRes;

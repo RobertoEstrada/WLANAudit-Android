@@ -10,3 +10,6 @@
 [submodule "Vendor/AndroidMenudrawer"]
 	path = Vendor/AndroidMenudrawer
 	url = git://github.com/SimonVT/android-menudrawer.git
+[submodule "Vendor/SlidingMenu"]
+	path = Vendor/SlidingMenu
+	url = git://github.com/jfeinstein10/SlidingMenu.git

@@ -3,6 +3,12 @@ package es.glasspixel.wlanaudit.fragments;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
+import roboguice.RoboGuice;
+import roboguice.inject.InjectResource;
+import roboguice.inject.InjectView;
+
 import com.actionbarsherlock.app.SherlockFragment;
 
 import android.annotation.SuppressLint;
@@ -25,6 +31,7 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Window;
@@ -35,6 +42,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,6 +51,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
 
 import es.glasspixel.wlanaudit.R;
 import es.glasspixel.wlanaudit.actions.AutoScanAction;
@@ -59,26 +68,60 @@ import es.glasspixel.wlanaudit.keyframework.KeyCalculatorFactory;
 import es.glasspixel.wlanaudit.keyframework.NetData;
 import es.glasspixel.wlanaudit.util.ChannelCalculator;
 
-public class ScanFragment extends SherlockFragment implements
+public class ScanFragment extends RoboSherlockFragment implements
 		OnItemClickListener {
 
-	private Callbacks mCallbacks = sDummyCallbacks;
+	@InjectResource(R.string.improve_precision_dialog_title)
+	String improve_preciosion_dialog_title;
 
-	public interface Callbacks {
+	@InjectResource(R.string.improve_precision_dialog_message)
+	String improve_precision_dialog_message;
 
-		public void onItemSelected(ScanResult s);
+	@InjectResource(R.string.settings)
+	String settings;
 
+	@InjectResource(R.string.no_networks_found)
+	String no_networks_found;
+
+	@InjectResource(android.R.string.cancel)
+	String cancel;
+
+	@InjectView(android.R.id.empty)
+	TextView empty_text;
+
+	@InjectView(android.R.id.list)
+	ListView list_view;
+
+	/**
+	 * The parent activity that listens for this fragment callbacks
+	 */
+	private ScanFragmentListener mCallback;
+
+	/**
+	 * Interface to pass fragment callbacks to parent activity. Parent activity
+	 * must implement this to be aware of the events of the fragment.
+	 */
+	public interface ScanFragmentListener {
+		/**
+		 * Observers must implement this method to be notified of which network
+		 * was selected on this fragment.
+		 * 
+		 * @param networkData
+		 *            The network data of the selected item.
+		 */
+		public void onNetworkSelected(ScanResult networkData);
 	}
-
-	private static Callbacks sDummyCallbacks = new Callbacks() {
-		@Override
-		public void onItemSelected(ScanResult s) {
-		}
-	};
 
 	private static final int LOCATION_SETTINGS = 2;
 
 	View myFragmentView;
+
+	/**
+	 * The {@link ViewPager} that will host the activty fragments.
+	 */
+	@InjectView(R.id.pager)
+	@Nullable
+	private ViewPager mViewPager;
 
 	/**
 	 * Manager of the wifi network interface
@@ -105,7 +148,7 @@ public class ScanFragment extends SherlockFragment implements
 
 	private List<String> mKeyList;
 
-	private TextView mDefaultPassValue;
+	TextView mDefaultPassValue;
 
 	private boolean screenIsLarge;
 
@@ -119,6 +162,7 @@ public class ScanFragment extends SherlockFragment implements
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		// RoboGuice.getInjector(getActivity()).injectMembersWithoutViews(this);
 		if (savedInstanceState != null
 				&& savedInstanceState.getBoolean("autoscan_state")) {
 			mAutoScanAction = new AutoScanAction(getActivity(), true);
@@ -128,37 +172,17 @@ public class ScanFragment extends SherlockFragment implements
 		screenIsLarge = getSherlockActivity().getResources().getBoolean(
 				R.bool.screen_large);
 
-		// if (!screenIsLarge) {
-		// this.setHasOptionsMenu(true);
-		// }
-
 		locationManager = (LocationManager) getSherlockActivity()
 				.getSystemService(Context.LOCATION_SERVICE);
 
-		// // List all providers:
-		// List<String> providers = locationManager.getAllProviders();
-		// for (String provider : providers) {
-		// printProvider(provider);
-		// }
-		//
-		// Criteria criteria = new Criteria();
-		// bestProvider = locationManager.getBestProvider(criteria, false);
-		// Log.d("MapActivity", "best provider: " + bestProvider);
-
-		// if (locationManager != null && bestProvider != null) {
-
-		// if (bestProvider.equals(LocationManager.NETWORK_PROsaveVIDER)) {
 		if (!locationManager
 				.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
 			AlertDialog.Builder dialogo1 = new AlertDialog.Builder(
 					getSherlockActivity());
-			dialogo1.setTitle(getSherlockActivity().getResources().getString(
-					R.string.improve_precision_dialog_title));
-			dialogo1.setMessage(getSherlockActivity().getResources().getString(
-					R.string.improve_precision_dialog_message));
+			dialogo1.setTitle(improve_preciosion_dialog_title);
+			dialogo1.setMessage(improve_precision_dialog_message);
 			dialogo1.setCancelable(false);
-			dialogo1.setPositiveButton(getSherlockActivity().getResources()
-					.getString(R.string.settings),
+			dialogo1.setPositiveButton(settings,
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialogo1, int id) {
 							Intent intent = new Intent(
@@ -166,8 +190,7 @@ public class ScanFragment extends SherlockFragment implements
 							startActivityForResult(intent, LOCATION_SETTINGS);
 						}
 					});
-			dialogo1.setNegativeButton(getSherlockActivity().getResources()
-					.getString(android.R.string.cancel),
+			dialogo1.setNegativeButton(cancel,
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialogo1, int id) {
 							dialogo1.dismiss();
@@ -232,21 +255,25 @@ public class ScanFragment extends SherlockFragment implements
 	}
 
 	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+
+		super.onViewCreated(view, savedInstanceState);
+		// RoboGuice.getInjector(getActivity()).injectViewMembers(this);
+		empty_text.setText(no_networks_found);
+		list_view.setEmptyView(empty_text);
+
+		list_view.setAdapter(new WifiNetworkAdapter(getSherlockActivity(),
+				R.layout.network_list_element_layout,
+				new ArrayList<ScanResult>()));
+		list_view.setOnItemClickListener(this);
+	}
+
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
 		myFragmentView = inflater.inflate(R.layout.saved_keys_fragment,
 				container, false);
-		((TextView) myFragmentView.findViewById(R.id.empty))
-				.setText(getSherlockActivity().getResources().getString(
-						R.string.no_networks_found));
-		((ListView) myFragmentView.findViewById(android.R.id.list))
-				.setEmptyView(getSherlockActivity().findViewById(R.id.empty));
-
-		((ListView) myFragmentView.findViewById(android.R.id.list))
-				.setAdapter(new WifiNetworkAdapter(getSherlockActivity(),
-						R.layout.network_list_element_layout,
-						new ArrayList<ScanResult>()));
 
 		prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		// If preference does not exist
@@ -261,9 +288,6 @@ public class ScanFragment extends SherlockFragment implements
 			editor.putInt("autoscan_interval", 30);
 			editor.commit();
 		}
-
-		((ListView) myFragmentView.findViewById(android.R.id.list))
-				.setOnItemClickListener(this);
 
 		initScan();
 
@@ -303,12 +327,10 @@ public class ScanFragment extends SherlockFragment implements
 			}
 			if (refresh != null)
 				refresh.setActionView(null);
-			((TextView) myFragmentView.findViewById(R.id.empty))
-					.setText(getSherlockActivity().getResources().getString(
-							R.string.no_networks_found));
-			((ListView) myFragmentView.findViewById(android.R.id.list))
-					.setEmptyView(getSherlockActivity()
-							.findViewById(R.id.empty));
+			empty_text.setText(getSherlockActivity().getResources().getString(
+					R.string.no_networks_found));
+			list_view.setEmptyView(getSherlockActivity().findViewById(
+					R.id.empty));
 		}
 	}
 
@@ -339,17 +361,12 @@ public class ScanFragment extends SherlockFragment implements
 					if (refresh != null)
 						refresh.setActionView(null);
 					if (mWifiManager.getScanResults().size() > 0) {
-						((ListView) myFragmentView
-								.findViewById(android.R.id.list))
-								.setAdapter(new WifiNetworkAdapter(
-										getSherlockActivity(),
-										R.layout.network_list_element_layout,
-										res));
+						list_view.setAdapter(new WifiNetworkAdapter(
+								getSherlockActivity(),
+								R.layout.network_list_element_layout, res));
 					} else {
-						((ListView) myFragmentView
-								.findViewById(android.R.id.list))
-								.setEmptyView(getSherlockActivity()
-										.findViewById(R.id.empty));
+						list_view.setEmptyView(getSherlockActivity()
+								.findViewById(R.id.empty));
 					}
 				}
 
@@ -429,18 +446,18 @@ public class ScanFragment extends SherlockFragment implements
 
 	@Override
 	public void onAttach(Activity activity) {
-
 		super.onAttach(activity);
-		if (!(activity instanceof Callbacks)) {
-			throw new IllegalStateException(
-					"Activity must implement fragment's callbacks.");
+		try {
+			mCallback = (ScanFragmentListener) activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(activity.toString()
+					+ " must implement OnNetworkSelectedListener");
 		}
-
-		mCallbacks = (Callbacks) activity;
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+	public void onItemClick(final AdapterView<?> parent, View arg1,
+			final int position, long arg3) {
 		Context mContext = getActivity();
 		final Dialog dialog = new Dialog(mContext);
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -450,8 +467,8 @@ public class ScanFragment extends SherlockFragment implements
 
 		mDefaultPassValue = (TextView) dialog.findViewById(R.id.password_value);
 
-		final ScanResult scannedNetwork = (ScanResult) arg0
-				.getItemAtPosition(arg2);
+		final ScanResult scannedNetwork = (ScanResult) parent
+				.getItemAtPosition(position);
 
 		int signalLevel = WifiManager.calculateSignalLevel(
 				scannedNetwork.level,
@@ -518,8 +535,9 @@ public class ScanFragment extends SherlockFragment implements
 										saveWLANKey(scannedNetwork);
 
 										// if (screenIsLarge == true) {
-										mCallbacks
-												.onItemSelected(scannedNetwork);
+										mCallback
+												.onNetworkSelected((ScanResult) parent
+														.getItemAtPosition(position));
 										// }
 										dialog.dismiss();
 									} else {

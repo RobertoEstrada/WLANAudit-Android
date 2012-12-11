@@ -2,25 +2,21 @@ package es.glasspixel.wlanaudit.adapters;
 
 import java.util.List;
 
-import es.glasspixel.wlanaudit.R;
-import es.glasspixel.wlanaudit.activities.SavedKey;
-
 import android.content.Context;
-import android.net.wifi.ScanResult;
-import android.net.wifi.WifiManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
+import es.glasspixel.wlanaudit.R;
+import es.glasspixel.wlanaudit.database.entities.Network;
 
 public class MapElementsAdapter extends BaseAdapter {
 
-	private List<SavedKey> elements;
+	private List<Network> elements;
 	private Context mContext;
 
-	public MapElementsAdapter(Context c, List<SavedKey> elements) {
+	public MapElementsAdapter(Context c, List<Network> elements) {
 		mContext = c;
 		this.elements = elements;
 	}
@@ -55,20 +51,11 @@ public class MapElementsAdapter extends BaseAdapter {
 
 		if (elements.get(position) != null) {
 			((TextView) listItem.findViewById(R.id.networkName))
-					.setText(elements.get(position).getWlan_name());
-			((TextView) listItem.findViewById(R.id.networkKey))
-					.setText(elements.get(position).getKeys().size() == 1 ? elements
-							.get(position).getKeys().get(0)
-							: printKeys(elements.get(position).getKeys()));
+					.setText(elements.get(position).mSSID);
+			((TextView) listItem.findViewById(R.id.networkAddress))
+					.setText(elements.get(position).mBSSID);
 		}
 		return listItem;
 	}
 
-	private String printKeys(List<String> keys) {
-		String r = "";
-		for (String s : keys) {
-			r += s + ",";
-		}
-		return r;
-	}
 }

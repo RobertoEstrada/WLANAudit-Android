@@ -1,10 +1,14 @@
 package es.glasspixel.wlanaudit.activities;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
 import org.osmdroid.views.overlay.OverlayItem;
+
+import roboguice.util.RoboContext;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -18,6 +22,7 @@ import android.widget.Toast;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.google.inject.Key;
 
 import com.slidingmenu.lib.SlidingMenu;
 import com.slidingmenu.lib.app.SlidingFragmentActivity;
@@ -28,7 +33,9 @@ import es.glasspixel.wlanaudit.fragments.SavedKeysMenuFragment;
 import es.glasspixel.wlanaudit.fragments.SavedKeysMenuFragment.OnSavedKeySelectedListener;
 
 public class SlidingMapActivity extends SlidingFragmentActivity implements
-		OnSavedKeySelectedListener {
+		OnSavedKeySelectedListener,RoboContext {
+	
+	protected HashMap<Key<?>, Object> scopedObjects = new HashMap<Key<?>, Object>();
 
 	private static final int SHOW_MENU = 0;
 	private MapFragment mContent;
@@ -150,5 +157,10 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
 		((MapFragment) getSupportFragmentManager().findFragmentById(
 				R.id.content_frame)).setFocused(s);
 
+	}
+
+	@Override
+	public Map<Key<?>, Object> getScopedObjectMap() {
+		return scopedObjects;
 	}
 }

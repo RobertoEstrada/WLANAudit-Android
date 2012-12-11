@@ -35,7 +35,7 @@
         </TextView>
 
         <TextView
-            android:id="@+id/networkKey"
+            android:id="@+id/networkAddress"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/networkName"

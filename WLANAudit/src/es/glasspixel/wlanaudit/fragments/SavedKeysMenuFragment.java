@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.actionbarsherlock.app.SherlockListFragment;
+import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockListFragment;
 
 import es.glasspixel.wlanaudit.R;
 import es.glasspixel.wlanaudit.activities.KeyListActivity;
@@ -32,7 +33,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class SavedKeysMenuFragment extends SherlockListFragment implements
+public class SavedKeysMenuFragment extends RoboSherlockListFragment implements
 		OnItemClickListener {
 	private List<SavedKey> mKeys;
 	private SlidingMapActivity listener;

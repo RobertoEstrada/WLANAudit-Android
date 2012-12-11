@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical" >
 
+
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -230,6 +231,12 @@
         android:gravity="right"
         android:paddingBottom="10dip"
         android:paddingTop="10dip" >
+
+        <ImageButton
+            android:id="@+id/starNetworkButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/btn_star_big_on" />
 
         <Button
             android:id="@+id/copyPasswordButton"
