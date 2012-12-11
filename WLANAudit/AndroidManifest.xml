@@ -94,16 +94,7 @@
             </intent-filter>
         </receiver>
 
-        <!-- <activity -->
-        <!-- android:name=".NetworkListActivitySwipe" -->
-        <!-- android:label="@string/title_activity_network_list_activity_swipe" > -->
-        <!-- </activity> -->
-        <!-- <activity -->
-        <!-- android:name="es.glasspixel.wlanaudit.activities.MenuActivity" -->
-        <!-- android:label="@string/app_name" > -->
-        <!-- </activity> -->
 
->>>>>>> refs/remotes/choose_remote_name/WLANAudit3
     </application>
 
 </manifest>
