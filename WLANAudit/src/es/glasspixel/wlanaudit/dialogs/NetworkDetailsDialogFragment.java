@@ -39,6 +39,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -232,6 +233,17 @@ public class NetworkDetailsDialogFragment extends RoboDialogFragment {
 			public void onClick(View v) {
 				saveNetwork(mNetworkData, mLastKnownLocation);
 				dismiss();
+			}
+		});
+
+		mStarNetworkButton.setOnLongClickListener(new OnLongClickListener() {
+
+			@Override
+			public boolean onLongClick(View v) {
+				Toast.makeText(getActivity(),
+						getResources().getString(R.string.save_and_copy_text),
+						Toast.LENGTH_LONG).show();
+				return false;
 			}
 		});
 

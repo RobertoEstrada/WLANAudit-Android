@@ -3,6 +3,7 @@ package es.glasspixel.wlanaudit.fragments;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.orman.mapper.Model;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
@@ -38,6 +39,7 @@ import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragmen
 import es.glasspixel.wlanaudit.R;
 import es.glasspixel.wlanaudit.activities.SavedKey;
 import es.glasspixel.wlanaudit.database.KeysSQliteHelper;
+import es.glasspixel.wlanaudit.database.entities.Network;
 import es.glasspixel.wlanaudit.dominio.SavedKeysUtils;
 
 public class MapFragment extends RoboSherlockFragment {
@@ -54,7 +56,7 @@ public class MapFragment extends RoboSherlockFragment {
 	private OverlayItem positionOverlay;
 	protected double keyLatitude;
 	protected double keyLongitude;
-	private List<SavedKey> mKeys;
+	private List<Network> mKeys;
 	private ItemizedOverlayWithFocus<OverlayItem> anotherItemizedIconOverlay;
 	protected Location myLocation;
 
@@ -64,8 +66,9 @@ public class MapFragment extends RoboSherlockFragment {
 	@Override
 	public void onResume() {
 		if (myLocation != null) {
-			showLocation(myLocation);
+			centerMap(myLocation, false);
 		}
+
 		super.onResume();
 	}
 
@@ -130,13 +133,6 @@ public class MapFragment extends RoboSherlockFragment {
 			initLocation();
 
 		}
-		// }
-
-		// } else {
-		// Toast.makeText(getSherlockActivity(),
-		// "Your location is unavailable now", Toast.LENGTH_LONG)
-		// .show();
-		// }
 
 		if (mPos == -1 && savedInstanceState != null)
 			mPos = savedInstanceState.getInt("mPos");
@@ -150,13 +146,13 @@ public class MapFragment extends RoboSherlockFragment {
 				.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 		locationManager.requestLocationUpdates(
 				LocationManager.NETWORK_PROVIDER, 20, 0, listener);
-		if (myLocation != null) {
-			showLocation(myLocation);
-		} else {
-			Toast.makeText(getSherlockActivity(),
-					"Your location is unavailable now", Toast.LENGTH_LONG)
-					.show();
-		}
+		// if (myLocation != null) {
+		// showLocation(myLocation);
+		// } else {
+		// Toast.makeText(getSherlockActivity(),
+		// "Your location is unavailable now", Toast.LENGTH_LONG)
+		// .show();
+		// }
 
 	}
 
@@ -186,10 +182,10 @@ public class MapFragment extends RoboSherlockFragment {
 			showLocation(lastKnownLocation);
 	}
 
-	public void setFocused(SavedKey s) {
+	public void setFocused(Network s) {
 		int i = 0;
-		for (SavedKey sk : mKeys) {
-			if (sk.getAddress().equals(s.getAddress())) {
+		for (Network sk : mKeys) {
+			if (sk.mSSID.equals(s.mSSID)) {
 				break;
 			}
 			i++;
@@ -207,7 +203,6 @@ public class MapFragment extends RoboSherlockFragment {
 	}
 
 	public void showLocation(Location l) {
-		final GeoPoint gp = new GeoPoint(l.getLatitude(), l.getLongitude());
 
 		Toast.makeText(
 				getSherlockActivity(),
@@ -215,13 +210,22 @@ public class MapFragment extends RoboSherlockFragment {
 						R.string.position_refreshed), Toast.LENGTH_LONG).show();
 
 		changePositionInMap(l);
-		this.centerMap(gp, false);
+		this.centerMap(l, false);
 
 	}
 
-	public void centerMap(GeoPoint g, boolean zoom) {
-		// myMapController.animateTo(g);
-		myMapController.setCenter(g);
+	public void centerMap(GeoPoint gp, boolean zoom) {
+
+		myMapController.setCenter(gp);
+
+		if (zoom)
+			myMapController.setZoom(myOpenMapView.getMaxZoomLevel() - 5);
+
+	}
+
+	public void centerMap(Location l, boolean zoom) {
+		final GeoPoint gp = new GeoPoint(l.getLatitude(), l.getLongitude());
+		myMapController.setCenter(gp);
 
 		if (zoom)
 			myMapController.setZoom(myOpenMapView.getMaxZoomLevel() - 5);
@@ -238,11 +242,12 @@ public class MapFragment extends RoboSherlockFragment {
 
 	private void loadKeysPosition() {
 		this.loadSavedKeys();
-		for (SavedKey s : mKeys) {
-			anotherOverlayItemArray.add(new OverlayItem(s.getWlan_name(), s
-					.getKeys().size() == 1 ? s.getKeys().get(0) : printKeys(s
-					.getKeys()),
-					new GeoPoint(s.getLatitude(), s.getLongitude())));
+		for (Network s : mKeys) {
+			anotherOverlayItemArray.add(new OverlayItem(s.mSSID, s
+					.getPossibleDefaultKeys().size() == 1 ? s
+					.getPossibleDefaultKeys().get(0) : printKeys(s
+					.getPossibleDefaultKeys()), new GeoPoint(s.mLatitude,
+					s.mLongitude)));
 
 		}
 
@@ -289,6 +294,7 @@ public class MapFragment extends RoboSherlockFragment {
 		// myOpenMapView.getOverlays().clear();
 
 		myOpenMapView.getOverlays().add(positiontemizedIconOverlay);
+		myOpenMapView.invalidate();
 
 	}
 
@@ -334,8 +340,9 @@ public class MapFragment extends RoboSherlockFragment {
 		super.onStop();
 	}
 
-	protected List<SavedKey> loadSavedKeys() {
-		mKeys = SavedKeysUtils.loadSavedKeys(getSherlockActivity());
+	protected List<Network> loadSavedKeys() {
+		// mKeys = SavedKeysUtils.loadSavedKeys(getSherlockActivity());
+		mKeys = Model.fetchAll(Network.class);
 
 		return mKeys;
 

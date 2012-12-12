@@ -28,13 +28,14 @@ import com.slidingmenu.lib.SlidingMenu;
 import com.slidingmenu.lib.app.SlidingFragmentActivity;
 
 import es.glasspixel.wlanaudit.R;
+import es.glasspixel.wlanaudit.database.entities.Network;
 import es.glasspixel.wlanaudit.fragments.MapFragment;
 import es.glasspixel.wlanaudit.fragments.SavedKeysMenuFragment;
 import es.glasspixel.wlanaudit.fragments.SavedKeysMenuFragment.OnSavedKeySelectedListener;
 
 public class SlidingMapActivity extends SlidingFragmentActivity implements
-		OnSavedKeySelectedListener,RoboContext {
-	
+		OnSavedKeySelectedListener, RoboContext {
+
 	protected HashMap<Key<?>, Object> scopedObjects = new HashMap<Key<?>, Object>();
 
 	private static final int SHOW_MENU = 0;
@@ -55,12 +56,11 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
 			setSlidingActionBarEnabled(false);
 			getSlidingMenu().setSlidingEnabled(true);
 			getSlidingMenu().setMode(SlidingMenu.LEFT);
-			// getSlidingMenu().setShadowDrawable(R.drawable.shadowright);
+
 			getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
-			// show home as up so we can toggle
 
 		} else {
-			// add a dummy view
+
 			View v = new View(this);
 			setBehindContentView(v);
 			getSlidingMenu().setSlidingEnabled(false);
@@ -101,7 +101,8 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
 
 		getSupportMenuInflater().inflate(R.menu.menu_map_location, menu);
 		if (getSlidingMenu().isSlidingEnabled()) {
-			menu.add(0, SHOW_MENU, 1, getResources().getString(R.string.show_keys_list));
+			menu.add(0, SHOW_MENU, 1,
+					getResources().getString(R.string.show_keys_list));
 			menu.getItem(1).setIcon(R.drawable.ic_menu_account_list);
 			menu.getItem(1).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
@@ -151,7 +152,7 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
 	}
 
 	@Override
-	public void onSavedKeySelected(SavedKey s) {
+	public void onSavedKeySelected(Network s) {
 
 		getSlidingMenu().showAbove();
 		((MapFragment) getSupportFragmentManager().findFragmentById(

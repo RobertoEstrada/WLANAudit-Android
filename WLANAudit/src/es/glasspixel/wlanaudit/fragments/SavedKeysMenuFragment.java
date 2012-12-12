@@ -3,6 +3,8 @@ package es.glasspixel.wlanaudit.fragments;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.orman.mapper.Model;
+
 import com.actionbarsherlock.app.SherlockListFragment;
 import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockListFragment;
 
@@ -11,6 +13,7 @@ import es.glasspixel.wlanaudit.activities.KeyListActivity;
 import es.glasspixel.wlanaudit.activities.SavedKey;
 import es.glasspixel.wlanaudit.activities.SlidingMapActivity;
 import es.glasspixel.wlanaudit.database.KeysSQliteHelper;
+import es.glasspixel.wlanaudit.database.entities.Network;
 import es.glasspixel.wlanaudit.dominio.SavedKeysUtils;
 import es.glasspixel.wlanaudit.keyframework.IKeyCalculator;
 import es.glasspixel.wlanaudit.keyframework.KeyCalculatorFactory;
@@ -35,7 +38,7 @@ import android.widget.AdapterView.OnItemClickListener;
 
 public class SavedKeysMenuFragment extends RoboSherlockListFragment implements
 		OnItemClickListener {
-	private List<SavedKey> mKeys;
+	private List<Network> mKeys;
 	private SlidingMapActivity listener;
 	private int mPosition;
 	LayoutInflater mInflater;
@@ -79,12 +82,12 @@ public class SavedKeysMenuFragment extends RoboSherlockListFragment implements
 	}
 
 	public interface OnSavedKeySelectedListener {
-		public void onSavedKeySelected(SavedKey s);
+		public void onSavedKeySelected(Network s);
 	}
 
-	protected List<SavedKey> loadSavedKeys() {
+	protected List<Network> loadSavedKeys() {
 
-		return SavedKeysUtils.loadSavedKeys(getSherlockActivity());
+		return mKeys = Model.fetchAll(Network.class);
 
 	}
 
@@ -131,32 +134,24 @@ public class SavedKeysMenuFragment extends RoboSherlockListFragment implements
 			}
 
 			((TextView) v.findViewById(R.id.networkName)).setText(mKeys.get(
-					position).getWlan_name());
-			if (mKeys.get(position).getLatitude() > -999999999
-					&& mKeys.get(position).getLongitude() > -999999999)
+					position).mSSID);
+			if (mKeys.get(position).mLatitude > -999999999
+					&& mKeys.get(position).mLongitude > -999999999)
 				((ImageView) v.findViewById(R.id.location_icon_saved_key))
 						.setVisibility(View.VISIBLE);
 			// ((TextView) v.findViewById(R.id.networkKey))
 			// .setText(printKeys(mKeys.get(position).getKeys()));
 
-			((TextView) v.findViewById(R.id.networkKey)).setText(mKeys.get(
-					position).getAddress());
+			((TextView) v.findViewById(R.id.networkAddress)).setText(mKeys.get(
+					position).mBSSID);
 			return v;
 		}
-	}
-
-	private String printKeys(List<String> keys) {
-		String r = "";
-		for (String s : keys) {
-			r += s + ",";
-		}
-		return r;
-	}
+	}	
 
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-		if (mKeys.get(arg2).getLatitude() > -1
-				&& mKeys.get(arg2).getLongitude() > -1)
+		if (mKeys.get(arg2).mLatitude > -999999999
+				&& mKeys.get(arg2).mLongitude > -999999999)
 			listener.onSavedKeySelected(mKeys.get(arg2));
 
 	}

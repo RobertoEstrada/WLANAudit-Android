@@ -69,5 +69,6 @@
     <string name="improve_precision_dialog_title">Improve precision of location</string>
     <string name="improve_precision_dialog_message">To set your location, please select the Location option in their settings. You can access them by clicking the Settings button</string>
     <string name="settings">Settings</string>
+    <string name="save_and_copy_text">Save and copy</string>
 
 </resources>

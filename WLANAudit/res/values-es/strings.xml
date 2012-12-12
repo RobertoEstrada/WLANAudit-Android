@@ -59,8 +59,8 @@
     <string name="menu_map_option">Mostrar claves almacenadas en el mapa</string>
     <string name="no_data_scan_keys">No hay puntos de acceso cercanos</string>
     <string name="position_refreshed">Posición actualizada</string>
-    
     <string name="key_already_store">Red ya almacenada</string>
     <string name="settings">Ajustes</string>
+    <string name="save_and_copy_text">Guardar red y copiar clave</string>
 
 </resources>
