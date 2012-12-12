@@ -22,7 +22,7 @@
         android:theme="@style/Theme.Styled" >
         <activity
             android:name="es.glasspixel.wlanaudit.activities.NetworkListActivitySwipe"
-            android:configChanges="orientation" >
+          >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

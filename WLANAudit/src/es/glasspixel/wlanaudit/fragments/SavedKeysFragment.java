@@ -102,8 +102,8 @@ public class SavedKeysFragment extends RoboSherlockListFragment implements
 
 		boolean b = getArguments().getBoolean("screen_large");
 
-		if (!b)
-			setHasOptionsMenu(true);
+		// if (!b)
+		// setHasOptionsMenu(true);
 
 		return inflater.inflate(R.layout.saved_keys_fragment, container, false);
 	}
@@ -142,40 +142,6 @@ public class SavedKeysFragment extends RoboSherlockListFragment implements
 						.getItemAtPosition(position));
 			}
 		});
-	}
-
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		menu.clear();
-		inflater.inflate(R.menu.networklistactivity_savedkeys_menu, menu);
-		super.onCreateOptionsMenu(menu, inflater);
-	}
-
-	/**
-	 * Menu option handling
-	 */
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		Intent i;
-		// Handle item selection
-		switch (item.getItemId()) {
-
-		case R.id.preferenceOption:
-			i = new Intent(getSherlockActivity(),
-					WLANAuditPreferencesActivity.class);
-			startActivity(i);
-			return true;
-		case R.id.aboutOption:
-			i = new Intent(getSherlockActivity(), AboutActivity.class);
-			startActivity(i);
-			return true;
-		case R.id.mapOption:
-			i = new Intent(getSherlockActivity(), SlidingMapActivity.class);
-			startActivity(i);
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
-		}
 	}
 
 	private ActionMode.Callback mActionCallBack = new Callback() {

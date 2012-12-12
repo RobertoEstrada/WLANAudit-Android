@@ -110,6 +110,8 @@ public class ScanFragment extends RoboSherlockFragment implements
 		 *            The network data of the selected item.
 		 */
 		public void onNetworkSelected(ScanResult networkData);
+		
+		public void scanCompleted();
 	}
 
 	private static final int LOCATION_SETTINGS = 2;
@@ -139,7 +141,7 @@ public class ScanFragment extends RoboSherlockFragment implements
 	 * Handle to the action bar's autoscan action to activate or deactivate the
 	 * autoscan on lifecycle events that require it
 	 */
-	private AutoScanAction mAutoScanAction;
+	public AutoScanAction mAutoScanAction;
 
 	/**
 	 * Handle to the action bar's refresh action
@@ -205,7 +207,7 @@ public class ScanFragment extends RoboSherlockFragment implements
 		}
 		// }
 		Log.d("ScanFragment", "showing menu..");
-		setHasOptionsMenu(true);
+		// setHasOptionsMenu(true);
 
 	}
 
@@ -320,8 +322,7 @@ public class ScanFragment extends RoboSherlockFragment implements
 				refresh.setActionView(null);
 				refresh.setEnabled(false);
 			}
-			if (refresh != null)
-				refresh.setActionView(null);
+			mCallback.scanCompleted();
 			empty_text.setText(getSherlockActivity().getResources().getString(
 					R.string.no_networks_found));
 			list_view.setEmptyView(getSherlockActivity().findViewById(
@@ -353,8 +354,7 @@ public class ScanFragment extends RoboSherlockFragment implements
 				List<ScanResult> res = mWifiManager.getScanResults();
 
 				if (myFragmentView != null && getSherlockActivity() != null) {
-					if (refresh != null)
-						refresh.setActionView(null);
+					mCallback.scanCompleted();
 					if (mWifiManager.getScanResults().size() > 0) {
 						list_view.setAdapter(new WifiNetworkAdapter(
 								getSherlockActivity(),
@@ -370,75 +370,7 @@ public class ScanFragment extends RoboSherlockFragment implements
 		getSherlockActivity().registerReceiver(mCallBackReceiver, i);
 	}
 
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		menu.clear();
-		inflater.inflate(R.menu.networklistactivity_menu, menu);
-		refresh = (MenuItem) menu.findItem(R.id.scanOption);
-		automatic_scan = (MenuItem) menu.findItem(R.id.toggleAutoscanOption);
-		checkAutoScanStatus();
-		super.onCreateOptionsMenu(menu, inflater);
-
-	}
-
-	/**
-	 * Menu option handling
-	 */
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		Intent i;
-		// Handle item selection
-		switch (item.getItemId()) {
-		case R.id.scanOption:
-
-			startScan();
-			if (refresh != null)
-				refresh.setActionView(R.layout.indeterminate_progress_action);
-			return true;
-		case R.id.toggleAutoscanOption:
-			// if (mPosition == 0)
-			mAutoScanAction.performAction();
-			checkAutoScanStatus();
-
-			return true;
-		case R.id.preferenceOption:
-			i = new Intent(getActivity(), WLANAuditPreferencesActivity.class);
-			e = getSherlockActivity().getSharedPreferences("viewpager",
-					Context.MODE_PRIVATE).edit();
-			e.putInt("viewpager_index", 0);
-			e.commit();
-			startActivity(i);
-			return true;
-		case R.id.aboutOption:
-			i = new Intent(getActivity(), AboutActivity.class);
-			e = getSherlockActivity().getSharedPreferences("viewpager",
-					Context.MODE_PRIVATE).edit();
-			e.putInt("viewpager_index", 0);
-			e.commit();
-			startActivity(i);
-			return true;
-		case R.id.mapOption:
-			i = new Intent(getSherlockActivity(), SlidingMapActivity.class);
-			e = getSherlockActivity().getSharedPreferences("viewpager",
-					Context.MODE_PRIVATE).edit();
-			e.putInt("viewpager_index", 0);
-			e.commit();
-			startActivity(i);
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
-		}
-	}
-
-	private void checkAutoScanStatus() {
-		if (mAutoScanAction.isAutoScanEnabled()) {
-			automatic_scan.setIcon(R.drawable.ic_autoscan);
-		} else {
-			automatic_scan.setIcon(R.drawable.ic_autoscan_disabled);
-		}
-
-	}
-
+	
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);

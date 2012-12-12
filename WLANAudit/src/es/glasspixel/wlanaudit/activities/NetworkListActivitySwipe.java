@@ -23,6 +23,9 @@ import javax.annotation.Nullable;
 
 import roboguice.inject.InjectView;
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences.Editor;
 import android.content.res.Resources;
 import android.net.wifi.ScanResult;
 import android.os.Bundle;
@@ -31,11 +34,15 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockFragmentActivity;
 import com.google.inject.Inject;
 
 import es.glasspixel.wlanaudit.R;
+import es.glasspixel.wlanaudit.actions.AutoScanAction;
 import es.glasspixel.wlanaudit.database.entities.Network;
 import es.glasspixel.wlanaudit.dialogs.NetworkDetailsDialogFragment;
 import es.glasspixel.wlanaudit.dialogs.SavedNetworkDetailsDialogFragment;
@@ -80,6 +87,14 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity
 	@Inject
 	private Resources mResources;
 
+	private MenuItem refresh;
+
+	private MenuItem automatic_scan;
+
+	private AutoScanAction mAutoScanAction;
+
+	private MenuItem map_menu_item;
+
 	/**
 	 * Lifecycle management: Activity is being created
 	 */
@@ -87,6 +102,13 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_network_list_activity_swipe);
+
+		if (savedInstanceState != null
+				&& savedInstanceState.getBoolean("autoscan_state")) {
+			mAutoScanAction = new AutoScanAction(this, true);
+		} else {
+			mAutoScanAction = new AutoScanAction(this);
+		}
 
 		mFragments = new ArrayList<Fragment>();
 		mFragments.add(new ScanFragment());
@@ -100,6 +122,26 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity
 			mSectionsPagerAdapter = new SectionsPagerAdapter(
 					getSupportFragmentManager());
 			mViewPager.setAdapter(mSectionsPagerAdapter);
+			mViewPager.setOnPageChangeListener(new OnPageChangeListener() {
+
+				@Override
+				public void onPageSelected(int arg0) {
+					
+
+				}
+
+				@Override
+				public void onPageScrolled(int arg0, float arg1, int arg2) {
+					checkMenuItems();
+
+				}
+
+				@Override
+				public void onPageScrollStateChanged(int arg0) {
+					// TODO Auto-generated method stub
+
+				}
+			});
 		} else {
 			getSupportFragmentManager().beginTransaction()
 					.replace(R.id.scan_fragment, mFragments.get(0), "tag")
@@ -118,7 +160,81 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		// super.onSaveInstanceState(outState);
-		// outState.remove("android:support:fragments");
+		outState.remove("android:support:fragments");
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getSupportMenuInflater().inflate(R.menu.networklistactivity_menu, menu);
+		refresh = (MenuItem) menu.findItem(R.id.scanOption);
+		automatic_scan = (MenuItem) menu.findItem(R.id.toggleAutoscanOption);
+		map_menu_item = (MenuItem) menu.findItem(R.id.mapOption);
+		checkMenuItems();
+		checkAutoScanStatus();
+
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	private void checkMenuItems() {
+		if (mViewPager != null) {
+			if (mViewPager.getCurrentItem() == 0) {
+				refresh.setVisible(true);
+				automatic_scan.setVisible(true);
+				map_menu_item.setVisible(false);
+			} else {
+				refresh.setVisible(false);
+				automatic_scan.setVisible(false);
+				map_menu_item.setVisible(true);
+			}
+		}
+
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		Intent i;
+		// Handle item selection
+		switch (item.getItemId()) {
+		case R.id.scanOption:
+
+			((ScanFragment) mFragments.get(0)).startScan();
+			if (refresh != null)
+				refresh.setActionView(R.layout.indeterminate_progress_action);
+			return true;
+		case R.id.toggleAutoscanOption:
+			// if (mPosition == 0)
+			((ScanFragment) mFragments.get(0)).mAutoScanAction.performAction();
+			checkAutoScanStatus();
+
+			return true;
+		case R.id.preferenceOption:
+			i = new Intent(this, WLANAuditPreferencesActivity.class);
+
+			startActivity(i);
+			return true;
+		case R.id.aboutOption:
+			i = new Intent(this, AboutActivity.class);
+
+			startActivity(i);
+			return true;
+		case R.id.mapOption:
+			i = new Intent(this, SlidingMapActivity.class);
+
+			startActivity(i);
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+
+	}
+
+	public void checkAutoScanStatus() {
+		if (mAutoScanAction.isAutoScanEnabled()) {
+			automatic_scan.setIcon(R.drawable.ic_autoscan);
+		} else {
+			automatic_scan.setIcon(R.drawable.ic_autoscan_disabled);
+		}
+
 	}
 
 	/**
@@ -218,5 +334,11 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity
 			}
 			return null;
 		}
+	}
+
+	@Override
+	public void scanCompleted() {
+		refresh.setActionView(null);
+
 	}
 }
