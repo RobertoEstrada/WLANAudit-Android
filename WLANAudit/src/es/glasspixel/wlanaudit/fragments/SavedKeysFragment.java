@@ -1,4 +1,3 @@
-
 package es.glasspixel.wlanaudit.fragments;
 
 import java.util.List;
@@ -6,6 +5,7 @@ import java.util.List;
 import org.orman.mapper.Model;
 
 import roboguice.inject.InjectView;
+import sun.security.action.GetIntegerAction;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -32,186 +32,201 @@ import es.glasspixel.wlanaudit.adapters.SavedNetworksAdapter;
 import es.glasspixel.wlanaudit.database.entities.Network;
 import es.glasspixel.wlanaudit.interfaces.OnDataSourceModifiedListener;
 
-public class SavedKeysFragment extends RoboSherlockListFragment implements OnDataSourceModifiedListener {
-    
-    /**
-     * Interface to pass fragment callbacks to parent activity. Parent activity
-     * must implement this to be aware of the events of the fragment.
-     */
-    public interface SavedNetworkFragmentListener extends OnDataSourceModifiedListener{
-        /**
-         * Observers must implement this method to be notified of which network
-         * was selected on this fragment.
-         * 
-         * @param networkData The network data of the selected item.
-         */
-        public void onNetworkSelected(Network networkData);
-        /**
-         * Fragments which use a shared datasource with other
-         * fragments, should notify them using this method.
-         */
-        public void dataSourceShouldRefresh();
-    }
+public class SavedKeysFragment extends RoboSherlockListFragment implements
+		OnDataSourceModifiedListener {
 
-    protected ActionMode mActionMode;
+	/**
+	 * Interface to pass fragment callbacks to parent activity. Parent activity
+	 * must implement this to be aware of the events of the fragment.
+	 */
+	public interface SavedNetworkFragmentListener extends
+			OnDataSourceModifiedListener {
+		/**
+		 * Observers must implement this method to be notified of which network
+		 * was selected on this fragment.
+		 * 
+		 * @param networkData
+		 *            The network data of the selected item.
+		 */
+		public void onNetworkSelected(Network networkData);
 
-    protected int context_menu_item_position;
+		/**
+		 * Fragments which use a shared datasource with other fragments, should
+		 * notify them using this method.
+		 */
+		public void dataSourceShouldRefresh();
+	}
 
-    private List<Network> mSavedNetworks;
+	protected ActionMode mActionMode;
 
-    protected Network mSelectedNetwork;
-    
-    private SavedNetworkFragmentListener mCallback;
+	protected int context_menu_item_position;
 
-    @InjectView(android.R.id.list)
-    private ListView mNetworkListView;
-    
-    private SavedNetworksAdapter mListAdapter;
-    
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mCallback = (SavedNetworkFragmentListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnDataSourceModifiedListener");
-        }
-    }
+	private List<Network> mSavedNetworks;
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        // Cargamos datos desde la BD
-        mSavedNetworks = Model.fetchAll(Network.class);
-        // Creamos el adapter
-        mListAdapter = new SavedNetworksAdapter(getSherlockActivity(),
-                R.layout.key_saved_list_element, mSavedNetworks);
-        // Conectamos el adapter a la lista
-        setListAdapter(mListAdapter);
-    }
+	protected Network mSelectedNetwork;
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-        setHasOptionsMenu(true);
+	private SavedNetworkFragmentListener mCallback;
 
-        return inflater.inflate(R.layout.saved_keys_fragment, container, false);
-    }
+	@InjectView(android.R.id.list)
+	private ListView mNetworkListView;
 
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        mNetworkListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        mNetworkListView.setOnItemLongClickListener(new OnItemLongClickListener() {
+	private SavedNetworksAdapter mListAdapter;
 
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                if (mActionMode != null) {
-                    return false;
-                }
-                context_menu_item_position = position;
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		try {
+			mCallback = (SavedNetworkFragmentListener) activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(activity.toString()
+					+ " must implement OnDataSourceModifiedListener");
+		}
+	}
 
-                // Start the CAB using the ActionMode.Callback defined
-                // above
-                mActionMode = getSherlockActivity().startActionMode(mActionCallBack);
-                mSelectedNetwork = mSavedNetworks.get(position);
-                view.setSelected(true);
-                return true;
-            }
-        });
+	@Override
+	public void onResume() {
+		super.onResume();
+		// Cargamos datos desde la BD
+		mSavedNetworks = Model.fetchAll(Network.class);
+		// Creamos el adapter
+		mListAdapter = new SavedNetworksAdapter(getSherlockActivity(),
+				R.layout.key_saved_list_element, mSavedNetworks);
+		// Conectamos el adapter a la lista
+		setListAdapter(mListAdapter);
+	}
 
-        mNetworkListView.setOnItemClickListener(new OnItemClickListener() {
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		super.onCreateView(inflater, container, savedInstanceState);
 
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mCallback.onNetworkSelected((Network) parent.getItemAtPosition(position));
-            }
-        });
-    }
+		boolean b = getArguments().getBoolean("screen_large");
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.networklistactivity_savedkeys_menu, menu);
-    }
+		if (!b)
+			setHasOptionsMenu(true);
 
-    /**
-     * Menu option handling
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Intent i;
-        // Handle item selection
-        switch (item.getItemId()) {
+		return inflater.inflate(R.layout.saved_keys_fragment, container, false);
+	}
 
-            case R.id.preferenceOption:
-                i = new Intent(getSherlockActivity(), WLANAuditPreferencesActivity.class);
-                startActivity(i);
-                return true;
-            case R.id.aboutOption:
-                i = new Intent(getSherlockActivity(), AboutActivity.class);
-                startActivity(i);
-                return true;
-            case R.id.mapOption:
-                i = new Intent(getSherlockActivity(), SlidingMapActivity.class);
-                startActivity(i);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
+		mNetworkListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+		mNetworkListView
+				.setOnItemLongClickListener(new OnItemLongClickListener() {
 
-    private ActionMode.Callback mActionCallBack = new Callback() {
+					@Override
+					public boolean onItemLongClick(AdapterView<?> parent,
+							View view, int position, long id) {
+						if (mActionMode != null) {
+							return false;
+						}
+						context_menu_item_position = position;
 
-        @Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            MenuInflater inflater = mode.getMenuInflater();
-            inflater.inflate(R.menu.saved_keys_elements_context_menu, menu);
-            return true;
-        }
+						// Start the CAB using the ActionMode.Callback defined
+						// above
+						mActionMode = getSherlockActivity().startActionMode(
+								mActionCallBack);
+						mSelectedNetwork = mSavedNetworks.get(position);
+						view.setSelected(true);
+						return true;
+					}
+				});
 
-        @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false;
-        }
+		mNetworkListView.setOnItemClickListener(new OnItemClickListener() {
 
-        @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.delete_context_menu:
-                    mSelectedNetwork.delete();
-                    mCallback.dataSourceShouldRefresh();
-                    mode.finish();
-                    return true;
-                case R.id.copy_context_menu:
-                    // TODO
-                    /*
-                     * copyClipboard(mSelectedNetwork.getKey()); saveWLANKey(
-                     * ((TextView)
-                     * myFragmentView.findViewById(R.id.networkName))
-                     * .getText().toString(), mSelectedNetwork.getKey());
-                     */
-                    mode.finish();
-                    return true;
-                default:
-                    return true;
-            }
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				mCallback.onNetworkSelected((Network) parent
+						.getItemAtPosition(position));
+			}
+		});
+	}
 
-        }
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		menu.clear();
+		inflater.inflate(R.menu.networklistactivity_savedkeys_menu, menu);
+		super.onCreateOptionsMenu(menu, inflater);
+	}
 
-        @Override
-        public void onDestroyActionMode(ActionMode mode) {
-            mActionMode = null;
+	/**
+	 * Menu option handling
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		Intent i;
+		// Handle item selection
+		switch (item.getItemId()) {
 
-        }
-    };
+		case R.id.preferenceOption:
+			i = new Intent(getSherlockActivity(),
+					WLANAuditPreferencesActivity.class);
+			startActivity(i);
+			return true;
+		case R.id.aboutOption:
+			i = new Intent(getSherlockActivity(), AboutActivity.class);
+			startActivity(i);
+			return true;
+		case R.id.mapOption:
+			i = new Intent(getSherlockActivity(), SlidingMapActivity.class);
+			startActivity(i);
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
 
-    @Override
-    public void dataSourceShouldRefresh() {
-        mSavedNetworks = Model.fetchAll(Network.class);
-        mListAdapter.clear();
-        mListAdapter.addAll(mSavedNetworks);
-        mListAdapter.notifyDataSetChanged();        
-    }
+	private ActionMode.Callback mActionCallBack = new Callback() {
+
+		@Override
+		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+			MenuInflater inflater = mode.getMenuInflater();
+			inflater.inflate(R.menu.saved_keys_elements_context_menu, menu);
+			return true;
+		}
+
+		@Override
+		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+			return false;
+		}
+
+		@Override
+		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+			switch (item.getItemId()) {
+			case R.id.delete_context_menu:
+				mSelectedNetwork.delete();
+				mCallback.dataSourceShouldRefresh();
+				mode.finish();
+				return true;
+			case R.id.copy_context_menu:
+				// TODO
+				/*
+				 * copyClipboard(mSelectedNetwork.getKey()); saveWLANKey(
+				 * ((TextView) myFragmentView.findViewById(R.id.networkName))
+				 * .getText().toString(), mSelectedNetwork.getKey());
+				 */
+				mode.finish();
+				return true;
+			default:
+				return true;
+			}
+
+		}
+
+		@Override
+		public void onDestroyActionMode(ActionMode mode) {
+			mActionMode = null;
+
+		}
+	};
+
+	@Override
+	public void dataSourceShouldRefresh() {
+		mSavedNetworks = Model.fetchAll(Network.class);
+		mListAdapter.clear();
+		mListAdapter.addAll(mSavedNetworks);
+		mListAdapter.notifyDataSetChanged();
+	}
 }

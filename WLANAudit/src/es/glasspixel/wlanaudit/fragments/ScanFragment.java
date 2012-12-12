@@ -244,7 +244,6 @@ public class ScanFragment extends RoboSherlockFragment implements
 
 	private Location myLocation;
 
-	
 	private void showLocation(Location l) {
 		mLatitude = l.getLatitude();
 		mLongitude = l.getLongitude();
@@ -373,7 +372,7 @@ public class ScanFragment extends RoboSherlockFragment implements
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-
+		menu.clear();
 		inflater.inflate(R.menu.networklistactivity_menu, menu);
 		refresh = (MenuItem) menu.findItem(R.id.scanOption);
 		automatic_scan = (MenuItem) menu.findItem(R.id.toggleAutoscanOption);
@@ -454,7 +453,7 @@ public class ScanFragment extends RoboSherlockFragment implements
 	@Override
 	public void onItemClick(final AdapterView<?> parent, View arg1,
 			final int position, long arg3) {
-		
+
 		mCallback.onNetworkSelected((ScanResult) parent
 				.getItemAtPosition(position));
 
@@ -479,7 +478,6 @@ public class ScanFragment extends RoboSherlockFragment implements
 				Toast.LENGTH_SHORT).show();
 
 	}
-
 
 	private void initLocation() {
 		myLocation = locationManager

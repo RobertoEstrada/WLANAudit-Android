@@ -25,6 +25,23 @@
     <!-- android:showAsAction="ifRoom" -->
     <!-- android:title="@string/about_menu_btn"> -->
     <!-- </item> -->
-
+    <item
+        android:id="@+id/mapOption"
+        android:icon="@drawable/ic_menu_mapmode"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_map_option">
+    </item>
+    <item
+        android:id="@+id/preferenceOption"
+        android:icon="@drawable/ic_settings"
+        android:showAsAction="ifRoom"
+        android:title="@string/preferences_menu_btn">
+    </item>
+    <item
+        android:id="@+id/aboutOption"
+        android:icon="@drawable/ic_about"
+        android:showAsAction="ifRoom"
+        android:title="@string/about_menu_btn">
+    </item>
 
 </menu>
