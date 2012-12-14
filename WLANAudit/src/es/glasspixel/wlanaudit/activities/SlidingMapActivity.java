@@ -1,27 +1,24 @@
 package es.glasspixel.wlanaudit.activities;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
-import org.osmdroid.views.overlay.OverlayItem;
 
 import roboguice.util.RoboContext;
 
-import android.app.AlertDialog;
-import android.content.Intent;
-import android.location.Location;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NavUtils;
+import android.view.Display;
 import android.view.View;
-import android.widget.Toast;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.FrameLayout;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.espian.showcaseview.ShowcaseView;
 import com.google.inject.Key;
 
 import com.slidingmenu.lib.SlidingMenu;
@@ -34,12 +31,16 @@ import es.glasspixel.wlanaudit.fragments.SavedKeysMenuFragment;
 import es.glasspixel.wlanaudit.fragments.SavedKeysMenuFragment.OnSavedKeySelectedListener;
 
 public class SlidingMapActivity extends SlidingFragmentActivity implements
-		OnSavedKeySelectedListener, RoboContext {
+		OnSavedKeySelectedListener, RoboContext,
+		ShowcaseView.OnShowcaseEventListener {
 
 	protected HashMap<Key<?>, Object> scopedObjects = new HashMap<Key<?>, Object>();
 
 	private static final int SHOW_MENU = 0;
 	private MapFragment mContent;
+	private ShowcaseView sv;
+
+	private boolean showcaseView = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -48,6 +49,12 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
 
 		setContentView(R.layout.responsive_content_frame);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+		// if menu is hide, show showcaseview layout
+		if (findViewById(R.id.menu_frame) == null) {
+			showcaseView = true;
+
+		}
 
 		// check if the content frame contains the menu frame
 		if (findViewById(R.id.menu_frame) == null) {
@@ -73,14 +80,14 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
 					savedInstanceState, "mContent");
 		if (mContent == null)
 			mContent = new MapFragment(0);
-		getSupportFragmentManager().beginTransaction()
-				.replace(R.id.content_frame, mContent).commit();
 
 		// set the Behind View Fragment
 		SavedKeysMenuFragment s = new SavedKeysMenuFragment();
 		s.addListener(this);
 		getSupportFragmentManager().beginTransaction()
 				.replace(R.id.menu_frame, s).commit();
+		getSupportFragmentManager().beginTransaction()
+				.replace(R.id.content_frame, mContent).commit();
 
 		// customize the SlidingMenu
 		SlidingMenu sm = getSlidingMenu();
@@ -90,10 +97,36 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
 		sm.setBehindScrollScale(0.25f);
 		sm.setFadeDegree(0.25f);
 
-		// show the explanation dialog
-		// if (savedInstanceState == null)
-		// new AlertDialog.Builder(this).setTitle(R.string.what_is_this)
-		// .setMessage(R.string.responsive_explanation).show();
+		if (showcaseView) {
+			Display display = getWindowManager().getDefaultDisplay();
+			Point size = new Point();
+			display.getSize(size);
+
+			sv = (ShowcaseView) findViewById(R.id.showcase);
+			sv.setShowcaseView(findViewById(R.id.menu_frame));
+			sv.setShotType(ShowcaseView.TYPE_ONE_SHOT);
+			sv.setShowcasePosition(0, size.y / 2);
+			sv.show();
+
+			((Button) findViewById(R.id.showcase_button))
+					.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							if (sv.isShown()) {
+								sv.hide();
+								((Button) findViewById(R.id.showcase_button))
+										.setOnClickListener(null);
+								// ((FrameLayout)
+								// findViewById(R.id.frame_layout_container))
+								// .removeView(findViewById(R.id.showcase));
+
+							}
+
+						}
+					});
+		}
+
 	}
 
 	@Override
@@ -163,5 +196,17 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
 	@Override
 	public Map<Key<?>, Object> getScopedObjectMap() {
 		return scopedObjects;
+	}
+
+	@Override
+	public void onShowcaseViewHide(ShowcaseView showcaseView) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onShowcaseViewShow(ShowcaseView showcaseView) {
+		// TODO Auto-generated method stub
+
 	}
 }

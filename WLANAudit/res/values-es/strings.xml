@@ -62,5 +62,7 @@
     <string name="key_already_store">Red ya almacenada</string>
     <string name="settings">Ajustes</string>
     <string name="save_and_copy_text">Guardar red y copiar clave</string>
+     <string name="show_case_view_title_map">Acceda a sus redes guardadas</string>
+    <string name="show_case_view_text_map">Deslice el dedo desde el margen izquierdo para acceder</string>
 
 </resources>

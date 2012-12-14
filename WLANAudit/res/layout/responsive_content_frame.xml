@@ -1,5 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/content_frame"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:showcase="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <FrameLayout
+        android:id="@+id/frame_layout_container"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <FrameLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/content_frame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+        </FrameLayout>
+
+        <com.espian.showcaseview.ShowcaseView
+            android:id="@+id/showcase"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            showcase:backgroundColor="#3333B5E5" >
+
+            <TextView
+                android:id="@+id/textView"
+                style="@style/ShowcaseTitleText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:layout_marginTop="240dp"
+                android:text="@string/show_case_view_title_map" />
+
+            <Button
+                android:id="@id/showcase_button"
+                style="@style/ShowcaseButton"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="6dp"
+                android:layout_marginRight="6dp"
+                android:gravity="center"
+                android:text="OK"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/textView1"
+                style="@style/ShowcaseText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/textView"
+                android:layout_below="@+id/textView"
+                android:layout_marginTop="27dp"
+                android:text="@string/show_case_view_text_map" />
+        </com.espian.showcaseview.ShowcaseView>
+    </FrameLayout>
+
+</LinearLayout>

@@ -14,6 +14,12 @@
         android:title="@string/autoscan_toggle">
     </item>
     <item
+        android:id="@+id/mapOption"
+        android:icon="@drawable/ic_menu_mapmode"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_map_option">
+    </item>
+    <item
         android:id="@+id/preferenceOption"
         android:icon="@drawable/ic_settings"
         android:showAsAction="always"
@@ -25,11 +31,6 @@
         android:showAsAction="always"
         android:title="@string/about_menu_btn">
     </item>
-    <item
-        android:id="@+id/mapOption"
-        android:icon="@drawable/ic_menu_mapmode"
-        android:showAsAction="ifRoom"
-        android:title="@string/menu_map_option">
-    </item>
+    
 
 </menu>

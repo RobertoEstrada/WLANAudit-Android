@@ -126,7 +126,6 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity
 
 				@Override
 				public void onPageSelected(int arg0) {
-					
 
 				}
 
@@ -164,15 +163,22 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity
 	}
 
 	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		checkMenuItems();
+		return super.onPrepareOptionsMenu(menu);
+	}
+
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getSupportMenuInflater().inflate(R.menu.networklistactivity_menu, menu);
-		refresh = (MenuItem) menu.findItem(R.id.scanOption);
-		automatic_scan = (MenuItem) menu.findItem(R.id.toggleAutoscanOption);
-		map_menu_item = (MenuItem) menu.findItem(R.id.mapOption);
-		checkMenuItems();
+		refresh = menu.findItem(R.id.scanOption);
+		automatic_scan = menu.findItem(R.id.toggleAutoscanOption);
+		map_menu_item = menu.findItem(R.id.mapOption);
+
 		checkAutoScanStatus();
 
-		return super.onCreateOptionsMenu(menu);
+		return true;
+		// return super.onCreateOptionsMenu(menu);
 	}
 
 	private void checkMenuItems() {
@@ -181,6 +187,7 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity
 				refresh.setVisible(true);
 				automatic_scan.setVisible(true);
 				map_menu_item.setVisible(false);
+
 			} else {
 				refresh.setVisible(false);
 				automatic_scan.setVisible(false);
