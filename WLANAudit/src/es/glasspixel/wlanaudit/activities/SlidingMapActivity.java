@@ -115,7 +115,7 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
 
 			sv = (ShowcaseView) findViewById(R.id.showcase);
 			// sv.setShowcaseView(findViewById(R.id.content_frame));
-			// sv.setShotType(ShowcaseView.TYPE_ONE_SHOT);
+			sv.setShotType(ShowcaseView.TYPE_ONE_SHOT);
 
 			sv.setShowcasePosition(0, size.y / 2);
 			sv.invalidate();
