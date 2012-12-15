@@ -22,6 +22,7 @@ import com.espian.showcaseview.ShowcaseView;
 import com.google.inject.Key;
 
 import com.slidingmenu.lib.SlidingMenu;
+import com.slidingmenu.lib.SlidingMenu.OnOpenListener;
 import com.slidingmenu.lib.app.SlidingFragmentActivity;
 
 import es.glasspixel.wlanaudit.R;
@@ -96,6 +97,16 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
 		sm.setShadowDrawable(R.drawable.shadow);
 		sm.setBehindScrollScale(0.25f);
 		sm.setFadeDegree(0.25f);
+		sm.setOnOpenListener(new OnOpenListener() {
+
+			@Override
+			public void onOpen() {
+				if (sv.isShown()) {
+					sv.hide();
+				}
+
+			}
+		});
 
 		if (showcaseView) {
 			Display display = getWindowManager().getDefaultDisplay();
@@ -103,10 +114,12 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
 			display.getSize(size);
 
 			sv = (ShowcaseView) findViewById(R.id.showcase);
-			sv.setShowcaseView(findViewById(R.id.menu_frame));
-			sv.setShotType(ShowcaseView.TYPE_ONE_SHOT);
+			// sv.setShowcaseView(findViewById(R.id.content_frame));
+			// sv.setShotType(ShowcaseView.TYPE_ONE_SHOT);
+
 			sv.setShowcasePosition(0, size.y / 2);
-			sv.show();
+			sv.invalidate();
+			// sv.show();
 
 			((Button) findViewById(R.id.showcase_button))
 					.setOnClickListener(new OnClickListener() {
@@ -160,6 +173,7 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
 			break;
 		case SHOW_MENU:
 			toggle();
+
 			break;
 		}
 
