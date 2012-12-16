@@ -24,17 +24,21 @@ import org.orman.mapper.ModelQuery;
 import org.orman.sql.C;
 
 import roboguice.fragment.RoboDialogFragment;
+import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.Location;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,6 +68,25 @@ import es.glasspixel.wlanaudit.keyframework.NetData;
 import es.glasspixel.wlanaudit.util.ChannelCalculator;
 
 public class NetworkDetailsDialogFragment extends RoboDialogFragment {
+
+	@InjectResource(R.string.improve_precision_dialog_title)
+	String improve_preciosion_dialog_title;
+
+	@InjectResource(R.string.improve_precision_dialog_message)
+	String improve_precision_dialog_message;
+
+	@InjectResource(R.string.settings)
+	String settings;
+
+	@InjectResource(android.R.string.cancel)
+	String cancel;
+	
+	/**
+	 * Constant to identify the location's settings launch when 
+	 * there aren't location providers enabled
+	 */
+	private static final int LOCATION_SETTINGS = 2;
+
 	/**
 	 * Tag to identify the class in logcat
 	 */
@@ -303,7 +326,41 @@ public class NetworkDetailsDialogFragment extends RoboDialogFragment {
 			mLocator.startLocationUpdates();
 		} catch (NoProviderAvailable np) {
 			Log.d(TAG, "No location provider available at this time");
+			AlertDialog.Builder dialogo1 = new AlertDialog.Builder(
+					getActivity());
+			dialogo1.setTitle(improve_preciosion_dialog_title);
+			dialogo1.setMessage(improve_precision_dialog_message);
+			dialogo1.setCancelable(false);
+			dialogo1.setPositiveButton(settings,
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialogo1, int id) {
+							Intent intent = new Intent(
+									Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+							startActivityForResult(intent, LOCATION_SETTINGS);
+						}
+					});
+			dialogo1.setNegativeButton(cancel,
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialogo1, int id) {
+							dialogo1.dismiss();
+						}
+					});
+			dialogo1.show();
 		}
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == LOCATION_SETTINGS) {
+
+			try {
+				mLocator.startLocationUpdates();
+			} catch (NoProviderAvailable np) {
+				Log.d(TAG, "No location provider available at this time");
+			}
+		}
+
+		super.onActivityResult(requestCode, resultCode, data);
 	}
 
 	private void stopReceivingLocationUpdates() {

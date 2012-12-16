@@ -72,5 +72,6 @@
     <string name="save_and_copy_text">Save and copy</string>
     <string name="show_case_view_title_map">Access to your stored keys</string>
     <string name="show_case_view_text_map">Slide your finger from the left to see the keys</string>
+    <string name="location_unavailable">Your location is unavailable</string>
 
 </resources>

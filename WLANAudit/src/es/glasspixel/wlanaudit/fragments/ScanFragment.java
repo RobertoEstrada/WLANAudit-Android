@@ -5,68 +5,39 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import roboguice.RoboGuice;
 import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
 
-import com.actionbarsherlock.app.SherlockFragment;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Window;
-
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
-
+import com.novoda.location.Locator;
 import es.glasspixel.wlanaudit.R;
 import es.glasspixel.wlanaudit.actions.AutoScanAction;
 import es.glasspixel.wlanaudit.actions.RefreshAction;
-import es.glasspixel.wlanaudit.activities.AboutActivity;
-import es.glasspixel.wlanaudit.activities.KeyListActivity;
-import es.glasspixel.wlanaudit.activities.SlidingMapActivity;
-
-import es.glasspixel.wlanaudit.activities.WLANAuditPreferencesActivity;
 import es.glasspixel.wlanaudit.adapters.WifiNetworkAdapter;
-import es.glasspixel.wlanaudit.dominio.SavedKeysUtils;
-import es.glasspixel.wlanaudit.keyframework.IKeyCalculator;
-import es.glasspixel.wlanaudit.keyframework.KeyCalculatorFactory;
-import es.glasspixel.wlanaudit.keyframework.NetData;
-import es.glasspixel.wlanaudit.util.ChannelCalculator;
 
 public class ScanFragment extends RoboSherlockFragment implements
 		OnItemClickListener {
@@ -110,7 +81,7 @@ public class ScanFragment extends RoboSherlockFragment implements
 		 *            The network data of the selected item.
 		 */
 		public void onNetworkSelected(ScanResult networkData);
-		
+
 		public void scanCompleted();
 	}
 
@@ -162,6 +133,8 @@ public class ScanFragment extends RoboSherlockFragment implements
 
 	private MenuItem refresh;
 
+	protected Locator locator;
+
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		// RoboGuice.getInjector(getActivity()).injectMembersWithoutViews(this);
@@ -171,85 +144,61 @@ public class ScanFragment extends RoboSherlockFragment implements
 		} else {
 			mAutoScanAction = new AutoScanAction(getActivity());
 		}
+
 		screenIsLarge = getSherlockActivity().getResources().getBoolean(
 				R.bool.screen_large);
 
-		locationManager = (LocationManager) getSherlockActivity()
-				.getSystemService(Context.LOCATION_SERVICE);
-
-		if (!locationManager
-				.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-			AlertDialog.Builder dialogo1 = new AlertDialog.Builder(
-					getSherlockActivity());
-			dialogo1.setTitle(improve_preciosion_dialog_title);
-			dialogo1.setMessage(improve_precision_dialog_message);
-			dialogo1.setCancelable(false);
-			dialogo1.setPositiveButton(settings,
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialogo1, int id) {
-							Intent intent = new Intent(
-									Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-							startActivityForResult(intent, LOCATION_SETTINGS);
-						}
-					});
-			dialogo1.setNegativeButton(cancel,
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialogo1, int id) {
-							dialogo1.dismiss();
-						}
-					});
-			dialogo1.show();
-
-		} else {
-
-			initLocation();
-
-		}
+		// locationManager = (LocationManager) getSherlockActivity()
+		// .getSystemService(Context.LOCATION_SERVICE);
+		//
+		// if (!locationManager
+		// .isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+		// AlertDialog.Builder dialogo1 = new AlertDialog.Builder(
+		// getSherlockActivity());
+		// dialogo1.setTitle(improve_preciosion_dialog_title);
+		// dialogo1.setMessage(improve_precision_dialog_message);
+		// dialogo1.setCancelable(false);
+		// dialogo1.setPositiveButton(settings,
+		// new DialogInterface.OnClickListener() {
+		// public void onClick(DialogInterface dialogo1, int id) {
+		// Intent intent = new Intent(
+		// Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+		// startActivityForResult(intent, LOCATION_SETTINGS);
+		// }
+		// });
+		// dialogo1.setNegativeButton(cancel,
+		// new DialogInterface.OnClickListener() {
+		// public void onClick(DialogInterface dialogo1, int id) {
+		// dialogo1.dismiss();
+		// }
+		// });
+		// dialogo1.show();
+		//
+		// } else {
+		//
+		// initLocation();
+		//
+		// }
 		// }
 		Log.d("ScanFragment", "showing menu..");
 		// setHasOptionsMenu(true);
 
 	}
 
-	private final LocationListener listener = new LocationListener() {
+	
 
+	public BroadcastReceiver freshLocationReceiver = new BroadcastReceiver() {
 		@Override
-		public void onLocationChanged(Location location) {
-			mLatitude = location.getLatitude();
-			mLongitude = location.getLongitude();
+		public void onReceive(Context context, Intent intent) {
+			mLatitude = locator.getLocation().getLatitude();
+			mLongitude = locator.getLocation().getLongitude();
 
 		}
-
-		@Override
-		public void onProviderDisabled(String provider) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void onProviderEnabled(String provider) {
-			bestProvider = provider;
-
-		}
-
-		@Override
-		public void onStatusChanged(String provider, int status, Bundle extras) {
-			// TODO Auto-generated method stub
-
-		}
-
 	};
 
-	private MenuItem automatic_scan;
+	
 
-	private Editor e;
-
-	private Location myLocation;
-
-	private void showLocation(Location l) {
-		mLatitude = l.getLatitude();
-		mLongitude = l.getLongitude();
-	}
+	
 
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -370,7 +319,6 @@ public class ScanFragment extends RoboSherlockFragment implements
 		getSherlockActivity().registerReceiver(mCallBackReceiver, i);
 	}
 
-	
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -411,20 +359,7 @@ public class ScanFragment extends RoboSherlockFragment implements
 
 	}
 
-	private void initLocation() {
-		myLocation = locationManager
-				.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-		locationManager.requestLocationUpdates(
-				LocationManager.NETWORK_PROVIDER, 20, 0, listener);
-		if (myLocation != null) {
-			showLocation(myLocation);
-		} else {
-			Toast.makeText(getSherlockActivity(),
-					"Your location is unavailable now", Toast.LENGTH_LONG)
-					.show();
-		}
-
-	}
+	
 
 	/**
 	 * Lifecycle management: Activity is about to be shown
@@ -442,27 +377,14 @@ public class ScanFragment extends RoboSherlockFragment implements
 	public void onResume() {
 		super.onResume();
 
-		// mWifiManager.startScan();
+		
 
 		initScan();
 
 		// mAd.loadAd(new AdRequest());
 	}
 
-	/**
-	 * Lifecycle management: Activity is being stopped, we need to unregister
-	 * the broadcast receiver
-	 */
-	public void onStop() {
-		super.onStop();
-		// Unsubscribing from receiving updates about changes of the WiFi
-		// networks
-		try {
-			locationManager.removeUpdates(listener);
-		} catch (IllegalArgumentException e) {
-			// Do nothing
-		}
-	}
+	
 
 	public void onDestroy() {
 		super.onDestroy();

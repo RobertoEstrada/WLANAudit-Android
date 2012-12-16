@@ -86,13 +86,25 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity
 	 */
 	@Inject
 	private Resources mResources;
+	/**
+	 * Menu item to handle wifi scan
+	 */
 
 	private MenuItem refresh;
+	/**
+	 * Menu item to enable/disable automatic scan setting
+	 */
 
 	private MenuItem automatic_scan;
+	/**
+	 * AutoScan action
+	 */
 
 	private AutoScanAction mAutoScanAction;
 
+	/**
+	 *  Menu itme to launch map activity
+	 */
 	private MenuItem map_menu_item;
 
 	/**
