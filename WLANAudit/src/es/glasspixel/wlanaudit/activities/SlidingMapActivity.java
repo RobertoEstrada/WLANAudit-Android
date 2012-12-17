@@ -3,6 +3,10 @@ package es.glasspixel.wlanaudit.activities;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
+import roboguice.inject.InjectResource;
+import roboguice.inject.InjectView;
 import roboguice.util.RoboContext;
 
 import android.graphics.Point;
@@ -15,6 +19,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ListView;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -23,7 +28,6 @@ import com.google.inject.Key;
 
 import com.slidingmenu.lib.SlidingMenu;
 import com.slidingmenu.lib.SlidingMenu.OnOpenListener;
-import com.slidingmenu.lib.app.SlidingFragmentActivity;
 
 import es.glasspixel.wlanaudit.R;
 import es.glasspixel.wlanaudit.database.entities.Network;
@@ -38,28 +42,31 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
 	protected HashMap<Key<?>, Object> scopedObjects = new HashMap<Key<?>, Object>();
 
 	private static final int SHOW_MENU = 0;
+
 	private MapFragment mContent;
-	private ShowcaseView sv;
+	@InjectView(R.id.showcase)
+	@Nullable
+	ShowcaseView sv;
+
+	@InjectView(R.id.showcase_button)
+	Button showcase_button;
+
+	@InjectResource(R.string.map_layout_locations_list_title)
+	String ab_title;
 
 	private boolean showcaseView = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setTitle(R.string.map_layout_locations_list_title);
+		setTitle(ab_title);
 
 		setContentView(R.layout.responsive_content_frame);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-		// if menu is hide, show showcaseview layout
-		if (findViewById(R.id.menu_frame) == null) {
-			showcaseView = true;
-
-		}
-
 		// check if the content frame contains the menu frame
 		if (findViewById(R.id.menu_frame) == null) {
-
+			showcaseView = true;
 			setBehindContentView(R.layout.menu_frame);
 			setSlidingActionBarEnabled(false);
 			getSlidingMenu().setSlidingEnabled(true);
@@ -82,13 +89,14 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
 		if (mContent == null)
 			mContent = new MapFragment(0);
 
-		// set the Behind View Fragment
-		SavedKeysMenuFragment s = new SavedKeysMenuFragment();
-		s.addListener(this);
-		getSupportFragmentManager().beginTransaction()
-				.replace(R.id.menu_frame, s).commit();
 		getSupportFragmentManager().beginTransaction()
 				.replace(R.id.content_frame, mContent).commit();
+
+		// set the Behind View Fragment
+		// SavedKeysMenuFragment s = ;
+
+		getSupportFragmentManager().beginTransaction()
+				.replace(R.id.menu_frame, new SavedKeysMenuFragment()).commit();
 
 		// customize the SlidingMenu
 		SlidingMenu sm = getSlidingMenu();
@@ -97,47 +105,47 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
 		sm.setShadowDrawable(R.drawable.shadow);
 		sm.setBehindScrollScale(0.25f);
 		sm.setFadeDegree(0.25f);
-		sm.setOnOpenListener(new OnOpenListener() {
-
-			@Override
-			public void onOpen() {
-				if (sv.isShown()) {
-					sv.hide();
-				}
-
-			}
-		});
 
 		if (showcaseView) {
 			Display display = getWindowManager().getDefaultDisplay();
 			Point size = new Point();
 			display.getSize(size);
 
-			sv = (ShowcaseView) findViewById(R.id.showcase);
+			// sv = (ShowcaseView) findViewById(R.id.showcase);
 			// sv.setShowcaseView(findViewById(R.id.content_frame));
 			sv.setShotType(ShowcaseView.TYPE_ONE_SHOT);
 
 			sv.setShowcasePosition(0, size.y / 2);
-			sv.invalidate();
+			// sv.invalidate();
 			// sv.show();
 
-			((Button) findViewById(R.id.showcase_button))
-					.setOnClickListener(new OnClickListener() {
+			showcase_button.setOnClickListener(new OnClickListener() {
 
-						@Override
-						public void onClick(View v) {
-							if (sv.isShown()) {
-								sv.hide();
-								((Button) findViewById(R.id.showcase_button))
-										.setOnClickListener(null);
-								// ((FrameLayout)
-								// findViewById(R.id.frame_layout_container))
-								// .removeView(findViewById(R.id.showcase));
+				@Override
+				public void onClick(View v) {
+					if (sv.isShown()) {
+						sv.hide();
+						showcase_button.setOnClickListener(null);
+						// ((FrameLayout)
+						// findViewById(R.id.frame_layout_container))
+						// .removeView(findViewById(R.id.showcase));
+						sv.onClick(v);
 
-							}
+					}
 
-						}
-					});
+				}
+			});
+			sm.setOnOpenListener(new OnOpenListener() {
+
+				@Override
+				public void onOpen() {
+					if (sv.isShown()) {
+						sv.hide();
+						sv.onClick(showcase_button);
+					}
+
+				}
+			});
 		}
 
 	}

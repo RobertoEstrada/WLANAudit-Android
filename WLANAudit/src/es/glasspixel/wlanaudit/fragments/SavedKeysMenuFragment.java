@@ -19,6 +19,7 @@ import es.glasspixel.wlanaudit.keyframework.IKeyCalculator;
 import es.glasspixel.wlanaudit.keyframework.KeyCalculatorFactory;
 import es.glasspixel.wlanaudit.keyframework.NetData;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -49,6 +50,13 @@ public class SavedKeysMenuFragment extends RoboSherlockListFragment implements
 
 	public SavedKeysMenuFragment() {
 
+	}
+
+	@Override
+	public void onAttach(Activity activity) {
+		if (activity instanceof SlidingMapActivity)
+			addListener((SlidingMapActivity) activity);
+		super.onAttach(activity);
 	}
 
 	@Override
@@ -133,8 +141,8 @@ public class SavedKeysMenuFragment extends RoboSherlockListFragment implements
 						R.layout.key_saved_list_element, parent, false);
 			}
 
-			((TextView) v.findViewById(R.id.networkName)).setText(mKeys.get(
-					position).mSSID);
+			((TextView) v.findViewById(R.id.networkName)).setText(mKeys
+					.get(position).mSSID);
 			if (mKeys.get(position).mLatitude > -999999999
 					&& mKeys.get(position).mLongitude > -999999999)
 				((ImageView) v.findViewById(R.id.location_icon_saved_key))
@@ -142,11 +150,11 @@ public class SavedKeysMenuFragment extends RoboSherlockListFragment implements
 			// ((TextView) v.findViewById(R.id.networkKey))
 			// .setText(printKeys(mKeys.get(position).getKeys()));
 
-			((TextView) v.findViewById(R.id.networkAddress)).setText(mKeys.get(
-					position).mBSSID);
+			((TextView) v.findViewById(R.id.networkAddress)).setText(mKeys
+					.get(position).mBSSID);
 			return v;
 		}
-	}	
+	}
 
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {

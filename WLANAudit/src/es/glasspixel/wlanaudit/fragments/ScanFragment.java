@@ -63,6 +63,8 @@ public class ScanFragment extends RoboSherlockFragment implements
 	@InjectView(android.R.id.list)
 	ListView list_view;
 
+	private boolean isScanning = false;
+
 	/**
 	 * The parent activity that listens for this fragment callbacks
 	 */
@@ -83,6 +85,8 @@ public class ScanFragment extends RoboSherlockFragment implements
 		public void onNetworkSelected(ScanResult networkData);
 
 		public void scanCompleted();
+
+		public void scanStart();
 	}
 
 	private static final int LOCATION_SETTINGS = 2;
@@ -148,44 +152,7 @@ public class ScanFragment extends RoboSherlockFragment implements
 		screenIsLarge = getSherlockActivity().getResources().getBoolean(
 				R.bool.screen_large);
 
-		// locationManager = (LocationManager) getSherlockActivity()
-		// .getSystemService(Context.LOCATION_SERVICE);
-		//
-		// if (!locationManager
-		// .isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-		// AlertDialog.Builder dialogo1 = new AlertDialog.Builder(
-		// getSherlockActivity());
-		// dialogo1.setTitle(improve_preciosion_dialog_title);
-		// dialogo1.setMessage(improve_precision_dialog_message);
-		// dialogo1.setCancelable(false);
-		// dialogo1.setPositiveButton(settings,
-		// new DialogInterface.OnClickListener() {
-		// public void onClick(DialogInterface dialogo1, int id) {
-		// Intent intent = new Intent(
-		// Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-		// startActivityForResult(intent, LOCATION_SETTINGS);
-		// }
-		// });
-		// dialogo1.setNegativeButton(cancel,
-		// new DialogInterface.OnClickListener() {
-		// public void onClick(DialogInterface dialogo1, int id) {
-		// dialogo1.dismiss();
-		// }
-		// });
-		// dialogo1.show();
-		//
-		// } else {
-		//
-		// initLocation();
-		//
-		// }
-		// }
-		Log.d("ScanFragment", "showing menu..");
-		// setHasOptionsMenu(true);
-
 	}
-
-	
 
 	public BroadcastReceiver freshLocationReceiver = new BroadcastReceiver() {
 		@Override
@@ -195,10 +162,6 @@ public class ScanFragment extends RoboSherlockFragment implements
 
 		}
 	};
-
-	
-
-	
 
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -265,12 +228,10 @@ public class ScanFragment extends RoboSherlockFragment implements
 
 			setupNetworkScanCallBack();
 			// StartPassButtonListener();
-			this.startScan();
+			if (!isScanning)
+				this.startScan();
 		} else {
-			if (refresh != null) {
-				refresh.setActionView(null);
-				refresh.setEnabled(false);
-			}
+
 			mCallback.scanCompleted();
 			empty_text.setText(getSherlockActivity().getResources().getString(
 					R.string.no_networks_found));
@@ -279,10 +240,12 @@ public class ScanFragment extends RoboSherlockFragment implements
 		}
 	}
 
+	/**
+	 * Init the wifi scan and notify to de listener callback
+	 */
 	public void startScan() {
-		boolean start = mWifiManager.startScan();
-		if (refresh != null && start == true)
-			refresh.setActionView(R.layout.indeterminate_progress_action);
+		mCallback.scanStart();
+		mWifiManager.startScan();
 	}
 
 	/**
@@ -301,6 +264,7 @@ public class ScanFragment extends RoboSherlockFragment implements
 				// ListView refreshed
 
 				List<ScanResult> res = mWifiManager.getScanResults();
+				isScanning = false;
 
 				if (myFragmentView != null && getSherlockActivity() != null) {
 					mCallback.scanCompleted();
@@ -359,8 +323,6 @@ public class ScanFragment extends RoboSherlockFragment implements
 
 	}
 
-	
-
 	/**
 	 * Lifecycle management: Activity is about to be shown
 	 */
@@ -377,17 +339,13 @@ public class ScanFragment extends RoboSherlockFragment implements
 	public void onResume() {
 		super.onResume();
 
-		
-
 		initScan();
 
 		// mAd.loadAd(new AdRequest());
 	}
 
-	
-
-	public void onDestroy() {
-		super.onDestroy();
+	@Override
+	public void onPause() {
 		if (mAutoScanAction != null)
 			mAutoScanAction.stopAutoScan();
 		if (mCallBackReceiver != null) {
@@ -397,5 +355,7 @@ public class ScanFragment extends RoboSherlockFragment implements
 				Log.d("ScanFragment", e.getMessage().toString());
 			}
 		}
+		super.onPause();
 	}
+
 }

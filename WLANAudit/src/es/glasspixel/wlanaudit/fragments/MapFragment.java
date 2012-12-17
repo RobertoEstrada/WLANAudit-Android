@@ -12,6 +12,7 @@ import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.ItemizedIconOverlay.OnItemGestureListener;
 
 import roboguice.inject.InjectResource;
+import roboguice.inject.InjectView;
 
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -76,7 +77,8 @@ public class MapFragment extends RoboSherlockFragment {
 	private static final String TAG = "MapFragment";
 	private int mPos = -1;
 	private View v;
-	private MapView myOpenMapView;
+	@InjectView(R.id.openmapview)
+	MapView myOpenMapView;
 	/**
 	 * OSM controller
 	 */

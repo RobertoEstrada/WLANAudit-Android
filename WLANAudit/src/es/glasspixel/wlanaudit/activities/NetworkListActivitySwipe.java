@@ -103,7 +103,7 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity
 	private AutoScanAction mAutoScanAction;
 
 	/**
-	 *  Menu itme to launch map activity
+	 * Menu itme to launch map activity
 	 */
 	private MenuItem map_menu_item;
 
@@ -217,8 +217,7 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity
 		case R.id.scanOption:
 
 			((ScanFragment) mFragments.get(0)).startScan();
-			if (refresh != null)
-				refresh.setActionView(R.layout.indeterminate_progress_action);
+
 			return true;
 		case R.id.toggleAutoscanOption:
 			// if (mPosition == 0)
@@ -357,7 +356,15 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity
 
 	@Override
 	public void scanCompleted() {
-		refresh.setActionView(null);
+		if (refresh != null)
+			refresh.setActionView(null);
+
+	}
+
+	@Override
+	public void scanStart() {
+		if (refresh != null)
+			refresh.setActionView(R.layout.indeterminate_progress_action);
 
 	}
 }
