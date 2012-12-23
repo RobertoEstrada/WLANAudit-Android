@@ -49,6 +49,7 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
 	ShowcaseView sv;
 
 	@InjectView(R.id.showcase_button)
+	@Nullable
 	Button showcase_button;
 
 	@InjectResource(R.string.map_layout_locations_list_title)

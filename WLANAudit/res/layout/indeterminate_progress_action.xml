@@ -20,4 +20,3 @@
     android:layout_marginLeft="@dimen/progress_action_padding"
     android:layout_marginRight="@dimen/progress_action_padding"
     android:indeterminate="true" />
-

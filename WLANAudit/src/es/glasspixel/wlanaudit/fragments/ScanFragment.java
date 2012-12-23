@@ -207,6 +207,7 @@ public class ScanFragment extends RoboSherlockFragment implements
 	public void onDetach() {
 
 		super.onDetach();
+		mCallback = null;
 	}
 
 	public void initScan() {
@@ -350,7 +351,7 @@ public class ScanFragment extends RoboSherlockFragment implements
 			mAutoScanAction.stopAutoScan();
 		if (mCallBackReceiver != null) {
 			try {
-				getActivity().unregisterReceiver(mCallBackReceiver);
+				getSherlockActivity().unregisterReceiver(mCallBackReceiver);
 			} catch (IllegalArgumentException e) {
 				Log.d("ScanFragment", e.getMessage().toString());
 			}
