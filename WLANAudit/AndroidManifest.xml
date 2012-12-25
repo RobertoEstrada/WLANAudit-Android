@@ -62,30 +62,6 @@
                 android:value="es.glasspixel.wlanaudit.activities.NetworkListActivitySwipe" />
         </activity>
 
-        <!-- <receiver android:name="com.novoda.location.receiver.PassiveLocationChanged" > -->
-        <!-- <intent-filter> -->
-        <!-- <action android:name="com.novoda.location.ACTIVE_LOCATION_UPDATE_ACTION" /> -->
-        <!-- </intent-filter> -->
-        <!-- </receiver> -->
-        <!-- <receiver android:name="com.novoda.location.receiver.PassiveLocationChanged" /> -->
-        <!-- <receiver -->
-        <!-- android:name="com.novoda.location.receiver.UnregisterPassiveListenerOnLostConnectivity" -->
-        <!-- > -->
-        <!-- <intent-filter> -->
-        <!-- <action android:name="android.net.conn.CONNECTIVITY_CHANGE" /> -->
-        <!-- </intent-filter> -->
-        <!-- </receiver> -->
-        <!-- <receiver android:name="com.novoda.location.receiver.UnregisterPassiveLocationUpdatesOnLowBattery" > -->
-        <!-- <intent-filter> -->
-        <!-- <action android:name="android.intent.action.BATTERY_LOW" /> -->
-        <!-- <action android:name="android.intent.action.BATTERY_OKAY" /> -->
-        <!-- </intent-filter> -->
-        <!-- </receiver> -->
-        <!-- <receiver android:name="com.novoda.location.receiver.RestorePassiveListenerBoot" > -->
-        <!-- <intent-filter> -->
-        <!-- <action android:name="android.intent.action.BOOT_COMPLETED" /> -->
-        <!-- </intent-filter> -->
-        <!-- </receiver> -->
         <receiver
             android:name="com.novoda.location.receiver.LocationChanged"
             android:exported="false" >

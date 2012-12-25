@@ -80,10 +80,10 @@ public class NetworkDetailsDialogFragment extends RoboDialogFragment {
 
 	@InjectResource(android.R.string.cancel)
 	String cancel;
-	
+
 	/**
-	 * Constant to identify the location's settings launch when 
-	 * there aren't location providers enabled
+	 * Constant to identify the location's settings launch when there aren't
+	 * location providers enabled
 	 */
 	private static final int LOCATION_SETTINGS = 2;
 
@@ -403,8 +403,15 @@ public class NetworkDetailsDialogFragment extends RoboDialogFragment {
 			networkToSave.mFrequency = networkData.frequency;
 			networkToSave.mChannel = ChannelCalculator
 					.getChannelNumber(networkData.frequency);
-			networkToSave.mLatitude = networkLocation.getLatitude();
-			networkToSave.mLongitude = networkLocation.getLongitude();
+			//check if location is available
+			if (networkLocation != null) {
+				networkToSave.mLatitude = networkLocation.getLatitude();
+				networkToSave.mLongitude = networkLocation.getLongitude();
+			}else
+			{
+				networkToSave.mLatitude = -999999999;
+				networkToSave.mLongitude = -999999999;
+			}
 
 			// Insertion onto the DB
 			networkToSave.insert();

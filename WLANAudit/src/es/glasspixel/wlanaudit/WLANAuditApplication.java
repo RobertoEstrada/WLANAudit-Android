@@ -16,6 +16,7 @@
 
 package es.glasspixel.wlanaudit;
 
+import org.acra.ACRA;
 import org.orman.dbms.Database;
 import org.orman.dbms.sqliteandroid.SQLiteAndroid;
 import org.orman.mapper.MappingSession;
@@ -65,6 +66,6 @@ public class WLANAuditApplication extends Application {
 		locator = LocatorFactory.getInstance();
 		locator.prepare(getApplicationContext(), settings);
 
-		// ACRA.init(this);
+		ACRA.init(this);
 	}
 }
