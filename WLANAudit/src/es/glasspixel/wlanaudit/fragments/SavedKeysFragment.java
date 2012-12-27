@@ -132,6 +132,14 @@ public class SavedKeysFragment extends RoboSherlockListFragment implements
 									.startActionMode(mActionCallBack);
 							mSelectedNetwork = mSavedNetworks.get(position);
 							view.setSelected(true);
+							mNetworkListView.getCheckedItemPositions().put(0,
+									true);
+							mActionMode.setTitle(String.valueOf(1)
+									+ " "
+									+ getResources()
+											.getString(
+													R.string.context_menu_selected_count_unico));
+							mActionMode.getMenu().getItem(0).setVisible(true);
 
 							mNetworkListView
 									.setOnItemClickListener(new OnItemClickListener() {
@@ -142,26 +150,47 @@ public class SavedKeysFragment extends RoboSherlockListFragment implements
 										public void onItemClick(
 												AdapterView<?> arg0, View arg1,
 												int arg2, long arg3) {
+											mNetworkListView
+													.getCheckedItemPositions()
+													.put(0,
+															!mNetworkListView
+																	.getCheckedItemPositions()
+																	.get(arg2));
+											int checked_count = 0;
 											checked = mNetworkListView
 													.getCheckedItemPositions();
 											boolean hasCheckedElement = false;
 											for (int i = 0; i < checked.size()
 													&& !hasCheckedElement; i++) {
+												if (checked.get(i)) {
+													checked_count++;
+												}
 												hasCheckedElement = checked
 														.valueAt(i);
 											}
 											arg1.setSelected(checked.get(arg2));
-
-											if (hasCheckedElement) {
-												if (mActionMode == null) {
-													mActionMode = getSherlockActivity()
-															.startActionMode(
-																	mActionCallBack);
-												}
+											if (checked_count > 1) {
+												mActionMode.getMenu()
+														.getItem(0)
+														.setVisible(false);
+												mActionMode.setTitle(String
+														.valueOf(checked_count)
+														+ " "
+														+ getResources()
+																.getString(
+																		R.string.context_menu_selected_count_multiple));
+											} else if (checked_count == 1) {
+												mActionMode.setTitle(String
+														.valueOf(checked_count)
+														+ " "
+														+ getResources()
+																.getString(
+																		R.string.context_menu_selected_count_unico));
+												mActionMode.getMenu()
+														.getItem(0)
+														.setVisible(true);
 											} else {
-												if (mActionMode != null) {
-													mActionMode.finish();
-												}
+												mActionMode.finish();
 											}
 
 										}
@@ -208,6 +237,10 @@ public class SavedKeysFragment extends RoboSherlockListFragment implements
 											(ArrayList<String>) mSelectedNetwork
 													.getPossibleDefaultKeys());
 									startActivity(i);
+									getSherlockActivity()
+											.overridePendingTransition(
+													R.anim.slide_in_from_right,
+													R.anim.slide_out_to_left);
 
 								}
 
@@ -362,6 +395,9 @@ public class SavedKeysFragment extends RoboSherlockListFragment implements
 							(ArrayList<String>) mSelectedNetwork
 									.getPossibleDefaultKeys());
 					startActivity(i);
+					getSherlockActivity().overridePendingTransition(
+							R.anim.slide_in_from_right,
+							R.anim.slide_out_to_left);
 
 				}
 
@@ -370,6 +406,10 @@ public class SavedKeysFragment extends RoboSherlockListFragment implements
 			default:
 				return true;
 			}
+
+		}
+
+		public void setCopyMenuItemVisible(boolean visibility) {
 
 		}
 
@@ -404,7 +444,10 @@ public class SavedKeysFragment extends RoboSherlockListFragment implements
 	public void dataSourceShouldRefresh() {
 		mSavedNetworks = Model.fetchAll(Network.class);
 		mListAdapter.clear();
-		mListAdapter.addAll(mSavedNetworks);
+		for (Network n : mSavedNetworks) {
+			mListAdapter.add(n);
+		}
+
 		mListAdapter.notifyDataSetChanged();
 	}
 

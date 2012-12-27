@@ -71,7 +71,7 @@ public class AboutActivity extends SherlockActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.about_layout);
 		ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.setDisplayHomeAsUpEnabled(true);
 		mVersionValueLabel = (TextView) findViewById(R.id.versionValue);
 		mReleaseValueLabel = (TextView) findViewById(R.id.releaseValue);
 		mOssLicensesButton = (Button) findViewById(R.id.oss_button);
@@ -136,6 +136,8 @@ public class AboutActivity extends SherlockActivity {
 		case android.R.id.home:
 			// app icon in action bar clicked; go home
 			NavUtils.navigateUpFromSameTask(this);
+			overridePendingTransition(R.anim.slide_in_from_left,
+					R.anim.slide_out_to_right);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -164,5 +166,12 @@ public class AboutActivity extends SherlockActivity {
 			Log.e(this.getClass().getSimpleName(), "Name not found", e1);
 		}
 		return version;
+	}
+
+	@Override
+	public void onBackPressed() {
+		finish();
+		overridePendingTransition(R.anim.slide_in_from_left,
+				R.anim.slide_out_to_right);
 	}
 }

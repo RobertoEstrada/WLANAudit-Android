@@ -179,10 +179,19 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
 	}
 
 	@Override
+	public void onBackPressed() {
+		finish();
+		overridePendingTransition(R.anim.slide_in_from_left,
+				R.anim.slide_out_to_right);
+	}
+
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			NavUtils.navigateUpFromSameTask(this);
+			overridePendingTransition(R.anim.slide_in_from_left,
+					R.anim.slide_out_to_right);
 			break;
 		case R.id.check_location_menu:
 

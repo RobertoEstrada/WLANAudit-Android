@@ -24,6 +24,7 @@ import es.glasspixel.wlanaudit.R;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 
 /***
  * PreferenceActivity is a built-in Activity for preferences management
@@ -55,10 +56,19 @@ public class WLANAuditPreferencesActivity extends SherlockPreferenceActivity {
 			// Intent intent = new Intent(this, NetworkListActivitySwipe.class);
 			// intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			// startActivity(intent);
-			finish();
+			NavUtils.navigateUpFromSameTask(this);
+			overridePendingTransition(R.anim.slide_in_from_left,
+					R.anim.slide_out_to_right);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+	@Override
+	public void onBackPressed() {
+		finish();
+		overridePendingTransition(R.anim.slide_in_from_left,
+				R.anim.slide_out_to_right);
 	}
 }

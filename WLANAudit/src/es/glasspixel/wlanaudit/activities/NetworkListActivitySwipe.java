@@ -228,17 +228,32 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity
 		case R.id.preferenceOption:
 			i = new Intent(this, WLANAuditPreferencesActivity.class);
 
+			/**
+			 * slide out to left + slide in from right --> aparece por la
+			 * izquierda la nueva actividad ;; slide out to right + slide in
+			 * from left --> intenta aparece la actividad que se cierra por la
+			 * izquierda ;; slide in from right + slide out to left --> nada ;;
+			 * slide in from left + slide out to right --> si pero no efecto
+			 * deseado ;; slide in form right + slide out to right --> no
+			 */
+
 			startActivity(i);
+			overridePendingTransition(R.anim.slide_in_from_right,
+					R.anim.slide_out_to_left);
 			return true;
 		case R.id.aboutOption:
 			i = new Intent(this, AboutActivity.class);
 
 			startActivity(i);
+			overridePendingTransition(R.anim.slide_in_from_right,
+					R.anim.slide_out_to_left);
 			return true;
 		case R.id.mapOption:
 			i = new Intent(this, SlidingMapActivity.class);
 
 			startActivity(i);
+			overridePendingTransition(R.anim.slide_in_from_right,
+					R.anim.slide_out_to_left);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

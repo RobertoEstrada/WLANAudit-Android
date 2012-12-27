@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.text.ClipboardManager;
 import android.view.Gravity;
 import android.view.View;
@@ -128,9 +129,19 @@ public class KeyListActivity extends SherlockListActivity {
 			// Intent intent = new Intent(this, NetworkListActivity.class);
 			// intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			// startActivity(intent);
+			NavUtils.navigateUpFromSameTask(this);
+			overridePendingTransition(R.anim.slide_in_from_left,
+					R.anim.slide_out_to_right);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+	
+	@Override
+	public void onBackPressed() {
+		finish();
+		overridePendingTransition(R.anim.slide_in_from_left,
+				R.anim.slide_out_to_right);
 	}
 }
