@@ -46,7 +46,7 @@ public class SavedNetworkDetailsDialogFragment extends RoboDialogFragment {
     private static final String TAG = SavedNetworkDetailsDialogFragment.class.getName();
     
     /**
-     * Key to store and recover from dialog bundle the network data to displau
+     * Key to store and recover from dialog bundle the network data to display
      */
     private static String NETWORK_DETAILS_DATA_KEY = "NetworkDetailsData";
 

@@ -73,5 +73,7 @@
     <string name="show_case_view_title_map">Access to your stored keys</string>
     <string name="show_case_view_text_map">Slide your finger from the left to see the keys</string>
     <string name="location_unavailable">Your location is unavailable</string>
+    <string name="context_menu_selected_count_multiple">networks selected</string>
+    <string name="context_menu_selected_count_unico">network selected</string>
 
 </resources>

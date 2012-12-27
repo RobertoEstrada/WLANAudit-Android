@@ -1,18 +1,23 @@
 package es.glasspixel.wlanaudit.fragments;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.orman.mapper.Model;
 
 import roboguice.inject.InjectView;
-import sun.security.action.GetIntegerAction;
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
@@ -25,9 +30,7 @@ import com.actionbarsherlock.view.MenuItem;
 import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockListFragment;
 
 import es.glasspixel.wlanaudit.R;
-import es.glasspixel.wlanaudit.activities.AboutActivity;
-import es.glasspixel.wlanaudit.activities.SlidingMapActivity;
-import es.glasspixel.wlanaudit.activities.WLANAuditPreferencesActivity;
+import es.glasspixel.wlanaudit.activities.KeyListActivity;
 import es.glasspixel.wlanaudit.adapters.SavedNetworksAdapter;
 import es.glasspixel.wlanaudit.database.entities.Network;
 import es.glasspixel.wlanaudit.interfaces.OnDataSourceModifiedListener;
@@ -72,6 +75,8 @@ public class SavedKeysFragment extends RoboSherlockListFragment implements
 
 	private SavedNetworksAdapter mListAdapter;
 
+	protected MenuItem copyMenuItem;
+
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -100,38 +105,210 @@ public class SavedKeysFragment extends RoboSherlockListFragment implements
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
 
-		boolean b = getArguments().getBoolean("screen_large");
-
-		// if (!b)
-		// setHasOptionsMenu(true);
-
 		return inflater.inflate(R.layout.saved_keys_fragment, container, false);
 	}
 
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		mNetworkListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-		mNetworkListView
-				.setOnItemLongClickListener(new OnItemLongClickListener() {
+		mNetworkListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+		if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.HONEYCOMB) {
+			mNetworkListView.setItemsCanFocus(false);
+			mNetworkListView
+					.setOnItemLongClickListener(new OnItemLongClickListener() {
 
-					@Override
-					public boolean onItemLongClick(AdapterView<?> parent,
-							View view, int position, long id) {
-						if (mActionMode != null) {
-							return false;
+						@Override
+						public boolean onItemLongClick(AdapterView<?> parent,
+								View view, int position, long id) {
+							if (mActionMode != null) {
+								return false;
+							}
+							context_menu_item_position = position;
+
+							// Start the CAB using the ActionMode.Callback
+							// defined
+							// above
+							mActionMode = getSherlockActivity()
+									.startActionMode(mActionCallBack);
+							mSelectedNetwork = mSavedNetworks.get(position);
+							view.setSelected(true);
+
+							mNetworkListView
+									.setOnItemClickListener(new OnItemClickListener() {
+
+										private SparseBooleanArray checked;
+
+										@Override
+										public void onItemClick(
+												AdapterView<?> arg0, View arg1,
+												int arg2, long arg3) {
+											checked = mNetworkListView
+													.getCheckedItemPositions();
+											boolean hasCheckedElement = false;
+											for (int i = 0; i < checked.size()
+													&& !hasCheckedElement; i++) {
+												hasCheckedElement = checked
+														.valueAt(i);
+											}
+											arg1.setSelected(checked.get(arg2));
+
+											if (hasCheckedElement) {
+												if (mActionMode == null) {
+													mActionMode = getSherlockActivity()
+															.startActionMode(
+																	mActionCallBack);
+												}
+											} else {
+												if (mActionMode != null) {
+													mActionMode.finish();
+												}
+											}
+
+										}
+									});
+							return true;
 						}
-						context_menu_item_position = position;
+					});
 
-						// Start the CAB using the ActionMode.Callback defined
-						// above
-						mActionMode = getSherlockActivity().startActionMode(
-								mActionCallBack);
-						mSelectedNetwork = mSavedNetworks.get(position);
-						view.setSelected(true);
-						return true;
-					}
-				});
+		} else {
+
+			mNetworkListView
+					.setMultiChoiceModeListener(new ListView.MultiChoiceModeListener() {
+
+						ArrayList<Network> mCheckedItems;
+						android.view.MenuItem copy_item;
+
+						@Override
+						public boolean onActionItemClicked(
+								android.view.ActionMode mode,
+								android.view.MenuItem item) {
+
+							switch (item.getItemId()) {
+							case R.id.delete_context_menu:
+
+								for (Network n : mCheckedItems) {
+									n.delete();
+								}
+
+								mCallback.dataSourceShouldRefresh();
+								mode.finish();
+								break;
+							case R.id.copy_context_menu:
+								if (mSelectedNetwork.getPossibleDefaultKeys()
+										.size() == 1) {
+									copyClipboard(mSelectedNetwork
+											.getPossibleDefaultKeys().get(0));
+								} else if (mSelectedNetwork
+										.getPossibleDefaultKeys().size() > 1) {
+									Intent i = new Intent(
+											getSherlockActivity(),
+											KeyListActivity.class);
+									i.putStringArrayListExtra(
+											KeyListActivity.KEY_LIST_KEY,
+											(ArrayList<String>) mSelectedNetwork
+													.getPossibleDefaultKeys());
+									startActivity(i);
+
+								}
+
+								break;
+							default:
+								break;
+							}
+							mode.finish();
+
+							return true;
+						}
+
+						@Override
+						public boolean onCreateActionMode(
+								android.view.ActionMode mode,
+								android.view.Menu menu) {
+
+							android.view.MenuInflater inflater = mode
+									.getMenuInflater();
+							inflater.inflate(
+									R.menu.saved_keys_elements_context_menu,
+									menu);
+							copy_item = menu.getItem(0);
+							// if (mSelectView == null) {
+							// mSelectView = (ViewGroup)
+							// LayoutInflater.from(getActivity())
+							// .inflate(R.layout.select_count_layout, null);
+							//
+							// mSelectedCount = (TextView) mSelectView
+							// .findViewById(R.id.count_tv);
+							//
+							// }
+							if (mCheckedItems == null) {
+								mCheckedItems = new ArrayList<Network>();
+							}
+							// mode.setCustomView(mSelectView);
+							return true;
+						}
+
+						@Override
+						public void onDestroyActionMode(
+								android.view.ActionMode mode) {
+							mCheckedItems = null;
+
+						}
+
+						@Override
+						public boolean onPrepareActionMode(
+								android.view.ActionMode mode,
+								android.view.Menu menu) {
+							// if (mSelectView == null) {
+							// mSelectView = (ViewGroup)
+							// LayoutInflater.from(getActivity())
+							// .inflate(R.layout.select_count_layout, null);
+							//
+							// mSelectedCount = (TextView) mSelectView
+							// .findViewById(R.id.count_tv);
+							// }
+
+							if (mCheckedItems == null) {
+								mCheckedItems = new ArrayList<Network>();
+							}
+							return true;
+
+						}
+
+						@Override
+						public void onItemCheckedStateChanged(
+								android.view.ActionMode mode, int position,
+								long id, boolean checked) {
+
+							final int count = mNetworkListView
+									.getCheckedItemCount();
+							if (count > 1) {
+								copy_item.setVisible(false);
+								mode.setTitle(String.valueOf(count)
+										+ " "
+										+ getResources()
+												.getString(
+														R.string.context_menu_selected_count_multiple));
+							} else {
+								mode.setTitle(String.valueOf(count)
+										+ " "
+										+ getResources()
+												.getString(
+														R.string.context_menu_selected_count_unico));
+								copy_item.setVisible(true);
+							}
+
+							// mSelectedCount.setText(String.valueOf(count));
+							if (checked) {
+								mCheckedItems.add(mSavedNetworks.get(position));
+							} else {
+								mCheckedItems.remove(mSavedNetworks
+										.get(position));
+							}
+
+						}
+
+					});
+		}
 
 		mNetworkListView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -150,6 +327,7 @@ public class SavedKeysFragment extends RoboSherlockListFragment implements
 		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
 			MenuInflater inflater = mode.getMenuInflater();
 			inflater.inflate(R.menu.saved_keys_elements_context_menu, menu);
+			copyMenuItem = menu.getItem(0);
 			return true;
 		}
 
@@ -162,17 +340,31 @@ public class SavedKeysFragment extends RoboSherlockListFragment implements
 		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 			switch (item.getItemId()) {
 			case R.id.delete_context_menu:
-				mSelectedNetwork.delete();
+				SparseBooleanArray s = mNetworkListView
+						.getCheckedItemPositions();
+				for (int i = 0; i < s.size(); i++) {
+					if (s.get(i)) {
+						mSavedNetworks.get(i).delete();
+					}
+				}
+
 				mCallback.dataSourceShouldRefresh();
 				mode.finish();
 				return true;
 			case R.id.copy_context_menu:
-				// TODO
-				/*
-				 * copyClipboard(mSelectedNetwork.getKey()); saveWLANKey(
-				 * ((TextView) myFragmentView.findViewById(R.id.networkName))
-				 * .getText().toString(), mSelectedNetwork.getKey());
-				 */
+				if (mSelectedNetwork.getPossibleDefaultKeys().size() == 1) {
+					copyClipboard(mSelectedNetwork.getPossibleDefaultKeys()
+							.get(0));
+				} else if (mSelectedNetwork.getPossibleDefaultKeys().size() > 1) {
+					Intent i = new Intent(getSherlockActivity(),
+							KeyListActivity.class);
+					i.putStringArrayListExtra(KeyListActivity.KEY_LIST_KEY,
+							(ArrayList<String>) mSelectedNetwork
+									.getPossibleDefaultKeys());
+					startActivity(i);
+
+				}
+
 				mode.finish();
 				return true;
 			default:
@@ -188,6 +380,26 @@ public class SavedKeysFragment extends RoboSherlockListFragment implements
 		}
 	};
 
+	@SuppressWarnings("deprecation")
+	@SuppressLint("NewApi")
+	private void copyClipboard(CharSequence text) {
+		int sdk = android.os.Build.VERSION.SDK_INT;
+		if (sdk >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+			android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getActivity()
+					.getSystemService(Context.CLIPBOARD_SERVICE);
+			android.content.ClipData clip = android.content.ClipData
+					.newPlainText("text label", text);
+			clipboard.setPrimaryClip(clip);
+		} else {
+			android.text.ClipboardManager clipboard = (android.text.ClipboardManager) getActivity()
+					.getSystemService(Context.CLIPBOARD_SERVICE);
+			clipboard.setText(text);
+		}
+		Toast.makeText(getActivity(),
+				getResources().getString(R.string.key_copy_success),
+				Toast.LENGTH_SHORT).show();
+	}
+
 	@Override
 	public void dataSourceShouldRefresh() {
 		mSavedNetworks = Model.fetchAll(Network.class);
@@ -195,4 +407,5 @@ public class SavedKeysFragment extends RoboSherlockListFragment implements
 		mListAdapter.addAll(mSavedNetworks);
 		mListAdapter.notifyDataSetChanged();
 	}
+
 }

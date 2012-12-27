@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8" standalone="no"?>
 <resources>
 
     <string name="autoscan_enabled">Búsqueda automática activa</string>
@@ -56,7 +55,7 @@
     <string name="map_layout_locations_list_title">Localización de claves</string>
     <string name="show_my_location">Muéstrame donde estoy</string>
     <string name="title_activity_map">Localización de claves</string>
-    <string name="menu_map_option">Mostrar claves almacenadas en el mapa</string>
+    <string name="menu_map_option">Mostrar localización de las redes almacenadas</string>
     <string name="no_data_scan_keys">No hay puntos de acceso cercanos</string>
     <string name="position_refreshed">Posición actualizada</string>
     <string name="key_already_store">Red ya almacenada</string>
@@ -64,5 +63,7 @@
     <string name="save_and_copy_text">Guardar red y copiar clave</string>
      <string name="show_case_view_title_map">Acceda a sus redes guardadas</string>
     <string name="show_case_view_text_map">Deslice el dedo desde el margen izquierdo para acceder</string>
+    <string name="context_menu_selected_count_multiple">redes seleccionadas</string>
+    <string name="context_menu_selected_count_unico">red seleccionada</string>
 
 </resources>

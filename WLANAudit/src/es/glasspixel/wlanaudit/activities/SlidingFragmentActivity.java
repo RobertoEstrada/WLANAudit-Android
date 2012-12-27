@@ -1,13 +1,11 @@
 package es.glasspixel.wlanaudit.activities;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 
 import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockFragmentActivity;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.slidingmenu.lib.SlidingMenu;
 import com.slidingmenu.lib.app.SlidingActivityBase;
 import com.slidingmenu.lib.app.SlidingActivityHelper;

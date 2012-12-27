@@ -10,6 +10,8 @@ import roboguice.inject.InjectView;
 import roboguice.util.RoboContext;
 
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -55,6 +57,15 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
 	@InjectResource(R.string.map_layout_locations_list_title)
 	String ab_title;
 
+	@InjectResource(R.string.show_keys_list)
+	String show_keys_list;
+
+	@InjectResource(R.drawable.ic_menu_account_list)
+	Drawable ic_menu_account_list;
+
+	@InjectResource(R.drawable.shadow)
+	Drawable showcase_shadow;
+
 	private boolean showcaseView = false;
 
 	@Override
@@ -72,7 +83,6 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
 			setSlidingActionBarEnabled(false);
 			getSlidingMenu().setSlidingEnabled(true);
 			getSlidingMenu().setMode(SlidingMenu.LEFT);
-
 			getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
 
 		} else {
@@ -87,15 +97,15 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
 		if (savedInstanceState != null)
 			mContent = (MapFragment) getSupportFragmentManager().getFragment(
 					savedInstanceState, "mContent");
-		if (mContent == null)
-			mContent = new MapFragment(0);
+		if (mContent == null) {
+			mContent = new MapFragment();
+		}
 
+		// set the OSM map fragment
 		getSupportFragmentManager().beginTransaction()
 				.replace(R.id.content_frame, mContent).commit();
 
-		// set the Behind View Fragment
-		// SavedKeysMenuFragment s = ;
-
+		// set the Behind View Fragment (saved keys fragment)
 		getSupportFragmentManager().beginTransaction()
 				.replace(R.id.menu_frame, new SavedKeysMenuFragment()).commit();
 
@@ -103,22 +113,28 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
 		SlidingMenu sm = getSlidingMenu();
 		sm.setBehindOffsetRes(R.dimen.slidingmenu_offset);
 		sm.setShadowWidthRes(R.dimen.shadow_width);
-		sm.setShadowDrawable(R.drawable.shadow);
+		sm.setShadowDrawable(showcase_shadow);
 		sm.setBehindScrollScale(0.25f);
 		sm.setFadeDegree(0.25f);
 
 		if (showcaseView) {
-			Display display = getWindowManager().getDefaultDisplay();
-			Point size = new Point();
-			display.getSize(size);
 
-			// sv = (ShowcaseView) findViewById(R.id.showcase);
-			// sv.setShowcaseView(findViewById(R.id.content_frame));
 			sv.setShotType(ShowcaseView.TYPE_ONE_SHOT);
 
-			sv.setShowcasePosition(0, size.y / 2);
-			// sv.invalidate();
-			// sv.show();
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+				Display display = getWindowManager().getDefaultDisplay();
+				Point size = new Point();
+				display.getSize(size);
+
+				// set showcase view parameters
+
+				// set the showcase ring at a medium-heigh point of display
+				sv.setShowcasePosition(0, size.y / 2);
+			} else {
+				int a = getWindowManager().getDefaultDisplay().getHeight();
+				sv.setShowcasePosition(0, getWindowManager()
+						.getDefaultDisplay().getHeight() / 2);
+			}
 
 			showcase_button.setOnClickListener(new OnClickListener() {
 
@@ -127,9 +143,6 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
 					if (sv.isShown()) {
 						sv.hide();
 						showcase_button.setOnClickListener(null);
-						// ((FrameLayout)
-						// findViewById(R.id.frame_layout_container))
-						// .removeView(findViewById(R.id.showcase));
 						sv.onClick(v);
 
 					}
@@ -156,9 +169,8 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
 
 		getSupportMenuInflater().inflate(R.menu.menu_map_location, menu);
 		if (getSlidingMenu().isSlidingEnabled()) {
-			menu.add(0, SHOW_MENU, 1,
-					getResources().getString(R.string.show_keys_list));
-			menu.getItem(1).setIcon(R.drawable.ic_menu_account_list);
+			menu.add(0, SHOW_MENU, 1, show_keys_list);
+			menu.getItem(1).setIcon(ic_menu_account_list);
 			menu.getItem(1).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
 		}

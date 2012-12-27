@@ -20,25 +20,15 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Configuration;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.location.Criteria;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
 import com.novoda.location.Locator;
 import com.novoda.location.LocatorFactory;
@@ -47,12 +37,12 @@ import com.novoda.location.exception.NoProviderAvailable;
 
 import es.glasspixel.wlanaudit.R;
 import es.glasspixel.wlanaudit.WLANAuditApplication;
-import es.glasspixel.wlanaudit.activities.SavedKey;
-import es.glasspixel.wlanaudit.database.KeysSQliteHelper;
 import es.glasspixel.wlanaudit.database.entities.Network;
-import es.glasspixel.wlanaudit.dominio.SavedKeysUtils;
 
 public class MapFragment extends RoboSherlockFragment {
+
+	@InjectView(R.id.openmapview)
+	MapView myOpenMapView;
 
 	@InjectResource(R.string.improve_precision_dialog_title)
 	String improve_preciosion_dialog_title;
@@ -65,6 +55,16 @@ public class MapFragment extends RoboSherlockFragment {
 
 	@InjectResource(android.R.string.cancel)
 	String cancel;
+
+	@InjectResource(R.string.location_unavailable)
+	String location_unavailable;
+
+	@InjectResource(R.string.position_refreshed)
+	String position_refreshed;
+
+	@InjectResource(R.drawable.marker_blue)
+	Drawable marker_blue;
+
 	/**
 	 * Constant to identify the location's settings launch when there aren't
 	 * location providers enabled
@@ -75,10 +75,9 @@ public class MapFragment extends RoboSherlockFragment {
 	 * Tag to identify the class in logcat
 	 */
 	private static final String TAG = "MapFragment";
-	private int mPos = -1;
+
 	private View v;
-	@InjectView(R.id.openmapview)
-	MapView myOpenMapView;
+
 	/**
 	 * OSM controller
 	 */
@@ -241,11 +240,9 @@ public class MapFragment extends RoboSherlockFragment {
 		if (myLocation != null) {
 			centerMap(myLocation, false);
 		} else {
-			Toast.makeText(
-					getSherlockActivity(),
-					getSherlockActivity().getResources().getString(
-							R.string.location_unavailable), Toast.LENGTH_LONG)
-					.show();
+			Toast.makeText(getSherlockActivity(), location_unavailable,
+					Toast.LENGTH_LONG).show();
+
 		}
 
 	}
@@ -282,10 +279,8 @@ public class MapFragment extends RoboSherlockFragment {
 
 	public void showLocation(Location l) {
 
-		Toast.makeText(
-				getSherlockActivity(),
-				getSherlockActivity().getResources().getString(
-						R.string.position_refreshed), Toast.LENGTH_LONG).show();
+		Toast.makeText(getSherlockActivity(), position_refreshed,
+				Toast.LENGTH_LONG).show();
 
 		changePositionInMap(l);
 		this.centerMap(l, false);
@@ -361,12 +356,10 @@ public class MapFragment extends RoboSherlockFragment {
 
 		positionOverlay = new OverlayItem("My position", "", new GeoPoint(
 				l.getLatitude(), l.getLongitude()));
-		positionOverlay.setMarker(getSherlockActivity().getResources()
-				.getDrawable(R.drawable.marker_blue));
+		positionOverlay.setMarker(marker_blue);
 		positionOverlayItemArray.add(0, positionOverlay);
 		ItemizedOverlayWithFocus<OverlayItem> positiontemizedIconOverlay = new ItemizedOverlayWithFocus<OverlayItem>(
 				getSherlockActivity(), positionOverlayItemArray, null);
-	
 
 		myOpenMapView.getOverlays().add(positiontemizedIconOverlay);
 		myOpenMapView.invalidate();
@@ -380,7 +373,7 @@ public class MapFragment extends RoboSherlockFragment {
 	}
 
 	protected List<Network> loadSavedKeys() {
-		// mKeys = SavedKeysUtils.loadSavedKeys(getSherlockActivity());
+
 		mKeys = Model.fetchAll(Network.class);
 
 		return mKeys;

@@ -1,56 +1,47 @@
 package es.glasspixel.wlanaudit.fragments;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.orman.mapper.Model;
 
-import com.actionbarsherlock.app.SherlockListFragment;
-import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockListFragment;
-
-import es.glasspixel.wlanaudit.R;
-import es.glasspixel.wlanaudit.activities.KeyListActivity;
-import es.glasspixel.wlanaudit.activities.SavedKey;
-import es.glasspixel.wlanaudit.activities.SlidingMapActivity;
-import es.glasspixel.wlanaudit.database.KeysSQliteHelper;
-import es.glasspixel.wlanaudit.database.entities.Network;
-import es.glasspixel.wlanaudit.dominio.SavedKeysUtils;
-import es.glasspixel.wlanaudit.keyframework.IKeyCalculator;
-import es.glasspixel.wlanaudit.keyframework.KeyCalculatorFactory;
-import es.glasspixel.wlanaudit.keyframework.NetData;
-
+import roboguice.inject.InjectResource;
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
+
+import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockListFragment;
+
+import es.glasspixel.wlanaudit.R;
+import es.glasspixel.wlanaudit.activities.SlidingMapActivity;
+import es.glasspixel.wlanaudit.database.entities.Network;
 
 public class SavedKeysMenuFragment extends RoboSherlockListFragment implements
 		OnItemClickListener {
+	/**
+	 * List of saved keys
+	 */
 	private List<Network> mKeys;
+	/**
+	 * instance of parent listener
+	 */
 	private SlidingMapActivity listener;
-	private int mPosition;
+
 	LayoutInflater mInflater;
+	
+	/**
+	 * Empty saved keys list text
+	 */
+	@InjectResource(R.string.no_data_saved_keys)
+	private String no_data_text;
 
-	public SavedKeysMenuFragment(int i) {
-		mPosition = i;
-	}
-
-	public SavedKeysMenuFragment() {
-
-	}
+	
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -80,9 +71,7 @@ public class SavedKeysMenuFragment extends RoboSherlockListFragment implements
 
 		View empty = mInflater.inflate(R.layout.empty_list, null);
 
-		((TextView) empty.findViewById(R.id.textView1))
-				.setText(getSherlockActivity().getResources().getString(
-						R.string.no_data_saved_keys));
+		((TextView) empty.findViewById(R.id.textView1)).setText(no_data_text);
 
 		getListView().setEmptyView(empty);
 
@@ -99,16 +88,7 @@ public class SavedKeysMenuFragment extends RoboSherlockListFragment implements
 
 	}
 
-	// the meat of switching the above fragment
-	private void switchFragment(Fragment fragment) {
-		if (getActivity() == null)
-			return;
-
-		if (getActivity() instanceof SlidingMapActivity) {
-			SlidingMapActivity ra = (SlidingMapActivity) getActivity();
-			ra.switchContent(fragment);
-		}
-	}
+	
 
 	private class MenuAdapter extends BaseAdapter {
 

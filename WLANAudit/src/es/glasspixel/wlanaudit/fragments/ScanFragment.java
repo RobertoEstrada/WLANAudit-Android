@@ -15,7 +15,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.location.LocationManager;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -31,9 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
-import com.actionbarsherlock.view.MenuItem;
 import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
-import com.novoda.location.Locator;
 import es.glasspixel.wlanaudit.R;
 import es.glasspixel.wlanaudit.actions.AutoScanAction;
 import es.glasspixel.wlanaudit.actions.RefreshAction;
@@ -48,21 +45,37 @@ public class ScanFragment extends RoboSherlockFragment implements
 	@InjectResource(R.string.improve_precision_dialog_message)
 	String improve_precision_dialog_message;
 
-	@InjectResource(R.string.settings)
-	String settings;
+		
 
+	
+	/**
+	 * Empty text for {@empty_text}
+	 */
 	@InjectResource(R.string.no_networks_found)
 	String no_networks_found;
 
+	
+	/**
+	 * Cancel text for dialogfragments
+	 */
 	@InjectResource(android.R.string.cancel)
 	String cancel;
 
+	
+	/**
+	 * Textview for empty listviews
+	 */
 	@InjectView(android.R.id.empty)
 	TextView empty_text;
 
+	
+	/**
+	 * wifi scan results listview
+	 */
 	@InjectView(android.R.id.list)
 	ListView list_view;
-
+	
+	
 	private boolean isScanning = false;
 
 	/**
@@ -89,9 +102,10 @@ public class ScanFragment extends RoboSherlockFragment implements
 		public void scanStart();
 	}
 
-	private static final int LOCATION_SETTINGS = 2;
-
-	View myFragmentView;
+	/**
+	 * SavedKeysFragment instance to inflate
+	 */
+	View saved_keys_fragment;
 
 	/**
 	 * The {@link ViewPager} that will host the activty fragments.
@@ -110,6 +124,10 @@ public class ScanFragment extends RoboSherlockFragment implements
 	 */
 	private BroadcastReceiver mCallBackReceiver;
 
+	
+	/**
+	 * App preferences
+	 */
 	private SharedPreferences prefs;
 
 	/**
@@ -118,26 +136,6 @@ public class ScanFragment extends RoboSherlockFragment implements
 	 */
 	public AutoScanAction mAutoScanAction;
 
-	/**
-	 * Handle to the action bar's refresh action
-	 */
-	private RefreshAction mRefreshAction;
-
-	private List<String> mKeyList;
-
-	TextView mDefaultPassValue;
-
-	private boolean screenIsLarge;
-
-	private double mLatitude = -999999999, mLongitude = -999999999;
-
-	private LocationManager locationManager;
-
-	private String bestProvider;
-
-	private MenuItem refresh;
-
-	protected Locator locator;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -149,19 +147,12 @@ public class ScanFragment extends RoboSherlockFragment implements
 			mAutoScanAction = new AutoScanAction(getActivity());
 		}
 
-		screenIsLarge = getSherlockActivity().getResources().getBoolean(
+		getSherlockActivity().getResources().getBoolean(
 				R.bool.screen_large);
 
 	}
 
-	public BroadcastReceiver freshLocationReceiver = new BroadcastReceiver() {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			mLatitude = locator.getLocation().getLatitude();
-			mLongitude = locator.getLocation().getLongitude();
-
-		}
-	};
+	
 
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -181,7 +172,7 @@ public class ScanFragment extends RoboSherlockFragment implements
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-		myFragmentView = inflater.inflate(R.layout.saved_keys_fragment,
+		saved_keys_fragment = inflater.inflate(R.layout.saved_keys_fragment,
 				container, false);
 
 		prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -198,9 +189,9 @@ public class ScanFragment extends RoboSherlockFragment implements
 			editor.commit();
 		}
 
-		initScan();
+		// initScan();
 
-		return myFragmentView;
+		return saved_keys_fragment;
 	}
 
 	@Override
@@ -225,7 +216,7 @@ public class ScanFragment extends RoboSherlockFragment implements
 				mWifiManager.setWifiEnabled(true);
 			}
 
-			mRefreshAction = new RefreshAction(getActivity());
+			new RefreshAction(getActivity());
 
 			setupNetworkScanCallBack();
 			// StartPassButtonListener();
@@ -267,7 +258,7 @@ public class ScanFragment extends RoboSherlockFragment implements
 				List<ScanResult> res = mWifiManager.getScanResults();
 				isScanning = false;
 
-				if (myFragmentView != null && getSherlockActivity() != null) {
+				if (saved_keys_fragment != null && getSherlockActivity() != null) {
 					mCallback.scanCompleted();
 					if (mWifiManager.getScanResults().size() > 0) {
 						list_view.setAdapter(new WifiNetworkAdapter(
