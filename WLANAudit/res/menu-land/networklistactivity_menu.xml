@@ -15,7 +15,7 @@
     </item>
     <item
         android:id="@+id/mapOption"
-        android:icon="@drawable/ic_menu_mapmode"
+        android:icon="@drawable/location_map_holo_dark"
         android:showAsAction="ifRoom"
         android:title="@string/menu_map_option">
     </item>

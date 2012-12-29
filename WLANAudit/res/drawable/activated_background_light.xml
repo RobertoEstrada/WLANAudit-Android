@@ -19,6 +19,6 @@
 
     <item android:drawable="@drawable/list_longpressed_holo" android:state_activated="true"/>
     <item android:state_selected="true" android:drawable="@drawable/list_longpressed_holo"/>
-    <item android:drawable="@android:color/transparent"/>
+    <item android:drawable="@android:color/white"/>
 
 </selector>

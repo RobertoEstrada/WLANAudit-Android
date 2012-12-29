@@ -70,8 +70,8 @@
     <string name="improve_precision_dialog_message">To set your location, please select the Location option in their settings. You can access them by clicking the Settings button</string>
     <string name="settings">Settings</string>
     <string name="save_and_copy_text">Save and copy</string>
-    <string name="show_case_view_title_map">Access to your stored keys</string>
-    <string name="show_case_view_text_map">Slide your finger from the left to see the keys</string>
+    <string name="show_case_view_title_map">Access to your saved networks</string>
+    <string name="show_case_view_text_map">Slide your finger from the left to see your saved networks</string>
     <string name="location_unavailable">Your location is unavailable</string>
     <string name="context_menu_selected_count_multiple">networks selected</string>
     <string name="context_menu_selected_count_unico">network selected</string>

@@ -14,7 +14,7 @@
         android:layout_alignBottom="@+id/networkKey"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:src="@drawable/location_black"
+        android:src="@drawable/location_place_holo_dark"
         android:visibility="invisible" />
 
     <LinearLayout

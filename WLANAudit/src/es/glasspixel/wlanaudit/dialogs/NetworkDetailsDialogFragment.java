@@ -158,6 +158,8 @@ public class NetworkDetailsDialogFragment extends RoboDialogFragment {
 	@InjectView(R.id.starNetworkButton)
 	private ImageButton mStarNetworkButton;
 
+	private int exists;
+
 	/**
 	 * Gets a new instance of the dialog
 	 * 
@@ -234,57 +236,76 @@ public class NetworkDetailsDialogFragment extends RoboDialogFragment {
 				.getChannelNumber(mNetworkData.frequency)));
 		mNetworkIntensityTextView.setText(mNetworkData.level + " dBm");
 
-		// Setting up button callbacks
-		mCopyPasswordButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (mKeyList.size() == 1) {
-					copyClipboard(mNetworkDefaultPassTextView.getText()
-							.toString());
-				} else if (mKeyList.size() > 1) {
-					Intent i = new Intent(getActivity(), KeyListActivity.class);
-					i.putStringArrayListExtra(KeyListActivity.KEY_LIST_KEY,
-							(ArrayList<String>) mKeyList);
-					startActivity(i);
+		// Existence check
+		exists = Integer
+				.parseInt((String) Model.fetchSingleValue(ModelQuery.select()
+						.from(Network.class)
+						.where(C.eq("m_bssid", mNetworkData.BSSID)).count()
+						.getQuery()));
 
+		if (exists == 0) {
+
+			// Setting up button callbacks
+			mCopyPasswordButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					if (mKeyList.size() == 1) {
+						copyClipboard(mNetworkDefaultPassTextView.getText()
+								.toString());
+					} else if (mKeyList.size() > 1) {
+						Intent i = new Intent(getActivity(),
+								KeyListActivity.class);
+						i.putStringArrayListExtra(KeyListActivity.KEY_LIST_KEY,
+								(ArrayList<String>) mKeyList);
+						startActivity(i);
+
+					}
+					dismiss();
 				}
-				dismiss();
-			}
-		});
-		mStarNetworkButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				saveNetwork(mNetworkData, mLastKnownLocation);
-				dismiss();
-			}
-		});
+			});
+			mStarNetworkButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					saveNetwork(mNetworkData, mLastKnownLocation);
+					dismiss();
+				}
+			});
 
-		mStarNetworkButton.setOnLongClickListener(new OnLongClickListener() {
+			mStarNetworkButton
+					.setOnLongClickListener(new OnLongClickListener() {
 
-			@Override
-			public boolean onLongClick(View v) {
-				Toast.makeText(getActivity(),
-						getResources().getString(R.string.save_and_copy_text),
-						Toast.LENGTH_LONG).show();
-				return false;
-			}
-		});
+						@Override
+						public boolean onLongClick(View v) {
+							Toast.makeText(
+									getActivity(),
+									getResources().getString(
+											R.string.save_and_copy_text),
+									Toast.LENGTH_LONG).show();
+							return false;
+						}
+					});
 
-		// Calculating key
-		IKeyCalculator keyCalculator = KeyCalculatorFactory
-				.getKeyCalculator(new NetData(mNetworkData.SSID,
+			// Calculating key
+			IKeyCalculator keyCalculator = KeyCalculatorFactory
+					.getKeyCalculator(new NetData(mNetworkData.SSID,
+							mNetworkData.BSSID));
+			if (keyCalculator != null) {
+				mKeyList = keyCalculator.getKey(new NetData(mNetworkData.SSID,
 						mNetworkData.BSSID));
-		if (keyCalculator != null) {
-			mKeyList = keyCalculator.getKey(new NetData(mNetworkData.SSID,
-					mNetworkData.BSSID));
-			if (mKeyList != null) {
-				if (mKeyList.size() > 1) {
-					mNetworkDefaultPassTextView.setText(String.valueOf(mKeyList
-							.size())
-							+ " "
-							+ getText(R.string.number_of_keys_found));
-				} else if (mKeyList.size() == 1) {
-					mNetworkDefaultPassTextView.setText(mKeyList.get(0));
+				if (mKeyList != null) {
+					if (mKeyList.size() > 1) {
+						mNetworkDefaultPassTextView.setText(String
+								.valueOf(mKeyList.size())
+								+ " "
+								+ getText(R.string.number_of_keys_found));
+					} else if (mKeyList.size() == 1) {
+						mNetworkDefaultPassTextView.setText(mKeyList.get(0));
+					}
+				} else {
+					mNetworkDefaultPassTextView
+							.setText(getString(R.string.no_default_key));
+					mCopyPasswordButton.setEnabled(false);
+					mStarNetworkButton.setEnabled(false);
 				}
 			} else {
 				mNetworkDefaultPassTextView
@@ -292,10 +313,9 @@ public class NetworkDetailsDialogFragment extends RoboDialogFragment {
 				mCopyPasswordButton.setEnabled(false);
 				mStarNetworkButton.setEnabled(false);
 			}
+
 		} else {
-			mNetworkDefaultPassTextView
-					.setText(getString(R.string.no_default_key));
-			mCopyPasswordButton.setEnabled(false);
+
 			mStarNetworkButton.setEnabled(false);
 		}
 	}
@@ -390,11 +410,7 @@ public class NetworkDetailsDialogFragment extends RoboDialogFragment {
 	}
 
 	private void saveNetwork(ScanResult networkData, Location networkLocation) {
-		// Existence check
-		int exists = Integer.parseInt((String) Model
-				.fetchSingleValue(ModelQuery.select().from(Network.class)
-						.where(C.eq("m_bssid", networkData.BSSID)).count()
-						.getQuery()));
+
 		if (exists == 0) {
 			Network networkToSave = new Network();
 			networkToSave.mBSSID = networkData.BSSID;
@@ -403,12 +419,11 @@ public class NetworkDetailsDialogFragment extends RoboDialogFragment {
 			networkToSave.mFrequency = networkData.frequency;
 			networkToSave.mChannel = ChannelCalculator
 					.getChannelNumber(networkData.frequency);
-			//check if location is available
+			// check if location is available
 			if (networkLocation != null) {
 				networkToSave.mLatitude = networkLocation.getLatitude();
 				networkToSave.mLongitude = networkLocation.getLongitude();
-			}else
-			{
+			} else {
 				networkToSave.mLatitude = -999999999;
 				networkToSave.mLongitude = -999999999;
 			}
