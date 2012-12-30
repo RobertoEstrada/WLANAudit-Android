@@ -14,6 +14,9 @@ import org.osmdroid.views.overlay.ItemizedIconOverlay.OnItemGestureListener;
 import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
 
+
+
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -37,6 +40,7 @@ import com.novoda.location.exception.NoProviderAvailable;
 
 import es.glasspixel.wlanaudit.R;
 import es.glasspixel.wlanaudit.WLANAuditApplication;
+import es.glasspixel.wlanaudit.activities.SlidingMapActivity;
 import es.glasspixel.wlanaudit.database.entities.Network;
 
 public class MapFragment extends RoboSherlockFragment {
@@ -117,6 +121,15 @@ public class MapFragment extends RoboSherlockFragment {
 	 * Location changes listener
 	 */
 	private BroadcastReceiver mLocationAvailableCallBackReceiver;
+	
+	/**
+	 * instance of parent listener
+	 */
+	private SlidingMapActivity listener;
+	
+	public interface OnMapNetworkSelected {
+		public void onMapNetworkSelected(int selected_network_index);
+	}
 
 	public MapFragment() {
 	}
@@ -211,6 +224,19 @@ public class MapFragment extends RoboSherlockFragment {
 
 	public MapFragment(int pos) {
 		// mPos = pos;
+	}
+	
+	
+
+	@Override
+	public void onAttach(Activity activity) {
+		if (activity instanceof SlidingMapActivity)
+			addListener((SlidingMapActivity) activity);
+		super.onAttach(activity);
+	}
+	
+	public void addListener(SlidingMapActivity a) {
+		listener = a;
 	}
 
 	@Override
@@ -329,19 +355,23 @@ public class MapFragment extends RoboSherlockFragment {
 				myOnItemGestureListener);
 		myOpenMapView.getOverlays().add(anotherItemizedIconOverlay);
 		anotherItemizedIconOverlay.setFocusItemsOnTap(true);
+		
 	}
 
 	OnItemGestureListener<OverlayItem> myOnItemGestureListener = new OnItemGestureListener<OverlayItem>() {
 
 		@Override
 		public boolean onItemLongPress(int arg0, OverlayItem arg1) {
-			// TODO Auto-generated method stub
+			
 			return false;
 		}
 
 		@Override
 		public boolean onItemSingleTapUp(int index, OverlayItem item) {
-
+			if(listener!=null)
+			{
+				listener.onMapNetworkSelected(index);
+			}
 			return true;
 		}
 

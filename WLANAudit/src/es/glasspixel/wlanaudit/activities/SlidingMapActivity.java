@@ -20,9 +20,6 @@ import android.view.Display;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.ListView;
-
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.espian.showcaseview.ShowcaseView;
@@ -35,10 +32,11 @@ import es.glasspixel.wlanaudit.R;
 import es.glasspixel.wlanaudit.database.entities.Network;
 import es.glasspixel.wlanaudit.fragments.MapFragment;
 import es.glasspixel.wlanaudit.fragments.SavedKeysMenuFragment;
+import es.glasspixel.wlanaudit.fragments.MapFragment.OnMapNetworkSelected;
 import es.glasspixel.wlanaudit.fragments.SavedKeysMenuFragment.OnSavedKeySelectedListener;
 
 public class SlidingMapActivity extends SlidingFragmentActivity implements
-		OnSavedKeySelectedListener, RoboContext,
+		OnSavedKeySelectedListener, RoboContext, OnMapNetworkSelected,
 		ShowcaseView.OnShowcaseEventListener {
 
 	protected HashMap<Key<?>, Object> scopedObjects = new HashMap<Key<?>, Object>();
@@ -252,5 +250,12 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
 	public void onShowcaseViewShow(ShowcaseView showcaseView) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void onMapNetworkSelected(int selected_network_index) {
+
+		((SavedKeysMenuFragment) getSupportFragmentManager().findFragmentById(
+				R.id.menu_frame)).onMapItemSelected(selected_network_index);
 	}
 }

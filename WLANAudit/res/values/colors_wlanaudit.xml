@@ -17,5 +17,5 @@
 -->
 
 <resources>
-    <color name="pressed_wlanaudit">#CC163699</color>
+    <color name="pressed_wlanaudit">#CC0099CC</color>
 </resources>

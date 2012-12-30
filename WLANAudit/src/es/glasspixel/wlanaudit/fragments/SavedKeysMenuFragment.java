@@ -34,14 +34,12 @@ public class SavedKeysMenuFragment extends RoboSherlockListFragment implements
 	private SlidingMapActivity listener;
 
 	LayoutInflater mInflater;
-	
+
 	/**
 	 * Empty saved keys list text
 	 */
 	@InjectResource(R.string.no_data_saved_keys)
 	private String no_data_text;
-
-	
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -50,15 +48,15 @@ public class SavedKeysMenuFragment extends RoboSherlockListFragment implements
 		super.onAttach(activity);
 	}
 
+	public void addListener(SlidingMapActivity a) {
+		listener = a;
+	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		mInflater = inflater;
 		return inflater.inflate(R.layout.menu_saved_keys_fragment, null);
-	}
-
-	public void addListener(SlidingMapActivity a) {
-		listener = a;
 	}
 
 	@Override
@@ -82,13 +80,13 @@ public class SavedKeysMenuFragment extends RoboSherlockListFragment implements
 		public void onSavedKeySelected(Network s);
 	}
 
+	
+
 	protected List<Network> loadSavedKeys() {
 
 		return mKeys = Model.fetchAll(Network.class);
 
 	}
-
-	
 
 	private class MenuAdapter extends BaseAdapter {
 
@@ -118,7 +116,7 @@ public class SavedKeysMenuFragment extends RoboSherlockListFragment implements
 
 			if (v == null) {
 				v = getSherlockActivity().getLayoutInflater().inflate(
-						R.layout.key_saved_list_element, parent, false);
+						R.layout.key_saved_list_menu_element, parent, false);
 			}
 
 			((TextView) v.findViewById(R.id.networkName)).setText(mKeys
@@ -142,5 +140,10 @@ public class SavedKeysMenuFragment extends RoboSherlockListFragment implements
 				&& mKeys.get(arg2).mLongitude > -999999999)
 			listener.onSavedKeySelected(mKeys.get(arg2));
 
+	}
+	
+	public void onMapItemSelected(int index)
+	{
+		getListView().getChildAt(index).setSelected(true);
 	}
 }

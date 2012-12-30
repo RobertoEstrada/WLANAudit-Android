@@ -17,6 +17,7 @@
 package es.glasspixel.wlanaudit;
 
 import org.acra.ACRA;
+import org.acra.annotation.ReportsCrashes;
 import org.orman.dbms.Database;
 import org.orman.dbms.sqliteandroid.SQLiteAndroid;
 import org.orman.mapper.MappingSession;
@@ -31,6 +32,7 @@ import com.novoda.location.util.ApiLevelDetector;
 import android.app.Application;
 import es.glasspixel.wlanaudit.database.entities.Network;
 
+@ReportsCrashes(formKey = "", mailTo = "manzanocaminojesus@gmail.com")
 public class WLANAuditApplication extends Application {
 	/**
 	 * App package name

@@ -46,7 +46,7 @@ public class MapElementsAdapter extends BaseAdapter {
 		if (listItem == null) {
 			LayoutInflater inflater = (LayoutInflater) mContext
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			listItem = inflater.inflate(R.layout.key_saved_list_element, null);
+			listItem = inflater.inflate(R.layout.key_saved_list_menu_element, null);
 		}
 
 		if (elements.get(position) != null) {

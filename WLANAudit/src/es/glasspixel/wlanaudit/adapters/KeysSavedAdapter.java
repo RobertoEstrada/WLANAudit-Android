@@ -37,24 +37,10 @@ public class KeysSavedAdapter extends ArrayAdapter<SavedKey> {
 
 		((TextView) listItem.findViewById(R.id.networkName)).setText(getItem(
 				position).getWlan_name());
-		// ((TextView) listItem.findViewById(R.id.networkKey))
-		// .setText(getListString(getItem(position)));
-		((TextView) listItem.findViewById(R.id.networkKey)).setText(getItem(
-				position).getAddress());
+		((TextView) listItem.findViewById(R.id.networkAddress))
+				.setText(getItem(position).getAddress());
 
 		return listItem;
-	}
-
-	private CharSequence getListString(SavedKey item) {
-		String result = "";
-		if (item.getKeys().size() > 1) {
-			for (String s : item.getKeys()) {
-				result += s + ",";
-			}
-		} else {
-			result = item.getKeys().get(0);
-		}
-		return result;
 	}
 
 }

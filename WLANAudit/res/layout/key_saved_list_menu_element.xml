@@ -3,20 +3,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/activated_background_light"
+    android:background="@drawable/selectable_background_wlanaudit"
     android:paddingRight="6dp"
     tools:ignore="HardcodedText" >
+
+    <ImageView
+        android:id="@+id/location_icon_saved_key"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:contentDescription="Localización de la red"
+        android:src="@drawable/location_place_holo_light"
+        android:visibility="invisible" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/location_icon_saved_key"
         android:orientation="vertical" >
 
         <TextView
             android:id="@+id/networkName"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
             android:paddingLeft="10dip"
             android:paddingTop="5dip"
             android:text="TextView"
@@ -28,8 +38,6 @@
             android:id="@+id/networkAddress"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/networkName"
-            android:layout_below="@+id/networkName"
             android:paddingBottom="5dip"
             android:paddingLeft="12dip"
             android:text="TextView" >
