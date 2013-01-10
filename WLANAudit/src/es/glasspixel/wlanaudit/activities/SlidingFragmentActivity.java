@@ -96,6 +96,39 @@ public class SlidingFragmentActivity extends RoboSherlockFragmentActivity
 		super.setContentView(v, params);
 		mHelper.registerAboveContentView(v, params);
 	}
+	
+	/*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.slidingmenu.lib.app.SlidingActivityBase#showContent()
+     */
+	@Override
+    public void showContent() {
+        mHelper.showContent();
+    }
+
+	/*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.slidingmenu.lib.app.SlidingActivityBase#showMenu()
+     */
+    @Override
+    public void showMenu() {
+        mHelper.showMenu();
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.slidingmenu.lib.app.SlidingActivityBase#showSecondaryMenu()
+     */
+    @Override
+    public void showSecondaryMenu() {
+        mHelper.showSecondaryMenu();
+    }
 
 	/*
 	 * (non-Javadoc)
@@ -151,24 +184,6 @@ public class SlidingFragmentActivity extends RoboSherlockFragmentActivity
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.slidingmenu.lib.app.SlidingActivityBase#showAbove()
-	 */
-	public void showAbove() {
-		mHelper.showAbove();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.slidingmenu.lib.app.SlidingActivityBase#showBehind()
-	 */
-	public void showBehind() {
-		mHelper.showBehind();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see
 	 * com.slidingmenu.lib.app.SlidingActivityBase#setSlidingActionBarEnabled
 	 * (boolean)
@@ -189,5 +204,4 @@ public class SlidingFragmentActivity extends RoboSherlockFragmentActivity
 			return b;
 		return super.onKeyUp(keyCode, event);
 	}
-
 }

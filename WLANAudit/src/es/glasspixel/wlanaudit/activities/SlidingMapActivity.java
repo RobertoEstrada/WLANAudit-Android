@@ -146,7 +146,7 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
 
 				// set the showcase ring at a medium-heigh point of display
 				sv.setShowcasePosition(0, size.y / 2);
-			} else {
+			} else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 				sv.setShowcasePosition(0, getWindowManager()
 						.getDefaultDisplay().getHeight() / 2);
 			}
@@ -238,7 +238,7 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
 		Handler h = new Handler();
 		h.postDelayed(new Runnable() {
 			public void run() {
-				getSlidingMenu().showAbove();
+				getSlidingMenu().showContent();
 			}
 		}, 50);
 	}
@@ -246,7 +246,7 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
 	@Override
 	public void onSavedKeySelected(Network s) {
 
-		getSlidingMenu().showAbove();
+		getSlidingMenu().showContent();
 		((MapFragment) getSupportFragmentManager().findFragmentById(
 				R.id.content_frame)).setFocused(s);
 
