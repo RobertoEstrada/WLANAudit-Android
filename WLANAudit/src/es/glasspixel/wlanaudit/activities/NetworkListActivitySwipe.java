@@ -23,9 +23,7 @@ import javax.annotation.Nullable;
 
 import roboguice.inject.InjectView;
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences.Editor;
 import android.content.res.Resources;
 import android.net.wifi.ScanResult;
 import android.os.Bundle;
@@ -46,13 +44,13 @@ import es.glasspixel.wlanaudit.actions.AutoScanAction;
 import es.glasspixel.wlanaudit.database.entities.Network;
 import es.glasspixel.wlanaudit.dialogs.NetworkDetailsDialogFragment;
 import es.glasspixel.wlanaudit.dialogs.SavedNetworkDetailsDialogFragment;
-import es.glasspixel.wlanaudit.fragments.SavedKeysFragment;
+import es.glasspixel.wlanaudit.fragments.SavedNetworksFragment;
 import es.glasspixel.wlanaudit.fragments.ScanFragment;
 import es.glasspixel.wlanaudit.interfaces.OnDataSourceModifiedListener;
 
 public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity
 		implements ScanFragment.ScanFragmentListener,
-		SavedKeysFragment.SavedNetworkFragmentListener {
+		SavedNetworksFragment.SavedNetworkFragmentListener {
 
 	/**
 	 * Constant to define how many fragments this activity handles
@@ -124,7 +122,7 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity
 
 		mFragments = new ArrayList<Fragment>();
 		mFragments.add(new ScanFragment());
-		SavedKeysFragment saved = new SavedKeysFragment();
+		SavedNetworksFragment saved = new SavedNetworksFragment();
 		Bundle args = new Bundle();
 		args.putBoolean("screen_large", mViewPager == null);
 		saved.setArguments(args);

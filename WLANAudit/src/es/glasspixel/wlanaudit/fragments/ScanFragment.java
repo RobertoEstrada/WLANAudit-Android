@@ -40,41 +40,28 @@ public class ScanFragment extends RoboSherlockFragment implements
 		OnItemClickListener {
 
 	@InjectResource(R.string.improve_precision_dialog_title)
-	String improve_preciosion_dialog_title;
+	private static String improve_preciosion_dialog_title;
 
 	@InjectResource(R.string.improve_precision_dialog_message)
-	String improve_precision_dialog_message;
-
-		
-
+	private static String improve_precision_dialog_message;
 	
-	/**
-	 * Empty text for {@empty_text}
-	 */
 	@InjectResource(R.string.no_networks_found)
-	String no_networks_found;
+	private static String no_networks_found;
 
-	
-	/**
-	 * Cancel text for dialogfragments
-	 */
 	@InjectResource(android.R.string.cancel)
-	String cancel;
-
+	private static String cancel;
 	
 	/**
 	 * Textview for empty listviews
 	 */
 	@InjectView(android.R.id.empty)
 	TextView empty_text;
-
 	
 	/**
 	 * wifi scan results listview
 	 */
 	@InjectView(android.R.id.list)
-	ListView list_view;
-	
+	ListView list_view;	
 	
 	private boolean isScanning = false;
 
@@ -151,7 +138,6 @@ public class ScanFragment extends RoboSherlockFragment implements
 				R.bool.screen_large);
 
 	}
-
 	
 
 	@Override
@@ -295,7 +281,8 @@ public class ScanFragment extends RoboSherlockFragment implements
 
 	}
 
-	@SuppressLint("NewApi")
+	@SuppressWarnings("deprecation")
+    @SuppressLint("NewApi")
 	private void copyClipboard(CharSequence text) {
 		int sdk = android.os.Build.VERSION.SDK_INT;
 		if (sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {

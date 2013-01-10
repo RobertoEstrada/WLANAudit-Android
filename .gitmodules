@@ -13,3 +13,6 @@
 [submodule "Vendor/SlidingMenu"]
 	path = Vendor/SlidingMenu
 	url = git://github.com/jfeinstein10/SlidingMenu.git
+[submodule "Vendor/ShowcaseView"]
+	path = Vendor/ShowcaseView
+	url = git://github.com/Espiandev/ShowcaseView.git

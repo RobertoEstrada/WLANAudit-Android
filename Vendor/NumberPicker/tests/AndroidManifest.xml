@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- package name must be unique so suffix with "tests" so package loader doesn't ignore us -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.michaelnovakjr.numberpicker.tests"
+          android:versionCode="1"
+          android:versionName="1.0">
+
+    <application>
+        <uses-library android:name="android.test.runner" />
+    </application>
+
+
+    <!-- Default test runner for manually running tests. -->
+    <instrumentation android:name="android.test.InstrumentationTestRunner"
+                     android:targetPackage="com.michaelnovakjr.numberpicker.tests"
+                     android:label="Tests for libNumberPicker" />
+
+    <!-- Test runner for hooking into a CI environment. -->
+    <instrumentation android:name="com.michaelnovakjr.numberpicker.JUnitInstrumentationRunner"
+                     android:targetPackage="com.michaelnovakjr.numberpicker.tests"
+                     android:label="Tests for libNumberPicker" />
+</manifest>

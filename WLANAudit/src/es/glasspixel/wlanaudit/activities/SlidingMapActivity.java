@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2012 Roberto Estrada
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package es.glasspixel.wlanaudit.activities;
 
 import java.util.HashMap;
@@ -9,6 +24,7 @@ import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
 import roboguice.util.RoboContext;
 
+import android.annotation.TargetApi;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -31,9 +47,9 @@ import com.slidingmenu.lib.SlidingMenu.OnOpenListener;
 import es.glasspixel.wlanaudit.R;
 import es.glasspixel.wlanaudit.database.entities.Network;
 import es.glasspixel.wlanaudit.fragments.MapFragment;
-import es.glasspixel.wlanaudit.fragments.SavedKeysMenuFragment;
+import es.glasspixel.wlanaudit.fragments.SavedNetworksMenuFragment;
 import es.glasspixel.wlanaudit.fragments.MapFragment.OnMapNetworkSelected;
-import es.glasspixel.wlanaudit.fragments.SavedKeysMenuFragment.OnSavedKeySelectedListener;
+import es.glasspixel.wlanaudit.fragments.SavedNetworksMenuFragment.OnSavedKeySelectedListener;
 
 public class SlidingMapActivity extends SlidingFragmentActivity implements
 		OnSavedKeySelectedListener, RoboContext, OnMapNetworkSelected,
@@ -66,7 +82,9 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
 
 	private boolean showcaseView = false;
 
-	@Override
+	@SuppressWarnings("deprecation")
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    @Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setTitle(ab_title);
@@ -105,7 +123,7 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
 
 		// set the Behind View Fragment (saved keys fragment)
 		getSupportFragmentManager().beginTransaction()
-				.replace(R.id.menu_frame, new SavedKeysMenuFragment()).commit();
+				.replace(R.id.menu_frame, new SavedNetworksMenuFragment()).commit();
 
 		// customize the SlidingMenu
 		SlidingMenu sm = getSlidingMenu();
@@ -129,7 +147,6 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
 				// set the showcase ring at a medium-heigh point of display
 				sv.setShowcasePosition(0, size.y / 2);
 			} else {
-				int a = getWindowManager().getDefaultDisplay().getHeight();
 				sv.setShowcasePosition(0, getWindowManager()
 						.getDefaultDisplay().getHeight() / 2);
 			}
@@ -255,7 +272,7 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
 	@Override
 	public void onMapNetworkSelected(int selected_network_index) {
 
-		((SavedKeysMenuFragment) getSupportFragmentManager().findFragmentById(
+		((SavedNetworksMenuFragment) getSupportFragmentManager().findFragmentById(
 				R.id.menu_frame)).onMapItemSelected(selected_network_index);
 	}
 }

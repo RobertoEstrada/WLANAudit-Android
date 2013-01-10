@@ -16,15 +16,14 @@
 
 package es.glasspixel.wlanaudit.activities;
 
+import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockPreferenceActivity;
 import com.actionbarsherlock.view.MenuItem;
 
 import es.glasspixel.wlanaudit.R;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 
 /***
  * PreferenceActivity is a built-in Activity for preferences management

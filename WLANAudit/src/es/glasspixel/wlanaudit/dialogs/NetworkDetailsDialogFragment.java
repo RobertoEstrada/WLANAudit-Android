@@ -67,19 +67,7 @@ import es.glasspixel.wlanaudit.keyframework.KeyCalculatorFactory;
 import es.glasspixel.wlanaudit.keyframework.NetData;
 import es.glasspixel.wlanaudit.util.ChannelCalculator;
 
-public class NetworkDetailsDialogFragment extends RoboDialogFragment {
-
-	@InjectResource(R.string.improve_precision_dialog_title)
-	String improve_preciosion_dialog_title;
-
-	@InjectResource(R.string.improve_precision_dialog_message)
-	String improve_precision_dialog_message;
-
-	@InjectResource(R.string.settings)
-	String settings;
-
-	@InjectResource(android.R.string.cancel)
-	String cancel;
+public class NetworkDetailsDialogFragment extends RoboDialogFragment {	
 
 	/**
 	 * Constant to identify the location's settings launch when there aren't
@@ -157,6 +145,18 @@ public class NetworkDetailsDialogFragment extends RoboDialogFragment {
 
 	@InjectView(R.id.starNetworkButton)
 	private ImageButton mStarNetworkButton;
+	
+	@InjectResource(R.string.improve_precision_dialog_title)
+    private static String improve_preciosion_dialog_title;
+
+    @InjectResource(R.string.improve_precision_dialog_message)
+    private static String improve_precision_dialog_message;
+
+    @InjectResource(R.string.settings)
+    private static String settings;
+
+    @InjectResource(android.R.string.cancel)
+    private static String cancel;
 
 	private int exists;
 
@@ -286,13 +286,11 @@ public class NetworkDetailsDialogFragment extends RoboDialogFragment {
 				mNetworkDefaultPassTextView
 						.setText(getString(R.string.no_default_key));
 				mCopyPasswordButton.setEnabled(false);
-				mStarNetworkButton.setEnabled(false);
 			}
 		} else {
 			mNetworkDefaultPassTextView
 					.setText(getString(R.string.no_default_key));
 			mCopyPasswordButton.setEnabled(false);
-			mStarNetworkButton.setEnabled(false);
 		}
 
 		// Setting up button callbacks
@@ -316,9 +314,7 @@ public class NetworkDetailsDialogFragment extends RoboDialogFragment {
 	}
 
 	private void setupLocationServices() {
-		LocatorSettings settings = new LocatorSettings(
-				WLANAuditApplication.PACKAGE_NAME,
-				WLANAuditApplication.LOCATION_UPDATE_ACTION);
+		LocatorSettings settings = new LocatorSettings(WLANAuditApplication.LOCATION_UPDATE_ACTION);
 		settings.setUpdatesInterval(3 * 60 * 1000);
 		settings.setUpdatesDistance(50);
 		mLocator = LocatorFactory.getInstance();
@@ -341,12 +337,12 @@ public class NetworkDetailsDialogFragment extends RoboDialogFragment {
 			mLocator.startLocationUpdates();
 		} catch (NoProviderAvailable np) {
 			Log.d(TAG, "No location provider available at this time");
-			AlertDialog.Builder dialogo1 = new AlertDialog.Builder(
+			AlertDialog.Builder improvePrecisionDialog = new AlertDialog.Builder(
 					getActivity());
-			dialogo1.setTitle(improve_preciosion_dialog_title);
-			dialogo1.setMessage(improve_precision_dialog_message);
-			dialogo1.setCancelable(false);
-			dialogo1.setPositiveButton(settings,
+			improvePrecisionDialog.setTitle(improve_preciosion_dialog_title);
+			improvePrecisionDialog.setMessage(improve_precision_dialog_message);
+			improvePrecisionDialog.setCancelable(false);
+			improvePrecisionDialog.setPositiveButton(settings,
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialogo1, int id) {
 							Intent intent = new Intent(
@@ -354,13 +350,13 @@ public class NetworkDetailsDialogFragment extends RoboDialogFragment {
 							startActivityForResult(intent, LOCATION_SETTINGS);
 						}
 					});
-			dialogo1.setNegativeButton(cancel,
+			improvePrecisionDialog.setNegativeButton(cancel,
 					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialogo1, int id) {
-							dialogo1.dismiss();
+						public void onClick(DialogInterface dialog, int id) {
+							dialog.dismiss();
 						}
 					});
-			dialogo1.show();
+			improvePrecisionDialog.show();
 		}
 	}
 

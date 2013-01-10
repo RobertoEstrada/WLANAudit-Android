@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2012 Roberto Estrada
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package es.glasspixel.wlanaudit.fragments;
 
 import java.util.ArrayList;
@@ -106,7 +121,7 @@ public class MapFragment extends RoboSherlockFragment {
 	/**
 	 * Array with saved keys
 	 */
-	private List<Network> mKeys;
+	private List<Network> mSavedNetworks;
 	/**
 	 * 
 	 */
@@ -142,9 +157,7 @@ public class MapFragment extends RoboSherlockFragment {
 	}
 
 	private void setupLocationServices() {
-		LocatorSettings settings = new LocatorSettings(
-				WLANAuditApplication.PACKAGE_NAME,
-				WLANAuditApplication.LOCATION_UPDATE_ACTION);
+		LocatorSettings settings = new LocatorSettings(WLANAuditApplication.LOCATION_UPDATE_ACTION);
 		settings.setUpdatesInterval(3 * 60 * 1000);
 		settings.setUpdatesDistance(50);
 		mLocator = LocatorFactory.getInstance();
@@ -222,12 +235,6 @@ public class MapFragment extends RoboSherlockFragment {
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 
-	public MapFragment(int pos) {
-		// mPos = pos;
-	}
-	
-	
-
 	@Override
 	public void onAttach(Activity activity) {
 		if (activity instanceof SlidingMapActivity)
@@ -256,7 +263,7 @@ public class MapFragment extends RoboSherlockFragment {
 
 		// if (mPos == -1 && savedInstanceState != null)
 		// mPos = savedInstanceState.getInt("mPos");
-		loadKeysPosition();
+		loadNetworksPosition();
 
 		return v;
 	}
@@ -285,7 +292,7 @@ public class MapFragment extends RoboSherlockFragment {
 
 	public void setFocused(Network s) {
 		int i = 0;
-		for (Network sk : mKeys) {
+		for (Network sk : mSavedNetworks) {
 			if (sk.mSSID.equals(s.mSSID)) {
 				break;
 			}
@@ -331,21 +338,10 @@ public class MapFragment extends RoboSherlockFragment {
 
 	}
 
-	private String printKeys(List<String> keys) {
-		String r = "";
-		for (String s : keys) {
-			r += s + ",";
-		}
-		return r;
-	}
-
-	private void loadKeysPosition() {
+	private void loadNetworksPosition() {
 		this.loadSavedKeys();
-		for (Network s : mKeys) {
-			anotherOverlayItemArray.add(new OverlayItem(s.mSSID, s
-					.getPossibleDefaultKeys().size() == 1 ? s
-					.getPossibleDefaultKeys().get(0) : printKeys(s
-					.getPossibleDefaultKeys()), new GeoPoint(s.mLatitude,
+		for (Network s : mSavedNetworks) {
+			anotherOverlayItemArray.add(new OverlayItem(s.mSSID, s.mBSSID, new GeoPoint(s.mLatitude,
 					s.mLongitude)));
 
 		}
@@ -404,9 +400,9 @@ public class MapFragment extends RoboSherlockFragment {
 
 	protected List<Network> loadSavedKeys() {
 
-		mKeys = Model.fetchAll(Network.class);
+		mSavedNetworks = Model.fetchAll(Network.class);
 
-		return mKeys;
+		return mSavedNetworks;
 
 	}
 }

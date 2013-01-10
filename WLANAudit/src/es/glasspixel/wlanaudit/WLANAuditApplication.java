@@ -24,12 +24,12 @@ import org.orman.mapper.MappingSession;
 import org.orman.util.logging.AndroidLogger;
 import org.orman.util.logging.Log;
 
+import android.app.Application;
+
 import com.novoda.location.Locator;
 import com.novoda.location.LocatorFactory;
 import com.novoda.location.LocatorSettings;
-import com.novoda.location.util.ApiLevelDetector;
 
-import android.app.Application;
 import es.glasspixel.wlanaudit.database.entities.Network;
 
 @ReportsCrashes(formKey = "", mailTo = "manzanocaminojesus@gmail.com")
@@ -61,8 +61,7 @@ public class WLANAuditApplication extends Application {
 		MappingSession.registerEntity(Network.class);
 		Log.setLogger(new AndroidLogger(PACKAGE_NAME));
 		MappingSession.start();
-		LocatorSettings settings = new LocatorSettings(PACKAGE_NAME,
-				LOCATION_UPDATE_ACTION);
+		LocatorSettings settings = new LocatorSettings(LOCATION_UPDATE_ACTION);
 		settings.setUpdatesInterval(3 * 60 * 1000);
 		settings.setUpdatesDistance(50);
 		locator = LocatorFactory.getInstance();

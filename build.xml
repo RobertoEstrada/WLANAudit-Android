@@ -33,6 +33,7 @@
 			<arg value="Vendor/AndroidMenudrawer/library"/>
 			<arg value="Vendor/FBLikeSlideoutNavigation/lib"/>
 			<arg value="Vendor/NumberPicker/lib"/>
+			<arg value="Vendor/ShowcaseView/library"/>
 		</java>
 		<subant target="clean">
 			<fileset dir="${tools-home}/EclipseProjectGenerator" includes="build.xml"/>
@@ -67,6 +68,9 @@
 			<entry key="android.library" value="true"/>
 		</propertyfile>
 		<propertyfile file="Vendor/NumberPicker/lib/project.properties">
+			<entry key="android.library" value="true"/>
+		</propertyfile>
+		<propertyfile file="Vendor/ShowcaseView/library/project.properties">
 			<entry key="android.library" value="true"/>
 		</propertyfile>
 		<echo message="Dependency configuration complete" />
@@ -121,6 +125,18 @@
 			<arg value="--path"/>
 			<arg value="."/>
 		</exec>
+		<exec executable="cmd" dir="Vendor/ShowcaseView/library">
+			<arg value="/c"/>
+			<arg value="android"/>
+			<arg value="update"/>
+			<arg value="project"/>
+			<arg value="--target"/>
+			<arg value="${build-target}"/>
+			<arg value="--name"/>
+			<arg value="ShowcaseView"/>
+			<arg value="--path"/>
+			<arg value="."/>
+		</exec>
 	</target>
 	
 	<target name="configure-build-unix" if="isUnix">
@@ -161,6 +177,16 @@
 			<arg value="${build-target}"/>
 			<arg value="--name"/>
 			<arg value="NumberPicker"/>
+			<arg value="--path"/>
+			<arg value="."/>
+		</exec>
+		<exec executable="android" dir="Vendor/ShowcaseView/library">
+			<arg value="update"/>
+			<arg value="project"/>
+			<arg value="--target"/>
+			<arg value="${build-target}"/>
+			<arg value="--name"/>
+			<arg value="ShowcaseView"/>
 			<arg value="--path"/>
 			<arg value="."/>
 		</exec>

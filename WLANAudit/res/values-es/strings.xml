@@ -46,7 +46,7 @@
     <string name="network_channel">Canal:</string>
     <string name="action1">Escanear</string>
     <string name="key_list_title">Claves almacenadas</string>
-    <string name="action2">Claves almacenadas</string>
+    <string name="action2">Redes almacenadas</string>
     <string name="delete">Borrar</string>
     <string name="copy">Copiar</string>
     <string name="show_keys_list">Mostrar claves en el menú</string>
