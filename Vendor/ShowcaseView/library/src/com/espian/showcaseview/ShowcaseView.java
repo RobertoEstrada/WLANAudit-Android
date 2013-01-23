@@ -1,8 +1,5 @@
 package com.espian.showcaseview;
 
-import android.animation.Animator;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -18,6 +15,10 @@ import android.util.AttributeSet;
 import android.view.*;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import com.nineoldandroids.animation.Animator;
+import com.nineoldandroids.animation.AnimatorSet;
+import com.nineoldandroids.animation.ObjectAnimator;
+import com.nineoldandroids.view.ViewHelper;
 
 import java.lang.reflect.Field;
 
@@ -38,38 +39,44 @@ public class ShowcaseView extends RelativeLayout implements View.OnClickListener
     public static final int ITEM_ACTION_ITEM = 2;
     public static final int ITEM_ACTION_OVERFLOW = 6;
 
-	private final String INTERNAL_PREFS = "showcase_internal";
-	private final String SHOT_PREF_STORE = "hasShot";
+	private static final String INTERNAL_PREFS = "showcase_internal";
+	private static final String SHOT_PREF_STORE = "hasShot";
 
-	private float showcaseX = -1, showcaseY = -1, showcaseRadius = -1, metricScale = 1.0f;
+	private float showcaseX = -1.0f;
+    private float showcaseY = -1.0f;
+    private float showcaseRadius = -1.0f;
+    private float metricScale = 1.0f;
 	private boolean isRedundant = false;
 
 	private ConfigOptions mOptions;
-	private Paint mPaintTitle, mEraser;
+	private Paint mPaintTitle;
+    private Paint mEraser;
 	private TextPaint mPaintSub;
 	private final int backColor;
 	private Drawable showcase;
-	private View mButton, mHandy;
+	private View mButton;
+    private View mHandy;
 	private final Button mBackupButton;
 	private OnShowcaseEventListener mEventListener;
 	private PorterDuffXfermode mBlender;
 	private Rect voidedArea;
-	private String mTitleText, mSubText;
+	private String mTitleText;
+    private String mSubText;
 	private Context mContext;
 
 	public ShowcaseView(Context context) {
 		this(context, null, 0);
-		this.mContext = context;
+        mContext = context;
 	}
 
 	public ShowcaseView(Context context, AttributeSet attrs) {
 		this(context, attrs, 0);
-		this.mContext = context;
+        mContext = context;
 	}
 
 	public ShowcaseView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-		this.mContext = context;
+        mContext = context;
 		if (attrs != null) {
 			TypedArray styled = getContext().obtainStyledAttributes(attrs, R.styleable.ShowcaseView, defStyle, 0);
 			backColor = styled.getInt(R.styleable.ShowcaseView_backgroundColor, Color.argb(128, 80, 80, 80));
@@ -131,7 +138,7 @@ public class ShowcaseView extends RelativeLayout implements View.OnClickListener
 
         mHandy = ((LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.handy, null);
         addView(mHandy);
-        mHandy.setAlpha(0f);
+        ViewHelper.setAlpha(mHandy, 0.0f);
 
 	}
 
@@ -186,13 +193,20 @@ public class ShowcaseView extends RelativeLayout implements View.OnClickListener
             @Override
             public void run() {
                 View homeButton = activity.findViewById(android.R.id.home);
-                if (homeButton == null)
+                if (homeButton == null) {
+                    int homeId = activity.getResources().getIdentifier("abs__home", "id", activity.getPackageName());
+                    if(homeId != 0) {
+                        homeButton = activity.findViewById(homeId);
+                    }
+                }
+                if(homeButton == null) {
                     throw new RuntimeException("insertShowcaseViewWithType cannot be used when the theme " +
                             "has no ActionBar");
+                }
                 ViewParent p = homeButton.getParent().getParent(); //ActionBarView
 
-                Class abv = p.getClass(); //ActionBarView class
-                Class absAbv = abv.getSuperclass(); //AbsActionBarView class
+                Class<? extends ViewParent> abv = p.getClass(); //ActionBarView class
+                Class<?> absAbv = abv.getSuperclass(); //AbsActionBarView class
 
                 switch (itemType) {
 
@@ -345,7 +359,7 @@ public class ShowcaseView extends RelativeLayout implements View.OnClickListener
 			}
 		}
 
-		c.setBitmap(null);
+//		c.setBitmap(null);
 		b.recycle();
 
 		super.dispatchDraw(canvas);
@@ -367,8 +381,9 @@ public class ShowcaseView extends RelativeLayout implements View.OnClickListener
 
 	private void makeVoidedRect() {
 
-		int cx = (int) showcaseX, cy = (int) showcaseY;
-		int dw = showcase.getIntrinsicWidth();
+		int cx = (int) showcaseX;
+        int cy = (int) showcaseY;
+        int dw = showcase.getIntrinsicWidth();
 		int dh = showcase.getIntrinsicHeight();
 
 		voidedArea = new Rect(cx - dw / 2, cy - dh / 2, cx + dw / 2, cy + dh / 2);
@@ -473,7 +488,7 @@ public class ShowcaseView extends RelativeLayout implements View.OnClickListener
 			float yDelta = Math.abs(motionEvent.getRawY() - showcaseY);
 			double distanceFromFocus = Math.sqrt(Math.pow(xDelta, 2) + Math.pow(yDelta, 2));
 			if (mOptions.hideOnClickOutside && !(distanceFromFocus > showcaseRadius)) {
-			    this.hide();
+                hide();
 			}
 			return false;
 		} else {
@@ -481,7 +496,7 @@ public class ShowcaseView extends RelativeLayout implements View.OnClickListener
 			float yDelta = Math.abs(motionEvent.getRawY() - showcaseY);
 			double distanceFromFocus = Math.sqrt(Math.pow(xDelta, 2) + Math.pow(yDelta, 2));
 			if (mOptions.hideOnClickOutside && !(distanceFromFocus > showcaseRadius)) {
-			    this.hide();
+                hide();
 			}
 			return distanceFromFocus > showcaseRadius;
 		}
@@ -527,8 +542,8 @@ public class ShowcaseView extends RelativeLayout implements View.OnClickListener
 
         ObjectAnimator alphaIn = ObjectAnimator.ofFloat(mHandy, "alpha", 0f, 1f).setDuration(500);
 
-        ObjectAnimator setUpX = ObjectAnimator.ofFloat(mHandy, "x", view.getX() + view.getWidth() / 2).setDuration(0);
-        ObjectAnimator setUpY = ObjectAnimator.ofFloat(mHandy, "y", view.getY() + view.getHeight() / 2).setDuration(0);
+        ObjectAnimator setUpX = ObjectAnimator.ofFloat(mHandy, "x", ViewHelper.getX(view) + view.getWidth() / 2).setDuration(0);
+        ObjectAnimator setUpY = ObjectAnimator.ofFloat(mHandy, "y", ViewHelper.getY(view) + view.getHeight() / 2).setDuration(0);
 
         AnimatorSet as = new AnimatorSet();
         as.play(setUpX).with(setUpY).before(alphaIn);
@@ -712,7 +727,8 @@ public class ShowcaseView extends RelativeLayout implements View.OnClickListener
 	}
 
 	public static class ConfigOptions {
-		public boolean block = true, noButton = false;
+		public boolean block = true;
+        public boolean noButton = false;
 		public int shotType = TYPE_NO_LIMIT;
 		public int insert = INSERT_TO_DECOR;
 		public boolean hideOnClickOutside = false;

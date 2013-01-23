@@ -137,16 +137,12 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
 
 			sv.setShotType(ShowcaseView.TYPE_ONE_SHOT);
 
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
 				Display display = getWindowManager().getDefaultDisplay();
 				Point size = new Point();
 				display.getSize(size);
-
-				// set showcase view parameters
-
-				// set the showcase ring at a medium-heigh point of display
 				sv.setShowcasePosition(0, size.y / 2);
-			} else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			} else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB_MR2){
 				sv.setShowcasePosition(0, getWindowManager()
 						.getDefaultDisplay().getHeight() / 2);
 			}
