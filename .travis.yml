@@ -4,11 +4,11 @@ jdk: oraclejdk7
 env:
   global:
     - ANDROID_HOME=$HOME/android-sdk-linux
-	
+
 branches:
   only:
     - WLANAudit3
-	
+
 before_install:
   - export PATH=$PATH:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools
   # Android SDK tools needs ia32-libs in order to run on 64 bit systems, but it was not installing on Travis
@@ -18,5 +18,4 @@ before_install:
   - tar xfz android-sdk_r21.0.1-linux.tgz -C ~
   - android --silent update sdk --filter platform-tools,android-16,extra-android-support --no-ui --force
 
-test:
-  - ant build-debug
+script: ant build-debug
