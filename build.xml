@@ -30,8 +30,6 @@
 		</subant>
 		<java jar="${tools-home}/eprojgen.jar" fork="true">
 			<arg value="Vendor/ActionBarSherlock/library"/>
-			<arg value="Vendor/AndroidMenudrawer/library"/>
-			<arg value="Vendor/FBLikeSlideoutNavigation/lib"/>
 			<arg value="Vendor/NumberPicker/lib"/>
 			<arg value="Vendor/ShowcaseView/library"/>
 			<arg value="Vendor/SlidingMenu/library"/>
@@ -59,21 +57,6 @@
 
 	<!-- define our main/default target -->
 	<target name="configure-build" depends="configure-build-windows, configure-build-unix">
-		<propertyfile file="Vendor/ActionBarSherlock/library/project.properties">
-			<entry key="android.library" value="true"/>
-		</propertyfile>
-		<propertyfile file="Vendor/AndroidMenudrawer/library/project.properties">
-			<entry key="android.library" value="true"/>
-		</propertyfile>
-		<propertyfile file="Vendor/FBLikeSlideoutNavigation/lib/project.properties">
-			<entry key="android.library" value="true"/>
-		</propertyfile>
-		<propertyfile file="Vendor/NumberPicker/lib/project.properties">
-			<entry key="android.library" value="true"/>
-		</propertyfile>
-		<propertyfile file="Vendor/ShowcaseView/library/project.properties">
-			<entry key="android.library" value="true"/>
-		</propertyfile>
 		<echo message="Dependency configuration complete" />
 	</target>
   
@@ -87,30 +70,6 @@
 			<arg value="${build-target}"/>
 			<arg value="--name"/>
 			<arg value="ActionBarSherlock"/>
-			<arg value="--path"/>
-			<arg value="."/>
-		</exec>
-		<exec executable="cmd" dir="Vendor/AndroidMenudrawer/library">
-			<arg value="/c"/>
-			<arg value="android"/>
-			<arg value="update"/>
-			<arg value="project"/>
-			<arg value="--target"/>
-			<arg value="${build-target}"/>
-			<arg value="--name"/>
-			<arg value="AndroidMenuDrawer"/>
-			<arg value="--path"/>
-			<arg value="."/>
-		</exec>
-		<exec executable="cmd" dir="Vendor/FBLikeSlideoutNavigation/lib">
-			<arg value="/c"/>
-			<arg value="android"/>
-			<arg value="update"/>
-			<arg value="project"/>
-			<arg value="--target"/>
-			<arg value="${build-target}"/>
-			<arg value="--name"/>
-			<arg value="FBLikeSlideoutNavigation"/>
 			<arg value="--path"/>
 			<arg value="."/>
 		</exec>
@@ -158,26 +117,6 @@
 			<arg value="${build-target}"/>
 			<arg value="--name"/>
 			<arg value="ActionBarSherlock"/>
-			<arg value="--path"/>
-			<arg value="."/>
-		</exec>
-		<exec executable="android" dir="Vendor/AndroidMenudrawer/library">
-			<arg value="update"/>
-			<arg value="project"/>
-			<arg value="--target"/>
-			<arg value="${build-target}"/>
-			<arg value="--name"/>
-			<arg value="AndroidMenuDrawer"/>
-			<arg value="--path"/>
-			<arg value="."/>
-		</exec>
-		<exec executable="android" dir="Vendor/FBLikeSlideoutNavigation/lib">
-			<arg value="update"/>
-			<arg value="project"/>
-			<arg value="--target"/>
-			<arg value="${build-target}"/>
-			<arg value="--name"/>
-			<arg value="FBLikeSlideoutNavigation"/>
 			<arg value="--path"/>
 			<arg value="."/>
 		</exec>
