@@ -6,36 +6,21 @@
 	<property name="tests-home" value="WLANAudit-Tests/" />
 	<property name="tools-home" value="Tools/" />
 	
-	<target name="build-debug" depends="configure-build">
+	<target name="build-debug">
 		<subant target="debug">
 			<fileset dir="${app-home}" includes="build.xml"/>
 		</subant>
 	</target>
 	
-	<target name="build-release" depends="configure-build">
+	<target name="build-release">
 		<subant target="release">
 			<fileset dir="${app-home}" includes="build.xml"/>
 		</subant>
 	</target>
 	
-	<target name="test" depends="configure-build">
+	<target name="test">
 		<subant target="test">
 			<fileset dir="${tests-home}" includes="build.xml"/>
-		</subant>
-	</target>
-	
-	<target name="eclipse" depends="configure-build">
-		<subant target="build">
-			<fileset dir="${tools-home}/EclipseProjectGenerator" includes="build.xml"/>
-		</subant>
-		<java jar="${tools-home}/eprojgen.jar" fork="true">
-			<arg value="Vendor/ActionBarSherlock/library"/>
-			<arg value="Vendor/NumberPicker/lib"/>
-			<arg value="Vendor/ShowcaseView/library"/>
-			<arg value="Vendor/SlidingMenu/library"/>
-		</java>
-		<subant target="clean">
-			<fileset dir="${tools-home}/EclipseProjectGenerator" includes="build.xml"/>
 		</subant>
 	</target>
 	
@@ -44,109 +29,5 @@
 			<fileset dir="${app-home}" includes="build.xml"/>
 			<fileset dir="${tests-home}" includes="build.xml"/>
 		</subant>
-	</target>
-    
-	<!-- set the operating system test properties -->
-	<condition property="isWindows">
-		<os family="windows" />
-	</condition>
-
-	<condition property="isUnix">
-		<os family="unix" />
-	</condition>	
-
-	<!-- define our main/default target -->
-	<target name="configure-build" depends="configure-build-windows, configure-build-unix">
-		<echo message="Dependency configuration complete" />
-	</target>
-  
-	<target name="configure-build-windows" if="isWindows">
-		<exec executable="cmd" dir="Vendor/ActionBarSherlock/library">
-			<arg value="/c"/>
-			<arg value="android"/>
-			<arg value="update"/>
-			<arg value="project"/>
-			<arg value="--target"/>
-			<arg value="${build-target}"/>
-			<arg value="--name"/>
-			<arg value="ActionBarSherlock"/>
-			<arg value="--path"/>
-			<arg value="."/>
-		</exec>
-		<exec executable="cmd" dir="Vendor/NumberPicker/lib">
-			<arg value="/c"/>
-			<arg value="android"/>
-			<arg value="update"/>
-			<arg value="project"/>
-			<arg value="--target"/>
-			<arg value="${build-target}"/>
-			<arg value="--name"/>
-			<arg value="NumberPicker"/>
-			<arg value="--path"/>
-			<arg value="."/>
-		</exec>
-		<exec executable="cmd" dir="Vendor/ShowcaseView/library">
-			<arg value="/c"/>
-			<arg value="android"/>
-			<arg value="update"/>
-			<arg value="project"/>
-			<arg value="--target"/>
-			<arg value="${build-target}"/>
-			<arg value="--name"/>
-			<arg value="ShowcaseView"/>
-			<arg value="--path"/>
-			<arg value="."/>
-		</exec>
-		<exec executable="cmd" dir="Vendor/SlidingMenu/library">
-			<arg value="/c"/>
-			<arg value="android"/>
-			<arg value="update"/>
-			<arg value="project"/>
-			<arg value="--name"/>
-			<arg value="SlidingMenu"/>
-			<arg value="--path"/>
-			<arg value="."/>
-		</exec>
-	</target>
-	
-	<target name="configure-build-unix" if="isUnix">
-		<exec executable="android" dir="Vendor/ActionBarSherlock/library">
-			<arg value="update"/>
-			<arg value="project"/>
-			<arg value="--target"/>
-			<arg value="${build-target}"/>
-			<arg value="--name"/>
-			<arg value="ActionBarSherlock"/>
-			<arg value="--path"/>
-			<arg value="."/>
-		</exec>
-		<exec executable="android" dir="Vendor/NumberPicker/lib">
-			<arg value="update"/>
-			<arg value="project"/>
-			<arg value="--target"/>
-			<arg value="${build-target}"/>
-			<arg value="--name"/>
-			<arg value="NumberPicker"/>
-			<arg value="--path"/>
-			<arg value="."/>
-		</exec>
-		<exec executable="android" dir="Vendor/ShowcaseView/library">
-			<arg value="update"/>
-			<arg value="project"/>
-			<arg value="--target"/>
-			<arg value="${build-target}"/>
-			<arg value="--name"/>
-			<arg value="ShowcaseView"/>
-			<arg value="--path"/>
-			<arg value="."/>
-		</exec>
-		<exec executable="android" dir="Vendor/SlidingMenu/library">
-			<arg value="update"/>
-			<arg value="project"/>
-			<arg value="--name"/>
-			<arg value="SlidingMenu"/>
-			<arg value="--path"/>
-			<arg value="."/>
-		</exec>
 	</target>
 </project>
