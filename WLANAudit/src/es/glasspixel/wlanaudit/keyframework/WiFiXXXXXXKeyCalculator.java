@@ -18,6 +18,7 @@ package es.glasspixel.wlanaudit.keyframework;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -44,7 +45,7 @@ public class WiFiXXXXXXKeyCalculator implements IKeyCalculator {
 
 		// Public data
 		String essid = trimSSID(network.SSID);
-		String bssid = network.BSSID.replaceAll(":", "").toUpperCase();
+		String bssid = network.BSSID.replaceAll(":", "").toUpperCase(Locale.getDefault());
 		
 		// Data preparation
 		char[] essid_c = essid.toCharArray();
@@ -108,7 +109,7 @@ public class WiFiXXXXXXKeyCalculator implements IKeyCalculator {
 					+ dec2hex(Z2) + dec2hex(W2) + dec2hex(X3) + dec2hex(Y3)
 					+ dec2hex(Z3) + dec2hex(W3);
 
-			keyList.add(result.toUpperCase());
+			keyList.add(result.toUpperCase(Locale.getDefault()));
 		}
 
 		return keyList;
@@ -117,11 +118,11 @@ public class WiFiXXXXXXKeyCalculator implements IKeyCalculator {
 	private String trimSSID(String ssid) {
 		String result = null;
 		if (ssid.contains("WLAN")) {
-			result = ssid.replace("WLAN", "").toUpperCase();
+			result = ssid.replace("WLAN", "").toUpperCase(Locale.getDefault());
 		} else if (ssid.contains("YaCOM")) {
-			result = ssid.replace("YaCOM", "").toUpperCase();
+			result = ssid.replace("YaCOM", "").toUpperCase(Locale.getDefault());
 		} else if (ssid.contains("WiFi")) {
-			result = ssid.replace("WiFi", "").toUpperCase();
+			result = ssid.replace("WiFi", "").toUpperCase(Locale.getDefault());
 		}
 		return result;
 	}
