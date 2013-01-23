@@ -13,27 +13,21 @@ To get the source code clone the repository with the following commands
     
     $ git clone git://github.com/RobertoEstrada/WLANAudit-Android.git
 
-Once clone has finished
-    
-    $ git submodule update --init
-
 Building the sourcecode
 =======================
 In order to build the sourcecode you need to have installed and configured Java, the Android SDK and Apache Ant. You need to set the environment variable ANDROID_HOME and have the Android tools and Ant in your path.
 
 Then in a shell at the project root, use the following command
 
-    $ ant build-debug
+    $ ant
 
 Working with Eclipse
 ====================
-In a shell at the project root, use the following command to generate eclipse project files for all the dependencies.
+Open eclipse and select *File / Import / Existing projects into workspace* and then select the project root as the base directory. Select all the projects.
 
-    $ ant eclipse 
+Work as usual. 
 
-When done, open eclipse and select *File / Import / Existing projects into workspace* and then select the project root as the base directory. Select all the projects except those that have *'Sample'* on their names.
-
-Work as usual.
+**DO NOT MODIFY THE LIBRARY PROJECTS FROM ECLIPSE AND DO NOT COMMIT THEM OR THE BUILD WILL BREAK**
 
 Contributing to the project
 =============================
