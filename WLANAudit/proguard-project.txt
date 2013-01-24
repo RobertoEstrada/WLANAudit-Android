@@ -23,5 +23,8 @@
 -keep interface android.support.v4.app.** { *; }
 -keep class com.actionbarsherlock.** { *; }
 -keep interface com.actionbarsherlock.** { *; }
+-keep class * extends java.util.ListResourceBundle {
+    protected Object[][] getContents();
+}
 
 -keepattributes *Annotation*
