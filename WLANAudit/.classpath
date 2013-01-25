@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="gen"/>
-	<classpathentry excluding="es/glasspixel/wlanaudit/interfaces/OnDataPass.java|es/glasspixel/wlanaudit/interfaces/SavedKeyListener.java|es/glasspixel/wlanaudit/adapters/MenuAdapter.java|es/glasspixel/wlanaudit/adapters/KeysSavedAdapter.java|es/glasspixel/wlanaudit/adapters/MapElementsAdapter.java|es/glasspixel/wlanaudit/activities/NetworkDetailsActivity.java|es/glasspixel/wlanaudit/activities/SavedKey.java|es/glasspixel/wlanaudit/activities/MainActivity.java|es/glasspixel/wlanaudit/database/KeysSQliteHelper.java" kind="src" path="src"/>
+	<classpathentry excluding="es/glasspixel/wlanaudit/interfaces/OnDataPass.java|es/glasspixel/wlanaudit/interfaces/SavedKeyListener.java|es/glasspixel/wlanaudit/adapters/MenuAdapter.java|es/glasspixel/wlanaudit/adapters/KeysSavedAdapter.java|es/glasspixel/wlanaudit/adapters/MapElementsAdapter.java|es/glasspixel/wlanaudit/activities/NetworkDetailsActivity.java|es/glasspixel/wlanaudit/activities/SavedKey.java|es/glasspixel/wlanaudit/activities/MainActivity.java|es/glasspixel/wlanaudit/database/KeysSQliteHelper.java|es/glasspixel/wlanaudit/fragments/MapFragment.java" kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="lib" path="libs/guice-3.0-no_aop.jar"/>
