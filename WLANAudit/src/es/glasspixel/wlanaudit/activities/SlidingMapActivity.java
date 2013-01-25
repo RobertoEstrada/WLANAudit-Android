@@ -53,6 +53,7 @@ import com.slidingmenu.lib.SlidingMenu.OnOpenListener;
 
 import es.glasspixel.wlanaudit.R;
 import es.glasspixel.wlanaudit.database.entities.Network;
+import es.glasspixel.wlanaudit.fragments.GMapsMapFragment;
 import es.glasspixel.wlanaudit.fragments.SavedNetworksMenuFragment;
 import es.glasspixel.wlanaudit.fragments.SavedNetworksMenuFragment.OnSavedKeySelectedListener;
 
@@ -121,15 +122,16 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
             getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
         } else {
             // If this is tablet UI
+            getSlidingMenu().setSlidingEnabled(false);
             setBehindContentView(new View(this));
         }
 
         // set the Above View Fragment
         if (savedInstanceState != null)
-            mMapFragment = (SupportMapFragment) getSupportFragmentManager().getFragment(
+            mMapFragment = (GMapsMapFragment) getSupportFragmentManager().getFragment(
                     savedInstanceState, MAP_FRAGMENT_KEY);
         if (mMapFragment == null) {
-            mMapFragment = SupportMapFragment.newInstance();
+            mMapFragment = GMapsMapFragment.newInstance();
         }
 
         // Set the map fragment
@@ -164,13 +166,11 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
      * {@inheritDoc}
      */
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getSupportMenuInflater().inflate(R.menu.menu_map_location, menu);
-        
+    public boolean onCreateOptionsMenu(Menu menu) {           
         if (getSlidingMenu().isSlidingEnabled()) {
             menu.add(0, SHOW_MENU, 1, show_keys_list);
-            menu.getItem(1).setIcon(ic_menu_account_list);
-            menu.getItem(1).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+            menu.getItem(0).setIcon(ic_menu_account_list);
+            menu.getItem(0).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         }
 
         return super.onCreateOptionsMenu(menu);
