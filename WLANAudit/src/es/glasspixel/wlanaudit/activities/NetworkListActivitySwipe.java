@@ -33,14 +33,19 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.widget.LinearLayout;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockFragmentActivity;
+import com.google.ads.AdRequest;
+import com.google.ads.AdSize;
+import com.google.ads.AdView;
 import com.google.inject.Inject;
 
 import es.glasspixel.wlanaudit.R;
 import es.glasspixel.wlanaudit.actions.AutoScanAction;
+import es.glasspixel.wlanaudit.ads.Key;
 import es.glasspixel.wlanaudit.database.entities.Network;
 import es.glasspixel.wlanaudit.dialogs.NetworkDetailsDialogFragment;
 import es.glasspixel.wlanaudit.dialogs.SavedNetworkDetailsDialogFragment;
@@ -78,6 +83,11 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity
 	@InjectView(R.id.pager)
 	@Nullable
 	private ViewPager mViewPager;
+	
+	@InjectView(R.id.adLayout)
+	private LinearLayout mAdLayout;
+	
+	private AdView mAdView;
 
 	/**
 	 * Handle to resources
@@ -160,7 +170,10 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity
 					.replace(R.id.item_detail_container, mFragments.get(1),
 							"tag2").commit();
 		}
-
+		
+		// Adview setup
+		mAdView = new AdView(this, AdSize.SMART_BANNER, Key.ADMOB_KEY);
+		mAdLayout.addView(mAdView);
 	}
 
 	/**
@@ -269,20 +282,12 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity
 	}
 
 	/**
-	 * Lifecycle management: Activity is about to be shown
-	 */
-	protected void onStart() {
-		super.onStart();
-		// mAd.loadAd(new AdRequest());
-	}
-
-	/**
 	 * Lifecycle management: Activity is being resumed, we need to refresh its
 	 * contents
 	 */
 	protected void onResume() {
 		super.onResume();
-		// mAd.loadAd(new AdRequest());
+		mAdView.loadAd(new AdRequest());
 	}
 
 	/**
