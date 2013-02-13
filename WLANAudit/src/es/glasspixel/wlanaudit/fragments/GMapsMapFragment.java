@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Roberto Estrada
+ * Copyright (C) 2013 The WLANAudit project contributors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

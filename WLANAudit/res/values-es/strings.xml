@@ -32,7 +32,7 @@
     <string name="time_unit"> segundos</string>
     <string name="about_version_number">Versión: </string>
     <string name="about_release_number">Número de revisión:</string>
-    <string name="disclaimer_text">WLANAudit © 2012 Roberto Estrada, Jesús Manzano\n\nWLANAudit es una aplicacion pensada para auditar la seguridad de las claves de acceso de los puntos de acceso WLAN comprobando si pueden ser calculadas a traves de los datos publicos de la red.No me responsabilizo del uso que pueda derivarse de esta aplicacion\n\nPuedes descargar el código fuente desde:\nhttps://github.com/RobertoEstrada/WLANAudit-Android\n\</string>
+    <string name="disclaimer_text">WLANAudit © 2013 Roberto Estrada, Jesús Manzano\n\nWLANAudit es una aplicacion pensada para auditar la seguridad de las claves de acceso de los puntos de acceso WLAN comprobando si pueden ser calculadas a traves de los datos publicos de la red.No me responsabilizo del uso que pueda derivarse de esta aplicacion\n\nPuedes descargar el código fuente desde:\nhttps://github.com/RobertoEstrada/WLANAudit-Android\n\</string>
     <string name="number_of_keys_found">posibles claves</string>
     <string name="scan_now">Buscar</string>
     <string name="scan_fragment_dialog_title">Detalles de la red</string>
@@ -61,7 +61,7 @@
     <string name="key_already_store">Red ya almacenada</string>
     <string name="settings">Ajustes</string>
     <string name="save_and_copy_text">Guardar red y copiar clave</string>
-     <string name="show_case_view_title_map">Acceda a sus redes guardadas</string>
+    <string name="show_case_view_title_map">Acceda a sus redes guardadas</string>
     <string name="show_case_view_text_map">Deslice el dedo desde el margen izquierdo para acceder</string>
     <string name="context_menu_selected_count_multiple">redes seleccionadas</string>
     <string name="context_menu_selected_count_unico">red seleccionada</string>
