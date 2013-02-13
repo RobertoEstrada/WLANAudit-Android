@@ -126,7 +126,7 @@ public class ScanFragment extends RoboSherlockFragment implements
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		// RoboGuice.getInjector(getActivity()).injectMembersWithoutViews(this);
+
 		if (savedInstanceState != null
 				&& savedInstanceState.getBoolean("autoscan_state")) {
 			mAutoScanAction = new AutoScanAction(getActivity(), true);
@@ -142,9 +142,8 @@ public class ScanFragment extends RoboSherlockFragment implements
 
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
-
 		super.onViewCreated(view, savedInstanceState);
-		// RoboGuice.getInjector(getActivity()).injectViewMembers(this);
+
 		empty_text.setText(no_networks_found);
 		list_view.setEmptyView(empty_text);
 
@@ -162,6 +161,7 @@ public class ScanFragment extends RoboSherlockFragment implements
 				container, false);
 
 		prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+		
 		// If preference does not exist
 		if (!prefs.contains("wifi_autostart")) {
 			SharedPreferences.Editor editor = prefs.edit();
@@ -175,20 +175,16 @@ public class ScanFragment extends RoboSherlockFragment implements
 			editor.commit();
 		}
 
-		// initScan();
-
 		return saved_keys_fragment;
 	}
 
 	@Override
 	public void onDetach() {
-
 		super.onDetach();
 		mCallback = null;
 	}
 
 	public void initScan() {
-
 		// WifiManager initialization
 		if (mWifiManager == null)
 			mWifiManager = (WifiManager) getActivity().getSystemService(
@@ -205,7 +201,7 @@ public class ScanFragment extends RoboSherlockFragment implements
 			new RefreshAction(getActivity());
 
 			setupNetworkScanCallBack();
-			// StartPassButtonListener();
+
 			if (!isScanning)
 				this.startScan();
 		} else {
@@ -303,24 +299,12 @@ public class ScanFragment extends RoboSherlockFragment implements
 	}
 
 	/**
-	 * Lifecycle management: Activity is about to be shown
-	 */
-	public void onStart() {
-		super.onStart();
-
-		// mAd.loadAd(new AdRequest());
-	}
-
-	/**
 	 * Lifecycle management: Activity is being resumed, we need to refresh its
 	 * contents
 	 */
 	public void onResume() {
 		super.onResume();
-
 		initScan();
-
-		// mAd.loadAd(new AdRequest());
 	}
 
 	@Override

@@ -16,8 +16,6 @@
 
 package es.glasspixel.wlanaudit;
 
-import org.acra.ACRA;
-import org.acra.annotation.ReportsCrashes;
 import org.orman.dbms.Database;
 import org.orman.dbms.sqliteandroid.SQLiteAndroid;
 import org.orman.mapper.MappingSession;
@@ -32,7 +30,6 @@ import com.novoda.location.LocatorSettings;
 
 import es.glasspixel.wlanaudit.database.entities.Network;
 
-@ReportsCrashes(formKey = "", mailTo = "manzanocaminojesus@gmail.com")
 public class WLANAuditApplication extends Application {
 	/**
 	 * App package name
@@ -66,7 +63,5 @@ public class WLANAuditApplication extends Application {
 		settings.setUpdatesDistance(50);
 		locator = LocatorFactory.getInstance();
 		locator.prepare(getApplicationContext(), settings);
-
-		ACRA.init(this);
 	}
 }

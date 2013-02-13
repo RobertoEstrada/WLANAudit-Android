@@ -92,12 +92,9 @@ public class SavedNetworksFragment extends RoboSherlockListFragment implements
 	@Override
 	public void onResume() {
 		super.onResume();
-		// Cargamos datos desde la BD
 		mSavedNetworks = Model.fetchAll(Network.class);
-		// Creamos el adapter
 		mListAdapter = new SavedNetworksAdapter(getSherlockActivity(),
 				R.layout.key_saved_list_element, mSavedNetworks);
-		// Conectamos el adapter a la lista
 		setListAdapter(mListAdapter);
 	}
 
@@ -266,19 +263,11 @@ public class SavedNetworksFragment extends RoboSherlockListFragment implements
 									R.menu.saved_keys_elements_context_menu,
 									menu);
 							copy_item = menu.getItem(0);
-							// if (mSelectView == null) {
-							// mSelectView = (ViewGroup)
-							// LayoutInflater.from(getActivity())
-							// .inflate(R.layout.select_count_layout, null);
-							//
-							// mSelectedCount = (TextView) mSelectView
-							// .findViewById(R.id.count_tv);
-							//
-							// }
+
 							if (mCheckedItems == null) {
 								mCheckedItems = new ArrayList<Network>();
 							}
-							// mode.setCustomView(mSelectView);
+
 							return true;
 						}
 
@@ -293,20 +282,11 @@ public class SavedNetworksFragment extends RoboSherlockListFragment implements
 						public boolean onPrepareActionMode(
 								android.view.ActionMode mode,
 								android.view.Menu menu) {
-							// if (mSelectView == null) {
-							// mSelectView = (ViewGroup)
-							// LayoutInflater.from(getActivity())
-							// .inflate(R.layout.select_count_layout, null);
-							//
-							// mSelectedCount = (TextView) mSelectView
-							// .findViewById(R.id.count_tv);
-							// }
 
 							if (mCheckedItems == null) {
 								mCheckedItems = new ArrayList<Network>();
 							}
 							return true;
-
 						}
 
 						@Override
@@ -332,7 +312,6 @@ public class SavedNetworksFragment extends RoboSherlockListFragment implements
 								copy_item.setVisible(true);
 							}
 
-							// mSelectedCount.setText(String.valueOf(count));
 							if (checked) {
 								mCheckedItems.add(mSavedNetworks.get(position));
 							} else {

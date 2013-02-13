@@ -92,10 +92,10 @@ public class KeyListActivity extends SherlockListActivity {
 	}
 
 	/**
-	 * Lifecycle management: Activity is about to be shown
+	 * Lifecycle management: Activity is about to be started/resumed
 	 */
-	protected void onStart() {
-		super.onStart();
+	protected void onResume() {
+		super.onResume();
 		mAd.loadAd(new AdRequest());
 	}
 
@@ -126,9 +126,6 @@ public class KeyListActivity extends SherlockListActivity {
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			// app icon in action bar clicked; go home
-			// Intent intent = new Intent(this, NetworkListActivity.class);
-			// intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			// startActivity(intent);
 			NavUtils.navigateUpFromSameTask(this);
 			overridePendingTransition(R.anim.slide_in_from_left,
 					R.anim.slide_out_to_right);

@@ -181,7 +181,6 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity
 	 */
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
-		// super.onSaveInstanceState(outState);
 		outState.remove("android:support:fragments");
 	}
 
@@ -201,7 +200,6 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity
 		checkAutoScanStatus();
 
 		return true;
-		// return super.onCreateOptionsMenu(menu);
 	}
 
 	private void checkMenuItems() {
@@ -231,10 +229,8 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity
 
 			return true;
 		case R.id.toggleAutoscanOption:
-			// if (mPosition == 0)
 			((ScanFragment) mFragments.get(0)).mAutoScanAction.performAction();
 			checkAutoScanStatus();
-
 			return true;
 		case R.id.preferenceOption:
 			i = new Intent(this, WLANAuditPreferencesActivity.class);

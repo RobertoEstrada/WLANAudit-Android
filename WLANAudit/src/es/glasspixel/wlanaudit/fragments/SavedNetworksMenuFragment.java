@@ -125,8 +125,6 @@ public class SavedNetworksMenuFragment extends RoboSherlockListFragment implemen
 					&& mKeys.get(position).mLongitude > -999999999)
 				((ImageView) v.findViewById(R.id.location_icon_saved_key))
 						.setVisibility(View.VISIBLE);
-			// ((TextView) v.findViewById(R.id.networkKey))
-			// .setText(printKeys(mKeys.get(position).getKeys()));
 
 			((TextView) v.findViewById(R.id.networkAddress)).setText(mKeys
 					.get(position).mBSSID);
