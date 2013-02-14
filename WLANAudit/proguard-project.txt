@@ -59,6 +59,7 @@
 -keep class roboguice.** { *; }
 -keep class com.github.rtyley.android.sherlock.roboguice.** { *; }
 -keep class org.orman.** { *; }
+-keep class javax.annotation.** { *; }
 
 -dontwarn com.google.ads.**
 -dontwarn com.slidingmenu.**

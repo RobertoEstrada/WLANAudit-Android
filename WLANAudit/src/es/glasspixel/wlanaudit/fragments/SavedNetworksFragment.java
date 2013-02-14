@@ -25,7 +25,6 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.SparseBooleanArray;
@@ -33,10 +32,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.ActionMode.Callback;
@@ -46,7 +45,6 @@ import com.actionbarsherlock.view.MenuItem;
 import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockListFragment;
 
 import es.glasspixel.wlanaudit.R;
-import es.glasspixel.wlanaudit.activities.KeyListActivity;
 import es.glasspixel.wlanaudit.adapters.SavedNetworksAdapter;
 import es.glasspixel.wlanaudit.database.entities.Network;
 import es.glasspixel.wlanaudit.interfaces.OnDataSourceModifiedListener;
@@ -236,29 +234,6 @@ public class SavedNetworksFragment extends RoboSherlockListFragment implements
 								mCallback.dataSourceShouldRefresh();
 								mode.finish();
 								break;
-							case R.id.copy_context_menu:
-								if (mSelectedNetwork.getPossibleDefaultKeys()
-										.size() == 1) {
-									copyClipboard(mSelectedNetwork
-											.getPossibleDefaultKeys().get(0));
-								} else if (mSelectedNetwork
-										.getPossibleDefaultKeys().size() > 1) {
-									Intent i = new Intent(
-											getSherlockActivity(),
-											KeyListActivity.class);
-									i.putStringArrayListExtra(
-											KeyListActivity.KEY_LIST_KEY,
-											(ArrayList<String>) mSelectedNetwork
-													.getPossibleDefaultKeys());
-									startActivity(i);
-									getSherlockActivity()
-											.overridePendingTransition(
-													R.anim.slide_in_from_right,
-													R.anim.slide_out_to_left);
-
-								}
-
-								break;
 							default:
 								break;
 							}
@@ -378,25 +353,6 @@ public class SavedNetworksFragment extends RoboSherlockListFragment implements
 				}
 
 				mCallback.dataSourceShouldRefresh();
-				mode.finish();
-				return true;
-			case R.id.copy_context_menu:
-				if (mSelectedNetwork.getPossibleDefaultKeys().size() == 1) {
-					copyClipboard(mSelectedNetwork.getPossibleDefaultKeys()
-							.get(0));
-				} else if (mSelectedNetwork.getPossibleDefaultKeys().size() > 1) {
-					Intent i = new Intent(getSherlockActivity(),
-							KeyListActivity.class);
-					i.putStringArrayListExtra(KeyListActivity.KEY_LIST_KEY,
-							(ArrayList<String>) mSelectedNetwork
-									.getPossibleDefaultKeys());
-					startActivity(i);
-					getSherlockActivity().overridePendingTransition(
-							R.anim.slide_in_from_right,
-							R.anim.slide_out_to_left);
-
-				}
-
 				mode.finish();
 				return true;
 			default:
