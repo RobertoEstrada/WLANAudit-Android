@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="WLANAudit-parent" default="build-debug">
+	
+	<property name="build-target" value="android-16" />
+	<property name="app-home" value="WLANAudit/" />
+	<property name="tests-home" value="WLANAudit-Tests/" />
+	<property name="tools-home" value="Tools/" />
+	
+	<target name="build-debug">
+		<subant target="debug">
+			<fileset dir="${app-home}" includes="build.xml"/>
+		</subant>
+	</target>
+	
+	<target name="build-release">
+		<subant target="release">
+			<fileset dir="${app-home}" includes="build.xml"/>
+		</subant>
+	</target>
+	
+	<target name="test">
+		<subant target="test">
+			<fileset dir="${tests-home}" includes="build.xml"/>
+		</subant>
+	</target>
+	
+	<target name="clean">
+		<subant target="clean">
+			<fileset dir="${app-home}" includes="build.xml"/>
+			<fileset dir="${tests-home}" includes="build.xml"/>
+		</subant>
+	</target>
+</project>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/scanOption"
+        android:icon="@drawable/ic_refresh"
+        android:showAsAction="always"
+        android:title="@string/scan_now">
+    </item>
+    <item
+        android:id="@+id/toggleAutoscanOption"
+        android:icon="@drawable/ic_autoscan"
+        android:showAsAction="always"
+        android:title="@string/autoscan_toggle">
+    </item>
+    <item
+        android:id="@+id/mapOption"
+        android:icon="@drawable/location_map_holo_dark"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_map_option">
+    </item>
+    <item
+        android:id="@+id/preferenceOption"
+        android:icon="@drawable/ic_settings"
+        android:showAsAction="always"
+        android:title="@string/preferences_menu_btn">
+    </item>
+    <item
+        android:id="@+id/aboutOption"
+        android:icon="@drawable/ic_about"
+        android:showAsAction="always"
+        android:title="@string/about_menu_btn">
+    </item>
+    
+
+</menu>

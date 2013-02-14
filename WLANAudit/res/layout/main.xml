@@ -1,35 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-/*
- * Copyright 2010, 2011 Mike Novak <michael.novakjr@gmail.com>
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
--->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/networkListActivityLayout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <TextView
+    <LinearLayout
+        android:id="@+id/adLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World, NumberPicker"
-        tools:ignore="HardcodedText" />
+        android:gravity="center_horizontal"
+        android:orientation="vertical" >
+    </LinearLayout>
 
-    <com.quietlycoding.android.picker.NumberPicker
+    <ListView
+        android:id="@+id/network_listview"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="fill_parent" >
+
+        <!-- Preview: listitem=@layout/network_list_element_layout -->
+    </ListView>
+
+    <TextView
+        android:id="@id/android:empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center|center_vertical"
+        android:text="@string/no_networks_found" />
 
 </LinearLayout>

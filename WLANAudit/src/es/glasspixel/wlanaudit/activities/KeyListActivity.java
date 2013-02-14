@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Roberto Estrada
+ * Copyright (C) 2013 The WLANAudit project contributors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,19 @@
 
 package es.glasspixel.wlanaudit.activities;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.text.ClipboardManager;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.Toast;
+
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.MenuItem;
@@ -25,19 +38,6 @@ import com.google.ads.AdView;
 
 import es.glasspixel.wlanaudit.R;
 import es.glasspixel.wlanaudit.ads.Key;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.text.ClipboardManager;
-import android.view.Gravity;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @SuppressWarnings("deprecation")
 public class KeyListActivity extends SherlockListActivity {
@@ -67,7 +67,7 @@ public class KeyListActivity extends SherlockListActivity {
 
 		setContentView(R.layout.key_list_layout);
 		ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.setDisplayHomeAsUpEnabled(true);
 
 		// If a previous instance state was saved
 		if (savedInstanceState != null
@@ -92,48 +92,53 @@ public class KeyListActivity extends SherlockListActivity {
 	}
 
 	/**
-	 * Lifecycle management: Activity is about to be shown
+	 * Lifecycle management: Activity is about to be started/resumed
 	 */
-	protected void onStart() {
-		super.onStart();
+	protected void onResume() {
+		super.onResume();
 		mAd.loadAd(new AdRequest());
 	}
-	
+
 	/**
 	 * Lifecycle management: Activity state is saved to be restored later
 	 */
 	protected void onSaveInstanceState(Bundle outState) {
-		outState.putStringArrayList(KeyListActivity.KEY_LIST_KEY, (ArrayList<String>) mKeyList);
+		outState.putStringArrayList(KeyListActivity.KEY_LIST_KEY,
+				(ArrayList<String>) mKeyList);
 	}
-	
+
 	/**
-	 * Handles the event of clicking on a list element. 
+	 * Handles the event of clicking on a list element.
 	 */
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		// Clipboard copy
 		ClipboardManager clipBoard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
 		clipBoard.setText(mKeyList.get(position));
 		// Copy notification
-		Toast notificationToast = Toast.makeText(this,
-				getResources().getString(
-						R.string.key_copy_success),
-				Toast.LENGTH_SHORT);
-		notificationToast.setGravity(Gravity.CENTER, 0,
-				0);
+		Toast notificationToast = Toast.makeText(this, getResources()
+				.getString(R.string.key_copy_success), Toast.LENGTH_SHORT);
+		notificationToast.setGravity(Gravity.CENTER, 0, 0);
 		notificationToast.show();
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			// app icon in action bar clicked; go home
+			NavUtils.navigateUpFromSameTask(this);
+			overridePendingTransition(R.anim.slide_in_from_left,
+					R.anim.slide_out_to_right);
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
 	
 	@Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                // app icon in action bar clicked; go home
-                Intent intent = new Intent(this,  NetworkListActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
+	public void onBackPressed() {
+		finish();
+		overridePendingTransition(R.anim.slide_in_from_left,
+				R.anim.slide_out_to_right);
+	}
 }

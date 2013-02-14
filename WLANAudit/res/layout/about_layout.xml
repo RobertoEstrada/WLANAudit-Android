@@ -66,9 +66,9 @@
         android:layout_width="fill_parent"
         android:layout_height="1dp"
         android:layout_marginTop="5dip"
-        android:background="@drawable/layout_divider"
         android:paddingBottom="5dip" >
     </View>
+    <!-- android:background="@drawable/layout_divider" -->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -104,8 +104,8 @@
         android:layout_width="fill_parent"
         android:layout_height="1dp"
         android:layout_marginTop="5dip"
-        android:background="@drawable/layout_divider"
         android:paddingBottom="5dip" />
+    <!-- android:background="@drawable/layout_divider" -->
 
     <ScrollView
         android:id="@+id/scrollView1"
@@ -142,12 +142,13 @@
                 </LinearLayout>
             </ScrollView>
 
-            <View
-                android:id="@+id/divider3"
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:background="@drawable/layout_divider"
-                android:paddingBottom="5dip" />
+            <!-- <View -->
+            <!-- android:id="@+id/divider3" -->
+            <!-- android:layout_width="fill_parent" -->
+            <!-- android:layout_height="1dp" -->
+            <!-- android:background="@drawable/layout_divider" -->
+            <!-- android:paddingBottom="5dip" /> -->
+
 
             <LinearLayout
                 android:layout_width="match_parent"

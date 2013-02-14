@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 Roberto Estrada
+ * Copyright (C) 2013 The WLANAudit project contributors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,8 +59,10 @@ public class WifiNetworkAdapter extends ArrayAdapter<ScanResult> {
 		View listItem = convertView;
 		// If the view is null, we need to inflate it from XML layout
 		if (listItem == null) {
-			LayoutInflater inflater = (LayoutInflater) getContext()
-					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			// HACK!!
+			getContext().setTheme(R.style.Sherlock___Theme_DarkActionBar);
+			// END HACK!!			
+			LayoutInflater inflater = LayoutInflater.from(getContext());
 			listItem = inflater.inflate(R.layout.network_list_element_layout,
 					null);
 		}

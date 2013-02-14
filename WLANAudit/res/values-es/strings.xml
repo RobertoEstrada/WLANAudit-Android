@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8" standalone="no"?>
 <resources>
+
     <string name="autoscan_enabled">Búsqueda automática activa</string>
     <string name="autoscan_disabled">Búsqueda automática desactivada</string>
     <string name="network_bssid_label">Dirección MAC:</string>
@@ -12,6 +12,8 @@
     <string name="key_copy_warn_title">AP Inseguro</string>
     <string name="key_copy_warn_text">Se pudo calcular una posible clave por defecto a traves de los datos publicos.\n\nSi no se trata de tu AP, avisa a su propietario de que cambie la clave de su red.</string>
     <string name="ok_button">Aceptar</string>
+    <string name="send_report">Sending error report..</string>
+    <string name="error_saving_key">Ha ocurrido un error guardando la red</string>
     <string name="key_copy_success">Clave copiada con éxito</string>
     <string name="scan_pref_group_name">Ajustes de búsqueda</string>
     <string name="menu_preferences_label">Preferencias</string>
@@ -30,14 +32,38 @@
     <string name="time_unit"> segundos</string>
     <string name="about_version_number">Versión: </string>
     <string name="about_release_number">Número de revisión:</string>
-    <string name="disclaimer_text">WLANAudit © 2012 Roberto Estrada\n\nWLANAudit es una aplicacion pensada para auditar la seguridad de las claves de acceso de los puntos de acceso WLAN comprobando si pueden ser calculadas a traves de los datos publicos de la red.No me responsabilizo del uso que pueda derivarse de esta aplicacion\n\nPuedes descargar el código fuente desde:\nhttps://github.com/RobertoEstrada/WLANAudit-Android\n\</string>
+    <string name="disclaimer_text">WLANAudit © 2013 Roberto Estrada, Jesús Manzano\n\nWLANAudit es una aplicacion pensada para auditar la seguridad de las claves de acceso de los puntos de acceso WLAN comprobando si pueden ser calculadas a traves de los datos publicos de la red.No me responsabilizo del uso que pueda derivarse de esta aplicacion\n\nPuedes descargar el código fuente desde:\nhttps://github.com/RobertoEstrada/WLANAudit-Android\n\</string>
     <string name="number_of_keys_found">posibles claves</string>
     <string name="scan_now">Buscar</string>
+    <string name="scan_fragment_dialog_title">Detalles de la red</string>
     <string name="autoscan_toggle">Busqueda automática</string>
     <string name="wifi_autostart_inactive_summary">Si el WiFi estaba inactivo al inicio de la aplicación no se activará automáticamente</string>
     <string name="wifi_autostart_active_summary">Si el WiFi estaba inactivo al inicio de la aplicación se activará automáticamente</string>
     <string name="wifi_autostart">Encendido automático del WiFi</string>
     <string name="no_networks_found">No se encontraron redes inalámbricas</string>
     <string name="oss_licenses_show_button">Mostrar licencias de software</string>
-    <string name="oss_licenses_dialog_title">Licencias de software</string><string name="network_channel">Canal:</string>
+    <string name="oss_licenses_dialog_title">Licencias de software</string>
+    <string name="network_channel">Canal:</string>
+    <string name="action1">Escanear</string>
+    <string name="key_list_title">Redes almacenadas</string>
+    <string name="action2">Redes almacenadas</string>
+    <string name="delete">Borrar</string>
+    <string name="copy">Copiar</string>
+    <string name="show_keys_list">Mostrar redes en el menú</string>
+    <string name="no_data_saved_keys">No hay redes almacenadas</string>
+    <string name="show_current_position">Mostrando posición actual..</string>
+    <string name="map_layout_locations_list_title">Localización de redes</string>
+    <string name="show_my_location">Muéstrame donde estoy</string>
+    <string name="title_activity_map">Localización de redes</string>
+    <string name="menu_map_option">Mostrar localización de las redes almacenadas</string>
+    <string name="no_data_scan_keys">No hay puntos de acceso cercanos</string>
+    <string name="position_refreshed">Posición actualizada</string>
+    <string name="key_already_store">Red ya almacenada</string>
+    <string name="settings">Ajustes</string>
+    <string name="save_and_copy_text">Guardar red y copiar clave</string>
+    <string name="show_case_view_title_map">Acceda a sus redes guardadas</string>
+    <string name="show_case_view_text_map">Deslice el dedo desde el margen izquierdo para acceder</string>
+    <string name="context_menu_selected_count_multiple">redes seleccionadas</string>
+    <string name="context_menu_selected_count_unico">red seleccionada</string>
+
 </resources>

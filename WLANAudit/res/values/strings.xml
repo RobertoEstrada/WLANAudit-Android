@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <resources>
+
     <string name="autoscan_enabled">Autoscan enabled</string>
     <string name="autoscan_disabled">Autoscan disabled</string>
     <string name="network_bssid_label">MAC Address:</string>
@@ -8,10 +9,12 @@
     <string name="signal_level_label">Intensity:</string>
     <string name="default_password_label">Default pass:</string>
     <string name="copy_pass_button">Copy password</string>
+    <string name="send_report">Sending error report..</string>
     <string name="no_default_key">Impossible to calculate</string>
     <string name="key_copy_warn_title">Unsafe AP</string>
     <string name="key_copy_warn_text">The default key of this AP could be guessed, hence this AP is unsafe. If this AP isn\'t yours, warn the owner about this security issue.</string>
     <string name="ok_button">OK</string>
+    <string name="error_saving_key">There was an error saving the key</string>
     <string name="key_copy_success">Password copied successfully</string>
     <string name="scan_pref_group_name">Scan preferences</string>
     <string name="menu_preferences_label">Preferences</string>
@@ -30,7 +33,7 @@
     <string name="time_unit"> seconds</string>
     <string name="about_version_number">Version: </string>
     <string name="about_release_number">Release number:</string>
-    <string name="disclaimer_text">WLANAudit © 2012 Roberto Estrada\n\nWLANAudit is an application to audit the security of WLAN Access points. The application tries to guess the access point default password via a public known algorithm. This app is NOT MEANT to be used as a hacking utility, so i\'m not responsible of the usage you make of it.\n\nYou can download the source code from:\nhttps://github.com/RobertoEstrada/WLANAudit-Android\n</string>
+    <string name="disclaimer_text">WLANAudit © 2013 Roberto Estrada, Jesús Manzano\n\nWLANAudit is an application to audit the security of WLAN Access points. The application tries to guess the access point default password via a public known algorithm. This app is NOT MEANT to be used as a hacking utility, so i\'m not responsible of the usage you make of it.\n\nYou can download the source code from:\nhttps://github.com/RobertoEstrada/WLANAudit-Android\n</string>
     <string name="number_of_keys_found">possible keys found</string>
     <string name="scan_now">Search</string>
     <string name="autoscan_toggle">Autoscan</string>
@@ -41,4 +44,36 @@
     <string name="oss_licenses_show_button">Show software licenses</string>
     <string name="oss_licenses_dialog_title">Software licenses</string>
     <string name="network_channel">Channel:</string>
+    <string name="action1">Scan</string>
+    <string name="action2">Saved networks</string>
+    <string name="delete">Delete</string>
+    <string name="copy">Copy</string>
+    <string name="title_section3">Section 3</string>
+    <string name="scan_fragment_dialog_title">Network details</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section1">Section 1</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_network_list_activity_swipe">NetworkListActivitySwipe</string>
+    <string name="no_data_saved_keys">There aren\'t saved networks</string>
+    <string name="title_activity_map">Situation of saved networks</string>
+    <string name="show_current_position">Show current position..</string>
+    <string name="map_layout_locations_list_title">My network\'s locations</string>
+    <string name="key_list_title">My saved networks</string>
+    <string name="show_my_location">Show my location</string>
+    <string name="show_keys_list">Show saved networks</string>
+    <string name="menu_map_option">Show saved networks in map</string>
+    <string name="no_data_scan_keys">There aren\'t AP near you</string>
+    <string name="position_refreshed">Location updated</string>
+    <string name="key_already_store">This key is already stored</string>
+    <string name="improve_precision_dialog_title">Improve precision of location</string>
+    <string name="improve_precision_dialog_message">To set your location, please select the Location option in their settings. You can access them by clicking the Settings button</string>
+    <string name="settings">Settings</string>
+    <string name="save_and_copy_text">Save and copy</string>
+    <string name="show_case_view_title_map">Access to your saved networks</string>
+    <string name="show_case_view_text_map">Slide your finger from the left to see your saved networks</string>
+    <string name="location_unavailable">Your location is unavailable</string>
+    <string name="context_menu_selected_count_multiple">networks selected</string>
+    <string name="context_menu_selected_count_unico">network selected</string>
+
 </resources>

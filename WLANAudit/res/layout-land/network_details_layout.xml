@@ -56,12 +56,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
+
+        <!-- <View -->
+        <!-- android:id="@+id/divider" -->
+        <!-- android:layout_width="fill_parent" -->
+        <!-- android:layout_height="1dp" -->
+        <!-- android:background="@drawable/layout_divider" /> -->
 
-        <View
-            android:id="@+id/divider"
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:background="@drawable/layout_divider" />
 
         <ScrollView
             android:id="@+id/scrollView1"
@@ -216,13 +217,14 @@
                 </TableRow>
             </TableLayout>
         </ScrollView>
+
+        <!-- <View -->
+        <!-- android:id="@+id/divider2" -->
+        <!-- android:layout_width="fill_parent" -->
+        <!-- android:layout_height="1dp" -->
+        <!-- android:layout_marginTop="5dip" -->
+        <!-- android:background="@drawable/layout_divider" /> -->
 
-        <View
-            android:id="@+id/divider2"
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="5dip"
-            android:background="@drawable/layout_divider" />
     </LinearLayout>
 
 </LinearLayout>

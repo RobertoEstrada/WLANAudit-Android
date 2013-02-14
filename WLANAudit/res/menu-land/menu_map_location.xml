@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/check_location_menu"
+        android:icon="@drawable/ic_menu_mylocation"
+        android:showAsAction="always|withText"
+        android:title="@string/show_my_location">
+    </item>
+
+</menu>
