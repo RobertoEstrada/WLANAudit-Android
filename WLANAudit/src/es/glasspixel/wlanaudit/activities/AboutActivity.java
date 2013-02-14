@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Roberto Estrada
+ * Copyright (C) 2013 The WLANAudit project contributors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -70,7 +71,7 @@ public class AboutActivity extends SherlockActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.about_layout);
 		ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.setDisplayHomeAsUpEnabled(true);
 		mVersionValueLabel = (TextView) findViewById(R.id.versionValue);
 		mReleaseValueLabel = (TextView) findViewById(R.id.releaseValue);
 		mOssLicensesButton = (Button) findViewById(R.id.oss_button);
@@ -134,9 +135,9 @@ public class AboutActivity extends SherlockActivity {
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			// app icon in action bar clicked; go home
-			Intent intent = new Intent(this, NetworkListActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(intent);
+			NavUtils.navigateUpFromSameTask(this);
+			overridePendingTransition(R.anim.slide_in_from_left,
+					R.anim.slide_out_to_right);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -165,5 +166,12 @@ public class AboutActivity extends SherlockActivity {
 			Log.e(this.getClass().getSimpleName(), "Name not found", e1);
 		}
 		return version;
+	}
+
+	@Override
+	public void onBackPressed() {
+		finish();
+		overridePendingTransition(R.anim.slide_in_from_left,
+				R.anim.slide_out_to_right);
 	}
 }

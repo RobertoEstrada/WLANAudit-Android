@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Roberto Estrada
+ * Copyright (C) 2013 The WLANAudit project contributors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,14 @@
 
 package es.glasspixel.wlanaudit.activities;
 
+import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockPreferenceActivity;
 import com.actionbarsherlock.view.MenuItem;
 
 import es.glasspixel.wlanaudit.R;
-
-import android.content.Intent;
-import android.os.Bundle;
 
 /***
  * PreferenceActivity is a built-in Activity for preferences management
@@ -34,7 +34,7 @@ import android.os.Bundle;
  * SharedPreferences sharedPreferences =
  * PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
  * <Preference Type> preferenceValue = sharedPreferences.get<Preference
- * Type>("<Preference Key>",<default value>);
+ * Type>("<Preference SavedKey>",<default value>);
  */
 public class WLANAuditPreferencesActivity extends SherlockPreferenceActivity {
 
@@ -43,21 +43,28 @@ public class WLANAuditPreferencesActivity extends SherlockPreferenceActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.setDisplayHomeAsUpEnabled(true);
 		addPreferencesFromResource(R.xml.app_preferences);
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			// app icon in action bar clicked; go home
-			Intent intent = new Intent(this, NetworkListActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(intent);
+			NavUtils.navigateUpFromSameTask(this);
+			overridePendingTransition(R.anim.slide_in_from_left,
+					R.anim.slide_out_to_right);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+	@Override
+	public void onBackPressed() {
+		finish();
+		overridePendingTransition(R.anim.slide_in_from_left,
+				R.anim.slide_out_to_right);
 	}
 }
