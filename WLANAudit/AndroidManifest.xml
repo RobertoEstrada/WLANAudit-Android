@@ -3,7 +3,7 @@
     package="es.glasspixel.wlanaudit"
     android:installLocation="auto"
     android:versionCode="9"
-    android:versionName="3.0" >
+    android:versionName="3.0.1" >
 
     <uses-sdk
         android:minSdkVersion="7"
