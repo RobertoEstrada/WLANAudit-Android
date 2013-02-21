@@ -152,12 +152,10 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity
 				@Override
 				public void onPageScrolled(int arg0, float arg1, int arg2) {
 					checkMenuItems();
-
 				}
 
 				@Override
 				public void onPageScrollStateChanged(int arg0) {
-					// TODO Auto-generated method stub
 
 				}
 			});
@@ -205,14 +203,13 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity
 	private void checkMenuItems() {
 		if (mViewPager != null) {
 			if (mViewPager.getCurrentItem() == 0) {
-				refresh.setVisible(true);
-				automatic_scan.setVisible(true);
-				map_menu_item.setVisible(false);
-
+				if(refresh != null) { refresh.setVisible(true); }
+				if(automatic_scan != null) { automatic_scan.setVisible(true); }
+				if(map_menu_item != null) { map_menu_item.setVisible(false); }
 			} else {
-				refresh.setVisible(false);
-				automatic_scan.setVisible(false);
-				map_menu_item.setVisible(true);
+			    if(refresh != null) { refresh.setVisible(false); }
+			    if(automatic_scan != null) { automatic_scan.setVisible(false); }
+			    if(map_menu_item != null) { map_menu_item.setVisible(true); }
 			}
 		}
 

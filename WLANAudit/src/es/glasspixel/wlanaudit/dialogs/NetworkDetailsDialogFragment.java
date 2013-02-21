@@ -110,11 +110,22 @@ public class NetworkDetailsDialogFragment extends RoboDialogFragment {
 	 * Broadcast receiver to watch for location updates
 	 */
 	private BroadcastReceiver mLocationAvailableCallBackReceiver;
+	
+	/**
+     * Dummy callback object, this is meant to be a dummy callback object when an
+     * activity is not attached to the fragment to avoid calls on a null object.
+     */
+	private OnDataSourceModifiedListener sDummyCallback = new OnDataSourceModifiedListener() {        
+        @Override
+        public void dataSourceShouldRefresh() {
+            
+        }
+    };
 
 	/**
 	 * Callback handle to the datasource observer
 	 */
-	private OnDataSourceModifiedListener mCallback;
+	private OnDataSourceModifiedListener mCallback = sDummyCallback;
 
 	@InjectView(R.id.networkIcon)
 	private ImageView mNetworkIcon;
@@ -189,7 +200,7 @@ public class NetworkDetailsDialogFragment extends RoboDialogFragment {
 	@Override
 	public void onDetach() {
 		super.onDetach();
-		mCallback = null;
+		mCallback = sDummyCallback;
 	}
 
 	@Override
