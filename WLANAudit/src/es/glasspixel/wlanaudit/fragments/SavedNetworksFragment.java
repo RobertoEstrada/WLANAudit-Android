@@ -73,6 +73,29 @@ public class SavedNetworksFragment extends RoboSherlockListFragment implements
 		 */
 		public void dataSourceShouldRefresh();
 	}
+	
+	/**
+	 * Dummy callback object, this is meant to be a dummy callback object when an
+	 * activity is not attached to the fragment to avoid calls on a null object.
+	 */
+	private SavedNetworkFragmentListener sDummyCallback = new SavedNetworkFragmentListener() {
+        
+        @Override
+        public void onNetworkSelected(Network networkData) {           
+        }
+        
+        @Override
+        public void dataSourceShouldRefresh() {
+        }
+    };
+    
+    /**
+     * Real callback, this object is assigned to a real callback when an
+     * activity attaches to the fragment, when the activity detaches it has
+     * to be replaced with the dummy callback object in order to avoid continuous
+     * nullity checks. This solution is used by Google in their I/0 2012 app.
+     */
+    private SavedNetworkFragmentListener mCallback = sDummyCallback;
 
 	protected ActionMode mActionMode;
 
@@ -80,9 +103,7 @@ public class SavedNetworksFragment extends RoboSherlockListFragment implements
 
 	private List<Network> mSavedNetworks;
 
-	protected Network mSelectedNetwork;
-
-	private SavedNetworkFragmentListener mCallback;
+	protected Network mSelectedNetwork;	
 
 	@InjectView(android.R.id.list)
 	private ListView mNetworkListView;
@@ -100,6 +121,12 @@ public class SavedNetworksFragment extends RoboSherlockListFragment implements
 			throw new ClassCastException(activity.toString()
 					+ " must implement OnDataSourceModifiedListener");
 		}
+	}
+	
+	@Override
+	public void onDetach() {
+	    super.onDetach();
+	    mCallback = sDummyCallback;
 	}
 
 	@Override

@@ -78,12 +78,7 @@ public class ScanFragment extends RoboSherlockFragment implements
 	@InjectView(android.R.id.list)
 	ListView list_view;	
 	
-	private boolean isScanning = false;
-
-	/**
-	 * The parent activity that listens for this fragment callbacks
-	 */
-	private ScanFragmentListener mCallback;
+	private boolean isScanning = false;	
 
 	/**
 	 * Interface to pass fragment callbacks to parent activity. Parent activity
@@ -103,6 +98,33 @@ public class ScanFragment extends RoboSherlockFragment implements
 
 		public void scanStart();
 	}
+	
+	/**
+     * Dummy callback object, this is meant to be a dummy callback object when an
+     * activity is not attached to the fragment to avoid calls on a null object.
+     */
+	private ScanFragmentListener sDummyCallback = new ScanFragmentListener() {
+
+        @Override
+        public void scanStart() {
+        }
+
+        @Override
+        public void scanCompleted() {
+        }
+
+        @Override
+        public void onNetworkSelected(ScanResult networkData) {
+        }
+    };
+	
+    /**
+     * Real callback, this object is assigned to a real callback when an
+     * activity attaches to the fragment, when the activity detaches it has
+     * to be replaced with the dummy callback object in order to avoid continuous
+     * nullity checks. This solution is used by Google in their I/0 2012 app.
+     */
+    private ScanFragmentListener mCallback = sDummyCallback;
 
 	/**
 	 * SavedKeysFragment instance to inflate
@@ -125,7 +147,6 @@ public class ScanFragment extends RoboSherlockFragment implements
 	 * Broadcast receiver to control the completion of a scan
 	 */
 	private BroadcastReceiver mCallBackReceiver;
-
 	
 	/**
 	 * App preferences
@@ -137,7 +158,6 @@ public class ScanFragment extends RoboSherlockFragment implements
 	 * autoscan on lifecycle events that require it
 	 */
 	public AutoScanAction mAutoScanAction;
-
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -191,13 +211,7 @@ public class ScanFragment extends RoboSherlockFragment implements
 		}
 
 		return saved_keys_fragment;
-	}
-
-	@Override
-	public void onDetach() {
-		super.onDetach();
-		mCallback = null;
-	}
+	}	
 
 	public void initScan() {
 		// WifiManager initialization
@@ -282,6 +296,12 @@ public class ScanFragment extends RoboSherlockFragment implements
 					+ " must implement OnNetworkSelectedListener");
 		}
 	}
+	
+	@Override
+    public void onDetach() {
+        super.onDetach();
+        mCallback = sDummyCallback;
+    }
 
 	@Override
 	public void onItemClick(final AdapterView<?> parent, View arg1,
