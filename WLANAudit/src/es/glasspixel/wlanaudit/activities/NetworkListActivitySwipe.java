@@ -30,7 +30,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.widget.LinearLayout;
@@ -288,34 +287,18 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity
 	 */
 	@Override
 	public void onNetworkSelected(ScanResult networkData) {
-		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-		Fragment prev = getSupportFragmentManager().findFragmentByTag(
-				"detailsDialog");
-		if (prev != null) {
-			ft.remove(prev);
-		}
-		ft.addToBackStack(null);
-
 		// Create and show the dialog.
 		NetworkDetailsDialogFragment detailsDlg = NetworkDetailsDialogFragment
 				.newInstance(networkData);
-		detailsDlg.show(ft, "detailsDialog");
+		detailsDlg.show(getSupportFragmentManager(), "detailsDialog");
 	}
 
 	@Override
 	public void onNetworkSelected(Network networkData) {
-		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-		Fragment prev = getSupportFragmentManager().findFragmentByTag(
-				"detailsDialog");
-		if (prev != null) {
-			ft.remove(prev);
-		}
-		ft.addToBackStack(null);
-
 		// Create and show the dialog.
 		SavedNetworkDetailsDialogFragment detailsDlg = SavedNetworkDetailsDialogFragment
 				.newInstance(networkData);
-		detailsDlg.show(ft, "detailsDialog");
+		detailsDlg.show(getSupportFragmentManager(), "detailsDialog");
 	}
 
 	/**

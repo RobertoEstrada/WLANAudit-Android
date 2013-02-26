@@ -109,7 +109,7 @@ public class SavedNetworkDetailsDialogFragment extends RoboDialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         getDialog().setTitle(R.string.scan_fragment_dialog_title);
-        getDialog().setCancelable(true);
+        this.setCancelable(true);
         getDialog().setCanceledOnTouchOutside(true);
         View v = inflater.inflate(R.layout.saved_network_details_dialog, container, false);
         return v;
