@@ -1,0 +1,33 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:0.4.3'
+    }
+}
+apply plugin: 'android'
+
+dependencies {
+    compile 'com.google.android.gms:play-services:3.1.36'
+    compile project(':Vendor:SlidingMenu:library')
+    compile project(':Vendor:ShowcaseView:library')
+    compile project(':Vendor:NumberPicker:lib')
+    compile files('libs/guice-3.0-no_aop.jar')
+    compile files('libs/javax.inject.jar')
+    compile files('libs/roboguice-2.0.jar')
+    compile files('libs/jsr305-1.3.9.jar')
+    compile files('libs/orman-20120316.jar')
+    compile files('libs/novocation-core-2.0-ALPHA.jar')
+    compile files('libs/GoogleAdMobAdsSdk-6.2.1.jar')
+}
+
+android {
+    compileSdkVersion 16
+    buildToolsVersion "17"
+
+    defaultConfig {
+        minSdkVersion 8
+        targetSdkVersion 17
+    }
+}

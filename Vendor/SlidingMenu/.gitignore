@@ -13,3 +13,5 @@ release
 gen
 .metadata/
 .metadata
+*.project
+.settings

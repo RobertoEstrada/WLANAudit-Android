@@ -5,10 +5,10 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 
-import com.google.android.maps.MapActivity;
+import com.actionbarsherlock.app.SherlockMapActivity;
 import com.slidingmenu.lib.SlidingMenu;
 
-public abstract class SlidingMapActivity extends MapActivity implements SlidingActivityBase {
+public abstract class SlidingMapActivity extends SherlockMapActivity implements SlidingActivityBase {
 
 	private SlidingActivityHelper mHelper;
 
@@ -114,22 +114,15 @@ public abstract class SlidingMapActivity extends MapActivity implements SlidingA
 	/* (non-Javadoc)
 	 * @see com.slidingmenu.lib.app.SlidingActivityBase#showAbove()
 	 */
-	public void showContent() {
-		mHelper.showContent();
+	public void showAbove() {
+		mHelper.showAbove();
 	}
 
 	/* (non-Javadoc)
 	 * @see com.slidingmenu.lib.app.SlidingActivityBase#showBehind()
 	 */
-	public void showMenu() {
-		mHelper.showMenu();
-	}
-
-	/* (non-Javadoc)
-	 * @see com.slidingmenu.lib.app.SlidingActivityBase#showSecondaryMenu()
-	 */
-	public void showSecondaryMenu() {
-		mHelper.showSecondaryMenu();
+	public void showBehind() {
+		mHelper.showBehind();
 	}
 
 	/* (non-Javadoc)

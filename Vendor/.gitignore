@@ -16,6 +16,7 @@ classes
 gen-external-apklibs
 
 #Maven
+build
 target
 release.properties
 pom.xml.*

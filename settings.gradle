@@ -1,0 +1,6 @@
+include ':WLANAudit'
+include ':Vendor:ActionBarSherlock'
+include ':Vendor:SlidingMenu:library'
+include ':Vendor:ShowcaseView:library'
+include ':Vendor:NumberPicker:lib'
+
