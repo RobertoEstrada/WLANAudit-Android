@@ -82,9 +82,14 @@ public class NetworkDetailsDialogFragment extends RoboDialogFragment {
 			.getName();
 
 	/**
-	 * Key to store and recover from dialog bundle the network data to displau
+	 * Key to store and recover from dialog bundle the network data to display
 	 */
 	private static String NETWORK_DETAILS_DATA_KEY = "NetworkDetailsData";
+
+    /**
+     * Key to store and recover from dialog bundle the network location data
+     */
+    private static String NETWORK_LOCATION_DATA_KEY = "NetworkLocationData";
 
 	/**
 	 * The network data to display on the dialog
@@ -99,12 +104,7 @@ public class NetworkDetailsDialogFragment extends RoboDialogFragment {
 	/**
 	 * Last known location
 	 */
-	private Location mLastKnownLocation;
-
-	/**
-	 * Handle to power-efficient location services
-	 */
-	private Locator mLocator;
+	private Location mNetworkLocation;
 
 	/**
 	 * Broadcast receiver to watch for location updates
@@ -178,10 +178,11 @@ public class NetworkDetailsDialogFragment extends RoboDialogFragment {
 	 *            The network data to display on the dialog
 	 * @return A ready to use instance of the dialog
 	 */
-	public static NetworkDetailsDialogFragment newInstance(ScanResult network) {
+	public static NetworkDetailsDialogFragment newInstance(ScanResult network, Location networkLocation) {
 		NetworkDetailsDialogFragment frag = new NetworkDetailsDialogFragment();
 		Bundle args = new Bundle();
 		args.putParcelable(NETWORK_DETAILS_DATA_KEY, network);
+        args.putParcelable(NETWORK_LOCATION_DATA_KEY, networkLocation);
 		frag.setArguments(args);
 		return frag;
 	}
@@ -207,6 +208,7 @@ public class NetworkDetailsDialogFragment extends RoboDialogFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mNetworkData = getArguments().getParcelable(NETWORK_DETAILS_DATA_KEY);
+        mNetworkLocation = getArguments().getParcelable(NETWORK_LOCATION_DATA_KEY);
 	}
 
 	@Override
@@ -224,14 +226,11 @@ public class NetworkDetailsDialogFragment extends RoboDialogFragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		setupLocationServices();
-		startReceivingLocationUpdates();
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
-		stopReceivingLocationUpdates();
 	}
 
 	@Override
@@ -263,7 +262,7 @@ public class NetworkDetailsDialogFragment extends RoboDialogFragment {
 		mStarNetworkButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				saveNetwork(mNetworkData, mLastKnownLocation);
+				saveNetwork(mNetworkData, mNetworkLocation);
 				dismiss();
 			}
 		});
@@ -324,73 +323,6 @@ public class NetworkDetailsDialogFragment extends RoboDialogFragment {
 			}
 		});
 
-	}
-
-	private void setupLocationServices() {
-		LocatorSettings settings = new LocatorSettings(WLANAuditApplication.LOCATION_UPDATE_ACTION);
-		settings.setUpdatesInterval(3 * 60 * 1000);
-		settings.setUpdatesDistance(50);
-		mLocator = LocatorFactory.getInstance();
-		mLocator.prepare(getActivity().getApplicationContext(), settings);
-		mLocationAvailableCallBackReceiver = new BroadcastReceiver() {
-
-			@Override
-			public void onReceive(Context context, Intent intent) {
-				mLastKnownLocation = mLocator.getLocation();
-			}
-		};
-	}
-
-	private void startReceivingLocationUpdates() {
-		IntentFilter f = new IntentFilter();
-		f.addAction(WLANAuditApplication.LOCATION_UPDATE_ACTION);
-		getActivity().getApplicationContext().registerReceiver(
-				mLocationAvailableCallBackReceiver, f);
-		try {
-			mLocator.startLocationUpdates();
-		} catch (NoProviderAvailable np) {
-			Log.d(TAG, "No location provider available at this time");
-			AlertDialog.Builder improvePrecisionDialog = new AlertDialog.Builder(
-					getActivity());
-			improvePrecisionDialog.setTitle(improve_preciosion_dialog_title);
-			improvePrecisionDialog.setMessage(improve_precision_dialog_message);
-			improvePrecisionDialog.setCancelable(false);
-			improvePrecisionDialog.setPositiveButton(settings,
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialogo1, int id) {
-							Intent intent = new Intent(
-									Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-							startActivityForResult(intent, LOCATION_SETTINGS);
-						}
-					});
-			improvePrecisionDialog.setNegativeButton(cancel,
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int id) {
-							dialog.dismiss();
-						}
-					});
-			improvePrecisionDialog.show();
-		}
-	}
-
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == LOCATION_SETTINGS) {
-
-			try {
-				mLocator.startLocationUpdates();
-			} catch (NoProviderAvailable np) {
-				Log.d(TAG, "No location provider available at this time");
-			}
-		}
-
-		super.onActivityResult(requestCode, resultCode, data);
-	}
-
-	private void stopReceivingLocationUpdates() {
-		getActivity().getApplicationContext().unregisterReceiver(
-				mLocationAvailableCallBackReceiver);
-		mLocator.stopLocationUpdates();
 	}
 
 	@SuppressWarnings("deprecation")
