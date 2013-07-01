@@ -16,30 +16,15 @@
 
 package es.glasspixel.wlanaudit.dialogs;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.orman.mapper.Model;
-import org.orman.mapper.ModelQuery;
-import org.orman.sql.C;
-
-import roboguice.fragment.RoboDialogFragment;
-import roboguice.inject.InjectResource;
-import roboguice.inject.InjectView;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.location.Location;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -51,13 +36,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.novoda.location.Locator;
-import com.novoda.location.LocatorFactory;
-import com.novoda.location.LocatorSettings;
-import com.novoda.location.exception.NoProviderAvailable;
+import org.orman.mapper.Model;
+import org.orman.mapper.ModelQuery;
+import org.orman.sql.C;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import es.glasspixel.wlanaudit.R;
-import es.glasspixel.wlanaudit.WLANAuditApplication;
 import es.glasspixel.wlanaudit.activities.KeyListActivity;
 import es.glasspixel.wlanaudit.adapters.WifiNetworkAdapter;
 import es.glasspixel.wlanaudit.database.entities.Network;
@@ -66,15 +52,11 @@ import es.glasspixel.wlanaudit.keyframework.IKeyCalculator;
 import es.glasspixel.wlanaudit.keyframework.KeyCalculatorFactory;
 import es.glasspixel.wlanaudit.keyframework.NetData;
 import es.glasspixel.wlanaudit.util.ChannelCalculator;
+import roboguice.fragment.RoboDialogFragment;
+import roboguice.inject.InjectResource;
+import roboguice.inject.InjectView;
 
 public class NetworkDetailsDialogFragment extends RoboDialogFragment {	
-
-	/**
-	 * Constant to identify the location's settings launch when there aren't
-	 * location providers enabled
-	 */
-	private static final int LOCATION_SETTINGS = 2;
-
 	/**
 	 * Tag to identify the class in logcat
 	 */
@@ -106,11 +88,6 @@ public class NetworkDetailsDialogFragment extends RoboDialogFragment {
 	 */
 	private Location mNetworkLocation;
 
-	/**
-	 * Broadcast receiver to watch for location updates
-	 */
-	private BroadcastReceiver mLocationAvailableCallBackReceiver;
-	
 	/**
      * Dummy callback object, this is meant to be a dummy callback object when an
      * activity is not attached to the fragment to avoid calls on a null object.

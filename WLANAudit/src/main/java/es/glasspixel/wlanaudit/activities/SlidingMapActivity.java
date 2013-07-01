@@ -15,15 +15,6 @@
  */
 package es.glasspixel.wlanaudit.activities;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
-import org.orman.mapper.Model;
-
-import roboguice.inject.InjectResource;
-import roboguice.inject.InjectView;
-import roboguice.util.RoboContext;
 import android.annotation.TargetApi;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
@@ -40,6 +31,8 @@ import android.widget.Button;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.github.espiandev.showcaseview.ShowcaseView;
+import com.google.android.gms.common.GooglePlayServicesClient;
+import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -47,18 +40,27 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.inject.Inject;
-import com.novoda.location.provider.LastLocationFinder;
 import com.slidingmenu.lib.SlidingMenu;
 import com.slidingmenu.lib.SlidingMenu.OnOpenListener;
+
+import org.orman.mapper.Model;
+
+import java.util.List;
+
+import javax.annotation.Nullable;
 
 import es.glasspixel.wlanaudit.R;
 import es.glasspixel.wlanaudit.database.entities.Network;
 import es.glasspixel.wlanaudit.fragments.GMapsMapFragment;
 import es.glasspixel.wlanaudit.fragments.SavedNetworksMenuFragment;
 import es.glasspixel.wlanaudit.fragments.SavedNetworksMenuFragment.OnSavedKeySelectedListener;
+import es.glasspixel.wlanaudit.util.GMSLocationServicesWrapper;
+import roboguice.inject.InjectResource;
+import roboguice.inject.InjectView;
+import roboguice.util.RoboContext;
 
 public class SlidingMapActivity extends SlidingFragmentActivity implements
-        OnSavedKeySelectedListener, RoboContext, ShowcaseView.OnShowcaseEventListener {
+        OnSavedKeySelectedListener, RoboContext, ShowcaseView.OnShowcaseEventListener, GooglePlayServicesClient.ConnectionCallbacks {
     /**
      * Key to store and recover the map fragment in/from the saved state bundle
      */
@@ -75,6 +77,14 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
      * GMaps V2 map controller
      */
     private GoogleMap mMap;
+    /**
+     * Wrapper to deal with all the pain of Google Play Services setup
+     */
+    private GMSLocationServicesWrapper mLocationServicesWrapper;
+    /**
+     * Client to the Google Play Services location service
+     */
+    private LocationClient mLocationClient;
     
     @Inject
     private LocationManager mLocationManager;
@@ -134,6 +144,10 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
             mMapFragment = GMapsMapFragment.newInstance();
         }
 
+        // Location client setup
+        mLocationServicesWrapper = new GMSLocationServicesWrapper(this,this);
+        mLocationClient = mLocationServicesWrapper.getLocationClient();
+
         // Set the map fragment
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, mMapFragment)
                 .commit();
@@ -148,9 +162,30 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
         
         // Set up the showcase view
         setUpShowCaseView(sm);
-        
-        // Setup the map
-        setUpMapIfNeeded();
+    }
+
+    /*
+    * Called when the Activity is restarted, even before it becomes visible.
+    */
+    @Override
+    public void onStart() {
+        super.onStart();
+        /*
+         * Connect the client. Don't re-start any requests here;
+         * instead, wait for onResume()
+         */
+        mLocationClient.connect();
+    }
+
+    /*
+     * Called when the Activity is no longer visible at all.
+     * Stop updates and disconnect.
+     */
+    @Override
+    public void onStop() {
+        // After disconnect() is called, the client is considered "dead".
+        mLocationClient.disconnect();
+        super.onStop();
     }
     
     /**
@@ -322,15 +357,6 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
                     .position(new LatLng(savedNetwork.mLatitude, savedNetwork.mLongitude))
                     .title(savedNetwork.mSSID).snippet(savedNetwork.mBSSID));
         }
-        
-        LastLocationFinder locator = new LastLocationFinder(mLocationManager);
-        Location loc = locator.getLastBestLocation(500 * 1000);
-        if (loc != null) {
-            CameraPosition camPos = CameraPosition.builder()
-                    .target(new LatLng(loc.getLatitude(), loc.getLongitude())).zoom(18)
-                    .bearing(0.0f).tilt(45.0f).build();
-            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(camPos));
-        }
     }
     
     /**
@@ -345,5 +371,24 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
      */
     @Override
     public void onShowcaseViewShow(ShowcaseView showcaseView) {
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        Location loc = null;
+        if(mLocationServicesWrapper.servicesConnected()) {
+            loc = mLocationClient.getLastLocation();
+        }
+
+        if (loc != null) {
+            CameraPosition camPos = CameraPosition.builder()
+                    .target(new LatLng(loc.getLatitude(), loc.getLongitude())).zoom(18)
+                    .bearing(0.0f).tilt(45.0f).build();
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(camPos));
+        }
+    }
+
+    @Override
+    public void onDisconnected() {
     }
 }

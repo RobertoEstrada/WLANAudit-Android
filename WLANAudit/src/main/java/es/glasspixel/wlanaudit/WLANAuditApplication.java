@@ -16,17 +16,13 @@
 
 package es.glasspixel.wlanaudit;
 
+import android.app.Application;
+
 import org.orman.dbms.Database;
 import org.orman.dbms.sqliteandroid.SQLiteAndroid;
 import org.orman.mapper.MappingSession;
 import org.orman.util.logging.AndroidLogger;
 import org.orman.util.logging.Log;
-
-import android.app.Application;
-
-import com.novoda.location.Locator;
-import com.novoda.location.LocatorFactory;
-import com.novoda.location.LocatorSettings;
 
 import es.glasspixel.wlanaudit.database.entities.Network;
 
@@ -36,10 +32,6 @@ public class WLANAuditApplication extends Application {
 	 */
 	public static final String PACKAGE_NAME = "es.glasspixel.wlanaudit";
 	/**
-	 * Unique action name for the locatio update action
-	 */
-	public static final String LOCATION_UPDATE_ACTION = "es.glasspixel.wlanaudit.action.ACTION_FRESH_LOCATION";
-	/**
 	 * Database name on disk
 	 */
 	public static final String DATABASE_NAME = "networksDB.db";
@@ -47,7 +39,6 @@ public class WLANAuditApplication extends Application {
 	 * Database name on disk
 	 */
 	public static final int DATABASE_VERSION = 1;
-	public Locator locator;
 
 	@Override
 	public void onCreate() {
@@ -58,10 +49,5 @@ public class WLANAuditApplication extends Application {
 		MappingSession.registerEntity(Network.class);
 		Log.setLogger(new AndroidLogger(PACKAGE_NAME));
 		MappingSession.start();
-		LocatorSettings settings = new LocatorSettings(LOCATION_UPDATE_ACTION);
-		settings.setUpdatesInterval(3 * 60 * 1000);
-		settings.setUpdatesDistance(50);
-		locator = LocatorFactory.getInstance();
-		locator.prepare(getApplicationContext(), settings);
 	}
 }
