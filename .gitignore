@@ -4,6 +4,7 @@
 bin
 gen
 lint.xml
+build
 
 #Eclipse
 .settings
@@ -22,7 +23,6 @@ lint.xml
 # generated GUI files
 R.java
 
-#Api key files
 /WLANAudit/proguard
 /WLANAudit/project.properties
 /ActionBar/project.properties
@@ -37,3 +37,4 @@ proguard/
 *.ipr
 *.iws
 .idea/
+/.gradle
