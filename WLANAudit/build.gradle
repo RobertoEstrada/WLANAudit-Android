@@ -18,8 +18,47 @@ dependencies {
     compile files('libs/roboguice-2.0.jar')
     compile files('libs/jsr305-1.3.9.jar')
     compile files('libs/orman-20120316.jar')
-    compile files('libs/novocation-core-2.0-ALPHA.jar')
     compile files('libs/GoogleAdMobAdsSdk-6.2.1.jar')
+}
+
+tasks.whenTaskAdded { theTask ->
+    if (theTask.name.matches("process(.*)Resources")) {
+        task("versionUpdateBefore${theTask.name.capitalize()}") << {
+            def buildType = (theTask =~ /process(.*)Resources/)[0][1].toLowerCase()
+
+            def code    = new ByteArrayOutputStream()
+            def version = new ByteArrayOutputStream()
+
+            exec { executable = "git"; args = ['tag']; standardOutput = code }
+            exec { executable = "git"; args = ['describe','--dirty']; 
+                   standardOutput = version }
+
+            code    = code.toString().split("\n").size().toString()
+            version = version.toString()
+
+            logger.info("code:    ${code}")
+            logger.info("version: ${version}")
+
+            def manifestInDir  = projectDir.toString() + "/src/main"
+            def manifestInPath = manifestInDir + "/AndroidManifest.xml"
+            def manifestOutDir   = buildDir.toString() + "/manifests/" + buildType
+            def manifestOutPath  = manifestOutDir + "/AndroidManifest.xml"
+
+            try {
+                new File(manifestInPath).withReader { reader ->
+                    new File(manifestOutPath).withWriter { writer ->
+                        def line = ""
+                        while ((line = reader.readLine()) != null) {
+                            line = line.replaceAll("android:versionCode=\"[0-9]+\"", "android:versionCode=\"${code}\"")
+                            line = line.replaceAll("android:versionName=\".*\"", "android:versionName=\"${version.replaceAll("\\s","")}\"")
+                            writer.writeLine(line)
+                        }
+                    }
+                }
+            } catch (FileNotFoundException e) {}
+        }
+        theTask.dependsOn("versionUpdateBefore${theTask.name.capitalize()}")
+    }
 }
 
 android {
