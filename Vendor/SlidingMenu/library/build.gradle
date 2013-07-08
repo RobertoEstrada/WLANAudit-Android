@@ -9,8 +9,7 @@ buildscript {
 apply plugin: 'android-library'
 
 dependencies {
-    compile project(':Vendor:ActionBarSherlock')     
-    compile files('libs/actionbarsherlock-plugin-maps-4.0.0.jar')
+    compile project(':Vendor:ActionBarSherlock')  
 }
 
 android {

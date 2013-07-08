@@ -10,6 +10,7 @@ apply plugin: 'android'
 
 dependencies {
     compile 'com.google.android.gms:play-services:3.1.36'
+    compile project(':Vendor:ActionBarSherlock') 
     compile project(':Vendor:SlidingMenu:library')
     compile project(':Vendor:ShowcaseView:library')
     compile project(':Vendor:NumberPicker:lib')
@@ -18,47 +19,7 @@ dependencies {
     compile files('libs/roboguice-2.0.jar')
     compile files('libs/jsr305-1.3.9.jar')
     compile files('libs/orman-20120316.jar')
-    compile files('libs/GoogleAdMobAdsSdk-6.2.1.jar')
-}
-
-tasks.whenTaskAdded { theTask ->
-    if (theTask.name.matches("process(.*)Resources")) {
-        task("versionUpdateBefore${theTask.name.capitalize()}") << {
-            def buildType = (theTask =~ /process(.*)Resources/)[0][1].toLowerCase()
-
-            def code    = new ByteArrayOutputStream()
-            def version = new ByteArrayOutputStream()
-
-            exec { executable = "git"; args = ['tag']; standardOutput = code }
-            exec { executable = "git"; args = ['describe','--dirty']; 
-                   standardOutput = version }
-
-            code    = code.toString().split("\n").size().toString()
-            version = version.toString()
-
-            logger.info("code:    ${code}")
-            logger.info("version: ${version}")
-
-            def manifestInDir  = projectDir.toString() + "/src/main"
-            def manifestInPath = manifestInDir + "/AndroidManifest.xml"
-            def manifestOutDir   = buildDir.toString() + "/manifests/" + buildType
-            def manifestOutPath  = manifestOutDir + "/AndroidManifest.xml"
-
-            try {
-                new File(manifestInPath).withReader { reader ->
-                    new File(manifestOutPath).withWriter { writer ->
-                        def line = ""
-                        while ((line = reader.readLine()) != null) {
-                            line = line.replaceAll("android:versionCode=\"[0-9]+\"", "android:versionCode=\"${code}\"")
-                            line = line.replaceAll("android:versionName=\".*\"", "android:versionName=\"${version.replaceAll("\\s","")}\"")
-                            writer.writeLine(line)
-                        }
-                    }
-                }
-            } catch (FileNotFoundException e) {}
-        }
-        theTask.dependsOn("versionUpdateBefore${theTask.name.capitalize()}")
-    }
+    compile files('libs/GoogleAdMobAdsSdk-6.4.1.jar')
 }
 
 android {
@@ -68,5 +29,13 @@ android {
     defaultConfig {
         minSdkVersion 8
         targetSdkVersion 17
+    }
+
+    buildTypes {
+        release {
+            runProguard true
+            proguardFile getDefaultProguardFile('proguard-android-optimize.txt')
+            proguardFile 'proguard-project.txt'
+        }
     }
 }
