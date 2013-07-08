@@ -19,31 +19,16 @@
 #   public *;
 #}
 
--keep class android.support.v4.app.** { *; }
--keep interface android.support.v4.app.** { *; }
+-keep class android.support.v4.** { *; }
+-keep interface android.support.v4.** { *; }
 -keep class com.actionbarsherlock.** { *; }
 -keep interface com.actionbarsherlock.** { *; }
 -keep class * extends java.util.ListResourceBundle {
-    protected Object[][] getContents();
+    protected java.lang.Object[][] getContents();
 }
 
 -keep public class * extends android.app.Activity
 -keep public class * extends android.app.Application { *; }
--keep public class * extends android.app.Service 
--keep public class * extends android.content.BroadcastReceiver 
--keep public class * extends android.content.ContentProvider
-
-# There's no way to keep all @Observes methods, so use the On*Event convention to identify event handlers
--keepclassmembers class * { 
-    void *(**On*Event); 
-}
-
--keep public class * extends android.view.View {
-    public <init>(android.content.Context);
-    public <init>(android.content.Context, android.util.AttributeSet);
-    public <init>(android.content.Context, android.util.AttributeSet, int);
-    public void set*(...);
-}
 
 -keepattributes *Annotation*,Signature  
 -keep class com.google.inject.Binder    
@@ -55,13 +40,19 @@
 }
 
 -keep class es.glasspixel.wlanaudit.database.entities.** { *; }
+-keep class com.google.android.gms.**{ *; }
+-keep class com.google.ads.**{ *; }
 -keep class com.google.inject.** { *; }
 -keep class roboguice.** { *; }
 -keep class com.github.rtyley.android.sherlock.roboguice.** { *; }
 -keep class org.orman.** { *; }
 -keep class javax.annotation.** { *; }
 
+-dontwarn android.support.v4.**
 -dontwarn com.google.ads.**
 -dontwarn com.slidingmenu.**
 -dontwarn org.orman.**
 -dontwarn roboguice.**
+-dontwarn com.google.vending.**
+-dontwarn com.android.vending.**
+-dontwarn com.google.android.gms.**
