@@ -11,9 +11,15 @@
 # generated files
 bin/
 gen/
+lib/
+target/
 
 # Local configuration file (sdk path, etc)
 local.properties
+
+# Eclipse project files
+.classpath
+.project
 
 # Os specific files
 .DS_Store
@@ -22,4 +28,13 @@ local.properties
 *.iml
 *.ipr
 *.iws
+.idea/i
 .idea/
+
+# Maven Files
+pom.xml.*
+settings.xml
+build/
+library/build/
+.gradle/
+library/.gradle

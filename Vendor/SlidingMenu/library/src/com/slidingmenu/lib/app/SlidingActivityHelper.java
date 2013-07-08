@@ -1,11 +1,12 @@
 package com.slidingmenu.lib.app;
 
 import android.app.Activity;
+import android.content.res.TypedArray;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 
 import com.slidingmenu.lib.R;
@@ -16,15 +17,15 @@ public class SlidingActivityHelper {
 	private Activity mActivity;
 
 	private SlidingMenu mSlidingMenu;
-
+	
 	private View mViewAbove;
-
+	
 	private View mViewBehind;
-
+	
 	private boolean mBroadcasting = false;
 
 	private boolean mOnPostCreateCalled = false;
-
+	
 	private boolean mEnableSlide = true;
 
 	/**
@@ -58,31 +59,33 @@ public class SlidingActivityHelper {
 
 		mOnPostCreateCalled = true;
 
-		mSlidingMenu.attachToActivity(mActivity, 
-				mEnableSlide ? SlidingMenu.SLIDING_WINDOW : SlidingMenu.SLIDING_CONTENT);
-		
-		final boolean open;
-		final boolean secondary;
-		if (savedInstanceState != null) {
-			open = savedInstanceState.getBoolean("SlidingActivityHelper.open");
-			secondary = savedInstanceState.getBoolean("SlidingActivityHelper.secondary");
+		// get the window background
+		TypedArray a = mActivity.getTheme().obtainStyledAttributes(new int[] {android.R.attr.windowBackground});
+		int background = a.getResourceId(0, 0);
+		a.recycle();
+
+		if (mEnableSlide) {
+			// move everything into the SlidingMenu
+			ViewGroup decor = (ViewGroup) mActivity.getWindow().getDecorView();
+			ViewGroup decorChild = (ViewGroup) decor.getChildAt(0);
+			// save ActionBar themes that have transparent assets
+			decorChild.setBackgroundResource(background);
+			decor.removeView(decorChild);
+			mSlidingMenu.setContent(decorChild);
+			decor.addView(mSlidingMenu);
 		} else {
-			open = false;
-			secondary = false;
-		}
-		new Handler().post(new Runnable() {
-			public void run() {
-				if (open) {
-					if (secondary) {
-						mSlidingMenu.showSecondaryMenu(false);
-					} else {
-						mSlidingMenu.showMenu(false);
-					}
-				} else {
-					mSlidingMenu.showContent(false);					
-				}
+			// take the above view out of
+			ViewGroup parent = (ViewGroup) mViewAbove.getParent();
+			if (parent != null) {
+				parent.removeView(mViewAbove);
 			}
-		});
+			// save people from having transparent backgrounds
+			if (mViewAbove.getBackground() == null) {
+				mViewAbove.setBackgroundResource(background);
+			}
+			mSlidingMenu.setContent(mViewAbove);
+			parent.addView(mSlidingMenu, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+		}
 	}
 
 	/**
@@ -122,8 +125,7 @@ public class SlidingActivityHelper {
 	 * @param outState Bundle in which to place your saved state.
 	 */
 	public void onSaveInstanceState(Bundle outState) {
-		outState.putBoolean("SlidingActivityHelper.open", mSlidingMenu.isMenuShowing());
-		outState.putBoolean("SlidingActivityHelper.secondary", mSlidingMenu.isSecondaryMenuShowing());
+		outState.putBoolean("menuOpen", mSlidingMenu.isBehindShowing());
 	}
 
 	/**
@@ -176,29 +178,25 @@ public class SlidingActivityHelper {
 	 * Toggle the SlidingMenu. If it is open, it will be closed, and vice versa.
 	 */
 	public void toggle() {
-		mSlidingMenu.toggle();
+		if (mSlidingMenu.isBehindShowing()) {
+			showAbove();
+		} else {
+			showBehind();
+		}
 	}
 
 	/**
-	 * Close the SlidingMenu and show the content view.
+	 * Close the SlidingMenu and show the above view.
 	 */
-	public void showContent() {
-		mSlidingMenu.showContent();
+	public void showAbove() {
+		mSlidingMenu.showAbove();
 	}
 
 	/**
-	 * Open the SlidingMenu and show the menu view.
+	 * Open the SlidingMenu and show the behind view.
 	 */
-	public void showMenu() {
-		mSlidingMenu.showMenu();
-	}
-
-	/**
-	 * Open the SlidingMenu and show the secondary menu view. Will default to the regular menu
-	 * if there is only one.
-	 */
-	public void showSecondaryMenu() {
-		mSlidingMenu.showSecondaryMenu();
+	public void showBehind() {
+		mSlidingMenu.showBehind();
 	}
 
 	/**
@@ -209,8 +207,8 @@ public class SlidingActivityHelper {
 	 * @return true, if successful
 	 */
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK && mSlidingMenu.isMenuShowing()) {
-			showContent();
+		if (keyCode == KeyEvent.KEYCODE_BACK && mSlidingMenu.isBehindShowing()) {
+			showAbove();
 			return true;
 		}
 		return false;
