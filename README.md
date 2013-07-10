@@ -1,5 +1,6 @@
 WLANAudit 3
 ===========
+[![Build Status](https://travis-ci.org/RobertoEstrada/WLANAudit-Android.png?branch=master)](https://travis-ci.org/RobertoEstrada/WLANAudit-Android)
 An application to scan for WLAN Access points and to audit their security and capabilities
 The application shows relevant diagnostic information about an access point such as MAC Address, encryption, signal strength, etc.
 
@@ -15,19 +16,21 @@ To get the source code clone the repository with the following commands
 
 Building the sourcecode
 =======================
-In order to build the sourcecode you need to have installed and configured Java, the Android SDK and Apache Ant. You need to set the environment variable ANDROID_HOME and have the Android tools and Ant in your path.
+In order to build the sourcecode you need to have installed and configured Java, the Android SDK and Gradle. You need to set the environment variable ANDROID_HOME and have the Android tools and Gradle in your path. Also you should have installed via the Android tools the Google and Android Maven
+repositories and the Android build tools.
 
 Then in a shell at the project root, use the following command
 
-    $ ant
+    $ gradle assemble
 
-Working with Eclipse
-====================
-Open eclipse and select *File / Import / Existing projects into workspace* and then select the project root as the base directory. Select all the projects.
+Working with Android Studio
+===========================
+Fire up Android Studio and select import project. Browse to the folder where you downloaded this repo and select it, then fill up
+the rest of the data such as your Gradle path if it is not auto detected.
 
 Work as usual. 
 
-**DO NOT MODIFY THE LIBRARY PROJECTS FROM ECLIPSE AND DO NOT COMMIT THEM OR THE BUILD WILL BREAK**
+**ECLIPSE AND ANT SUPPORT IS NOW DEPRECATED, THE PROJECT WILL NO LONGER FIX ISSUES WITH THEM**
 
 Contributing to the project
 =============================
