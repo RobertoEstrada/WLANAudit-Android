@@ -49,6 +49,7 @@
 -keep class javax.annotation.** { *; }
 
 -dontwarn android.support.v4.**
+-dontwarn com.actionbarsherlock.**
 -dontwarn com.google.ads.**
 -dontwarn com.slidingmenu.**
 -dontwarn org.orman.**
