@@ -3,23 +3,23 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.5.+'
+        classpath 'com.android.tools.build:gradle:0.6.+'
     }
 }
 apply plugin: 'android-library'
 
 dependencies {
     compile 'com.actionbarsherlock:actionbarsherlock:4.4.0@aar'
-    compile 'com.android.support:support-v4:18.0.+' 
+    compile 'com.android.support:support-v4:19.0.+' 
 }
 
 android {
-    compileSdkVersion "Google Inc.:Google APIs:18"
-    buildToolsVersion "18.0.1"
+    compileSdkVersion "Google Inc.:Google APIs:19"
+    buildToolsVersion "19"
 
     defaultConfig {
         minSdkVersion 7
-        targetSdkVersion 18
+        targetSdkVersion 19
     }
     sourceSets {
         main {

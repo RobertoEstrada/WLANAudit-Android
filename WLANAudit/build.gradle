@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.5.+'
+        classpath 'com.android.tools.build:gradle:0.6.+'
     }
 }
 apply plugin: 'android'
@@ -13,9 +13,9 @@ repositories {
 }
 
 dependencies {
-    compile 'com.google.android.gms:play-services:3.2.25'
+    compile 'com.google.android.gms:play-services:3.2.65'
     compile 'com.actionbarsherlock:actionbarsherlock:4.4.0@aar'
-    compile 'com.android.support:support-v4:18.0.+'
+    compile 'com.android.support:support-v4:19.0.+'
     compile project(':Vendor:SlidingMenu:library')
     compile project(':Vendor:ShowcaseView:library')
     compile project(':Vendor:NumberPicker:lib')
@@ -28,12 +28,12 @@ dependencies {
 }
 
 android {
-    compileSdkVersion 18
-    buildToolsVersion "18.0.1"
+    compileSdkVersion 19
+    buildToolsVersion "19"
 
     defaultConfig {
         minSdkVersion 8
-        targetSdkVersion 18
+        targetSdkVersion 19
     }
 
     buildTypes {
