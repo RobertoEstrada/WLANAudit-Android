@@ -78,7 +78,13 @@ public class ScanFragment extends RoboSherlockFragment implements
 	@InjectView(android.R.id.list)
 	ListView list_view;	
 	
-	private boolean isScanning = false;	
+	private boolean mIsScanning = false;
+    /**
+     * This flag stores if wifi was turned on by the app
+     * so when the user leaves the app, the wifi gets turned off
+     * to save power.
+     */
+    private boolean mWasWifiTurnedOn = false;
 
 	/**
 	 * Interface to pass fragment callbacks to parent activity. Parent activity
@@ -225,13 +231,16 @@ public class ScanFragment extends RoboSherlockFragment implements
 			if (!mWifiManager.isWifiEnabled()
 					&& prefs.getBoolean("wifi_autostart", true)) {
 				mWifiManager.setWifiEnabled(true);
-			}
+                mWasWifiTurnedOn = true;
+			} else {
+                mWasWifiTurnedOn = false;
+            }
 
 			new RefreshAction(getActivity());
 
 			setupNetworkScanCallBack();
 
-			if (!isScanning)
+			if (!mIsScanning)
 				this.startScan();
 		} else {
 
@@ -267,7 +276,7 @@ public class ScanFragment extends RoboSherlockFragment implements
 				// ListView refreshed
 
 				List<ScanResult> res = mWifiManager.getScanResults();
-				isScanning = false;
+				mIsScanning = false;
 
 				if (saved_keys_fragment != null && getSherlockActivity() != null) {
 					mCallback.scanCompleted();
@@ -353,6 +362,9 @@ public class ScanFragment extends RoboSherlockFragment implements
 				Log.d("ScanFragment", e.getMessage().toString());
 			}
 		}
+        if (mWifiManager.isWifiEnabled() && mWasWifiTurnedOn) {
+            mWifiManager.setWifiEnabled(false);
+        }
 		super.onPause();
 	}
 
