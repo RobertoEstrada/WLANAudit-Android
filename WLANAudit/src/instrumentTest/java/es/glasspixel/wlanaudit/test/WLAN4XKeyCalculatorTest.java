@@ -45,6 +45,7 @@ public class WLAN4XKeyCalculatorTest extends TestCase {
         mValidTestNetworks.put(new NetData("JAZZTEL_21DB", "00:1F:A4:3B:7E:51"), "B4B97A37CB924BCD231D");
         mValidTestNetworks.put(new NetData("JAZZTEL_8FAC", "F4:3E:61:63:DE:C3"), "D5B06B761196A47BA1EC");
         mValidTestNetworks.put(new NetData("JAZZTEL_CF28", "40:4A:03:6E:A0:6C"), "CCB9C3D4B3CBF508F57A");
+        mValidTestNetworks.put(new NetData("JAZZTEL_1234", "00:1A:2B:11:22:33"), "9e701814299bf841e288");
     }
     
     public void testGetKey() {
@@ -52,7 +53,5 @@ public class WLAN4XKeyCalculatorTest extends TestCase {
         for(NetData network : mValidTestNetworks.keySet()) {
             assertEquals(mValidTestNetworks.get(network), new WLANXXXXKeyCalculator().getKey(network).get(0));
         }
-        // Tests invalid combinations
-        assertEquals(null, new WLANXXXXKeyCalculator().getKey(new NetData("JAZZTEL_46AF", "38:72:C0:62:B0:CA")));
     }
 }

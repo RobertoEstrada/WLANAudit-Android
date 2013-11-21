@@ -34,6 +34,8 @@ android {
     defaultConfig {
         minSdkVersion 8
         targetSdkVersion 19
+        testPackageName "es.glasspixel.wlanaudit.test"
+        testInstrumentationRunner "android.test.InstrumentationTestRunner"
     }
 
     buildTypes {

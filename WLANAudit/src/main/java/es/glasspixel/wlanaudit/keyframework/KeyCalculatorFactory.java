@@ -91,6 +91,14 @@ public class KeyCalculatorFactory {
         addPattern("(?:WLAN|JAZZTEL)_([0-9a-fA-F]{4})", "(00:1F:A4:[0-9A-Fa-f:]{8})", WLANXXXXKeyCalculator.class);
         addPattern("(?:WLAN|JAZZTEL)_([0-9a-fA-F]{4})", "(F4:3E:61:[0-9A-Fa-f:]{8})", WLANXXXXKeyCalculator.class);
         addPattern("(?:WLAN|JAZZTEL)_([0-9a-fA-F]{4})", "(40:4A:03:[0-9A-Fa-f:]{8})", WLANXXXXKeyCalculator.class);
+        //New WLAN4X Patters (Nov 2013)
+        addPattern("(?:WLAN|JAZZTEL)_([0-9a-fA-F]{4})", "(30:39:F2:[0-9A-Fa-f:]{8})", WLANXXXXKeyCalculator.class);
+        addPattern("(?:WLAN|JAZZTEL)_([0-9a-fA-F]{4})", "(8C:0C:A3:[0-9A-Fa-f:]{8})", WLANXXXXKeyCalculator.class);
+        addPattern("(?:WLAN|JAZZTEL)_([0-9a-fA-F]{4})", "(5C:33:8E:[0-9A-Fa-f:]{8})", WLANXXXXKeyCalculator.class);
+        addPattern("(?:WLAN|JAZZTEL)_([0-9a-fA-F]{4})", "(C8:6C:87:[0-9A-Fa-f:]{8})", WLANXXXXKeyCalculator.class);
+        addPattern("(?:WLAN|JAZZTEL)_([0-9a-fA-F]{4})", "(D0:AE:EC:[0-9A-Fa-f:]{8})", WLANXXXXKeyCalculator.class);
+        addPattern("(?:WLAN|JAZZTEL)_([0-9a-fA-F]{4})", "(00:19:15:[0-9A-Fa-f:]{8})", WLANXXXXKeyCalculator.class);
+        addPattern("(?:WLAN|JAZZTEL)_([0-9a-fA-F]{4})", "(00:1A:2B:[0-9A-Fa-f:]{8})", WLANXXXXKeyCalculator.class);
         
         //WiFi6X Patterns
         addPattern("(?:WLAN|YACOM|WiFi)([0-9a-fA-F]{6})","([0-9A-Fa-f:]{17})", WiFiXXXXXXKeyCalculator.class);

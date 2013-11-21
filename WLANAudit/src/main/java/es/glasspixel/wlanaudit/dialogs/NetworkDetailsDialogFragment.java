@@ -133,20 +133,8 @@ public class NetworkDetailsDialogFragment extends RoboDialogFragment {
 
 	@InjectView(R.id.starNetworkButton)
 	private ImageButton mStarNetworkButton;
-	
-	@InjectResource(R.string.improve_precision_dialog_title)
-    private static String improve_preciosion_dialog_title;
 
-    @InjectResource(R.string.improve_precision_dialog_message)
-    private static String improve_precision_dialog_message;
-
-    @InjectResource(R.string.settings)
-    private static String settings;
-
-    @InjectResource(android.R.string.cancel)
-    private static String cancel;
-
-	private int exists;
+    private int exists;
 
 	/**
 	 * Gets a new instance of the dialog

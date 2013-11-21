@@ -21,6 +21,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -36,7 +37,7 @@ public class WLANXXXXKeyCalculator implements IKeyCalculator {
 	 * Router kinds to use the appropiate default key generarion algorithm.
 	 */
 	private static enum RouterKind {
-		COM_KIND, ZYX_KIND, UNK_KIND
+		COM_KIND, COM_KIND_1A2B, ZYX_KIND, UNK_KIND
 	}
 
 	/**
@@ -48,15 +49,13 @@ public class WLANXXXXKeyCalculator implements IKeyCalculator {
 		List<String> keyList = null;
 		
 		if (network.SSID.contains("JAZZTEL_")) {
-			if(network.BSSID.matches("(38:72:C0:[0-9A-Fa-f:]{8})"))
-				return null;
 			formattedESSID = network.SSID.replace("JAZZTEL_", "").toUpperCase();
 		} else if (network.SSID.contains("WLAN_")) {
 			formattedESSID = network.SSID.replace("WLAN_", "").toUpperCase();
 		}
 
 		RouterKind kind = getRouterKind(network.BSSID.toUpperCase());
-		String stringToHash = null;
+		String stringToHash;
 		String trimmedBSSID;
 
 		// Key calculation based on router kind
@@ -68,6 +67,18 @@ public class WLANXXXXKeyCalculator implements IKeyCalculator {
 			keyList = new ArrayList<String>();
 			keyList.add(hashString(stringToHash));
 			break;
+        case COM_KIND_1A2B:
+            trimmedBSSID = network.BSSID.replaceAll(":", "");
+            keyList = new ArrayList<String>();
+            for (int i = 0; i < 512; i++) {
+                int x = i < 256 ? i : i-256;
+                String keyStr = i < 256 ? "64680C" : "3872C0";
+                StringBuilder unk = new StringBuilder(Integer.toHexString(x));
+                while(unk.length() < 2) { unk.insert(0,"0"); }
+                stringToHash = "bcgbghgg" + keyStr + unk.toString().toUpperCase(Locale.US) + formattedESSID + trimmedBSSID;
+                keyList.add(hashString(stringToHash));
+            }
+            break;
 		case ZYX_KIND:
 			formattedESSID.toLowerCase();
 			trimmedBSSID = network.BSSID.replaceAll(":", "").toLowerCase();
@@ -102,7 +113,21 @@ public class WLANXXXXKeyCalculator implements IKeyCalculator {
 			return RouterKind.COM_KIND;
 		} else if (bssid.matches("(00:23:F8:[0-9A-Fa-f:]{8})")) {
 			return RouterKind.COM_KIND;
-		} else if (bssid.matches("(00:1F:A4:[0-9A-Fa-f:]{8})")) {
+		} else if (bssid.matches("(30:39:F2:[0-9A-Fa-f:]{8})")) {
+            return RouterKind.COM_KIND;
+        } else if (bssid.matches("(8C:0C:A3:[0-9A-Fa-f:]{8})")) {
+            return RouterKind.COM_KIND;
+        } else if (bssid.matches("(5C:33:8E:[0-9A-Fa-f:]{8})")) {
+            return RouterKind.COM_KIND;
+        } else if (bssid.matches("(C8:6C:87:[0-9A-Fa-f:]{8})")) {
+            return RouterKind.COM_KIND;
+        } else if (bssid.matches("(D0:AE:EC:[0-9A-Fa-f:]{8})")) {
+            return RouterKind.COM_KIND;
+        } else if (bssid.matches("(00:19:15:[0-9A-Fa-f:]{8})")) {
+            return RouterKind.COM_KIND;
+        } else if (bssid.matches("(00:1A:2B:[0-9A-Fa-f:]{8})")) {
+            return RouterKind.COM_KIND_1A2B;
+        } else if (bssid.matches("(00:1F:A4:[0-9A-Fa-f:]{8})")) {
 			return RouterKind.ZYX_KIND;
 		} else if (bssid.matches("(F4:3E:61:[0-9A-Fa-f:]{8})")) {
 			return RouterKind.ZYX_KIND;
@@ -130,7 +155,7 @@ public class WLANXXXXKeyCalculator implements IKeyCalculator {
 	 * Converts a byte array to an hex string. Code from: Snippet from:
 	 * http://rgagnon.com/javadetails/java-0596.html
 	 * 
-	 * @param data
+	 * @param raw
 	 *            The array of bytes to encode
 	 * @return The encoded hex string
 	 */
