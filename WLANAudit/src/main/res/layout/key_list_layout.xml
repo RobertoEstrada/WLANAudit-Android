@@ -3,7 +3,7 @@
     android:id="@+id/networkListActivityLayout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/keyListAdLayout"
@@ -11,13 +11,12 @@
         android:layout_height="wrap_content"
         android:layout_gravity="clip_horizontal"
         android:gravity="center_horizontal"
-        android:orientation="vertical" >
-    </LinearLayout>
+        android:orientation="vertical"></LinearLayout>
 
     <ListView
         android:id="@android:id/list"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
+        android:layout_height="fill_parent">
 
         <!-- Preview: listitem=@layout/key_list_element_layout -->
     </ListView>

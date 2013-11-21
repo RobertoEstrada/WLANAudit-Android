@@ -16,11 +16,6 @@
 
 package es.glasspixel.wlanaudit.dialogs;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import roboguice.fragment.RoboDialogFragment;
-import roboguice.inject.InjectView;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -33,10 +28,16 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import es.glasspixel.wlanaudit.R;
 import es.glasspixel.wlanaudit.activities.KeyListActivity;
 import es.glasspixel.wlanaudit.database.entities.Network;
 import es.glasspixel.wlanaudit.util.ChannelCalculator;
+import roboguice.fragment.RoboDialogFragment;
+import roboguice.inject.InjectView;
 
 public class SavedNetworkDetailsDialogFragment extends RoboDialogFragment {
     /**
@@ -44,7 +45,7 @@ public class SavedNetworkDetailsDialogFragment extends RoboDialogFragment {
      */
     @SuppressWarnings("unused")
     private static final String TAG = SavedNetworkDetailsDialogFragment.class.getName();
-    
+
     /**
      * Key to store and recover from dialog bundle the network data to display
      */
@@ -54,7 +55,7 @@ public class SavedNetworkDetailsDialogFragment extends RoboDialogFragment {
      * The network data to display on the dialog
      */
     private Network mNetworkData;
-    
+
     /**
      * A list with the possible default keys of the network being detailed
      */
@@ -83,10 +84,10 @@ public class SavedNetworkDetailsDialogFragment extends RoboDialogFragment {
 
     @InjectView(R.id.copyPasswordButton)
     private Button mCopyPasswordButton;
-    
+
     /**
      * Gets a new instance of the dialog
-     * 
+     *
      * @param network The network data to display on the dialog
      * @return A ready to use instance of the dialog
      */
@@ -96,7 +97,7 @@ public class SavedNetworkDetailsDialogFragment extends RoboDialogFragment {
         args.putSerializable(NETWORK_DETAILS_DATA_KEY, network);
         frag.setArguments(args);
         return frag;
-    }  
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -114,7 +115,7 @@ public class SavedNetworkDetailsDialogFragment extends RoboDialogFragment {
         View v = inflater.inflate(R.layout.saved_network_details_dialog, container, false);
         return v;
     }
-    
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -154,9 +155,9 @@ public class SavedNetworkDetailsDialogFragment extends RoboDialogFragment {
         } else {
             mNetworkDefaultPassTextView.setText(getString(R.string.no_default_key));
             mCopyPasswordButton.setEnabled(false);
-            
+
         }
-    } 
+    }
 
     @SuppressWarnings("deprecation")
     @SuppressLint("NewApi")

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <!-- <TextView -->
     <!-- android:layout_width="fill_parent" -->
@@ -27,7 +27,7 @@
         android:id="@+id/viewHeaderLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        tools:ignore="UseCompoundDrawables" >
+        tools:ignore="UseCompoundDrawables">
 
         <ImageView
             android:id="@+id/networkIcon"
@@ -48,8 +48,7 @@
             android:paddingTop="3dip"
             android:text="TextView"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            tools:ignore="HardcodedText" >
-        </TextView>
+            tools:ignore="HardcodedText"></TextView>
     </LinearLayout>
 
     <!-- <View -->
@@ -62,14 +61,14 @@
         android:id="@+id/networkParamsLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dip" >
+        android:layout_marginTop="15dip">
 
         <TableRow
             android:id="@+id/bssidRow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="10dip"
-            android:paddingLeft="20dip" >
+            android:paddingLeft="20dip">
 
             <TextView
                 android:id="@+id/bssid_label"
@@ -77,16 +76,14 @@
                 android:layout_height="wrap_content"
                 android:paddingRight="5dip"
                 android:text="@string/network_bssid_label"
-                android:textAppearance="?android:attr/textAppearanceMedium" >
-            </TextView>
+                android:textAppearance="?android:attr/textAppearanceMedium"></TextView>
 
             <TextView
                 android:id="@+id/bssid_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="TextView"
-                tools:ignore="HardcodedText" >
-            </TextView>
+                tools:ignore="HardcodedText"></TextView>
         </TableRow>
 
         <TableRow
@@ -94,7 +91,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="10dip"
-            android:paddingLeft="20dip" >
+            android:paddingLeft="20dip">
 
             <TextView
                 android:id="@+id/encryption_label"
@@ -102,16 +99,14 @@
                 android:layout_height="wrap_content"
                 android:paddingRight="5dip"
                 android:text="@string/network_encryption_label"
-                android:textAppearance="?android:attr/textAppearanceMedium" >
-            </TextView>
+                android:textAppearance="?android:attr/textAppearanceMedium"></TextView>
 
             <TextView
                 android:id="@+id/encryption_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="TextView"
-                tools:ignore="HardcodedText" >
-            </TextView>
+                tools:ignore="HardcodedText"></TextView>
         </TableRow>
 
         <TableRow
@@ -119,7 +114,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="10dip"
-            android:paddingLeft="20dip" >
+            android:paddingLeft="20dip">
 
             <TextView
                 android:id="@+id/frequency_label"
@@ -127,16 +122,14 @@
                 android:layout_height="wrap_content"
                 android:paddingRight="5dip"
                 android:text="@string/network_frequency"
-                android:textAppearance="?android:attr/textAppearanceMedium" >
-            </TextView>
+                android:textAppearance="?android:attr/textAppearanceMedium"></TextView>
 
             <TextView
                 android:id="@+id/frequency_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="TextView"
-                tools:ignore="HardcodedText" >
-            </TextView>
+                tools:ignore="HardcodedText"></TextView>
         </TableRow>
 
         <TableRow
@@ -144,7 +137,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="10dip"
-            android:paddingLeft="20dip" >
+            android:paddingLeft="20dip">
 
             <TextView
                 android:id="@+id/channel_label"
@@ -167,7 +160,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="10dip"
-            android:paddingLeft="20dip" >
+            android:paddingLeft="20dip">
 
             <TextView
                 android:id="@+id/intensity_label"
@@ -175,16 +168,14 @@
                 android:layout_height="wrap_content"
                 android:paddingRight="5dip"
                 android:text="@string/signal_level_label"
-                android:textAppearance="?android:attr/textAppearanceMedium" >
-            </TextView>
+                android:textAppearance="?android:attr/textAppearanceMedium"></TextView>
 
             <TextView
                 android:id="@+id/intensity_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="TextView"
-                tools:ignore="HardcodedText" >
-            </TextView>
+                tools:ignore="HardcodedText"></TextView>
         </TableRow>
 
         <TableRow
@@ -192,7 +183,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="10dip"
-            android:paddingLeft="18dip" >
+            android:paddingLeft="18dip">
 
             <TextView
                 android:id="@+id/password_label"
@@ -200,8 +191,7 @@
                 android:layout_height="wrap_content"
                 android:paddingRight="5dip"
                 android:text="@string/default_password_label"
-                android:textAppearance="?android:attr/textAppearanceMedium" >
-            </TextView>
+                android:textAppearance="?android:attr/textAppearanceMedium"></TextView>
 
             <TextView
                 android:id="@+id/password_value"
@@ -209,8 +199,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="2dip"
                 android:text="TextView"
-                tools:ignore="HardcodedText" >
-            </TextView>
+                tools:ignore="HardcodedText"></TextView>
         </TableRow>
     </TableLayout>
 
@@ -230,21 +219,20 @@
         android:layout_marginRight="20dip"
         android:gravity="right"
         android:paddingBottom="10dip"
-        android:paddingTop="10dip" >
+        android:paddingTop="10dip">
 
         <ImageButton
             android:id="@+id/starNetworkButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/btn_star_selector"  />
+            android:src="@drawable/btn_star_selector" />
 
         <Button
             android:id="@+id/copyPasswordButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/copy_pass_button" >
-        </Button>
+            android:text="@string/copy_pass_button"></Button>
     </LinearLayout>
 
 </LinearLayout>

@@ -23,9 +23,9 @@ import java.util.List;
 /**
  * Default key generator for the Pirelli Discus DRG A225 Documentation on the
  * algorithm can be found at:
- * 
+ * <p/>
  * http://www.remote-exploit.org/content/Pirelli_Discus_DRG_A225_WiFi_router.pdf
- * 
+ *
  * @author Roberto Estrada
  */
 public class DiscusKeyCalculator implements IKeyCalculator {
@@ -33,7 +33,7 @@ public class DiscusKeyCalculator implements IKeyCalculator {
     @Override
     public List<String> getKey(NetData network) {
         List<String> result = new ArrayList<String>();
-        int cnst = Integer.parseInt("D0EC31",16);
+        int cnst = Integer.parseInt("D0EC31", 16);
         int input = Integer.parseInt(network.SSID.substring(network.SSID.length() - 6), 16);
         int res = (input - cnst) / 4;
         String key = "YW0" + Integer.toString(res);

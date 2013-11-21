@@ -18,35 +18,35 @@ package es.glasspixel.wlanaudit.util;
 
 /**
  * This class implements a simple function to calculate the channel number
- * from the WiFi frequency. Uses this table to return results 
+ * from the WiFi frequency. Uses this table to return results
  * (Took from http://stackoverflow.com/a/5488225)
- * 
- *   CHA    LOWER   CENTER  UPPER
- *   NUM    FREQ    FREQ    FREQ
- *          MHZ     MHZ     MHZ
- *    
- *    1     2 401   2 412   2 423
- *    2     2 404   2 417   2 428
- *    3     2 411   2 422   2 433
- *    4     2 416   2 427   2 438
- *    5     2 421   2 432   2 443
- *    6     2 426   2 437   2 448
- *    7     2 431   2 442   2 453
- *    8     2 436   2 447   2 458
- *    9     2 441   2 452   2 463
- *   10     2 451   2 457   2 468
- *   11     2 451   2 462   2 473
- *   12     2 456   2 467   2 478
- *   13     2 461   2 472   2 483
- * 
+ * <p/>
+ * CHA    LOWER   CENTER  UPPER
+ * NUM    FREQ    FREQ    FREQ
+ * MHZ     MHZ     MHZ
+ * <p/>
+ * 1     2 401   2 412   2 423
+ * 2     2 404   2 417   2 428
+ * 3     2 411   2 422   2 433
+ * 4     2 416   2 427   2 438
+ * 5     2 421   2 432   2 443
+ * 6     2 426   2 437   2 448
+ * 7     2 431   2 442   2 453
+ * 8     2 436   2 447   2 458
+ * 9     2 441   2 452   2 463
+ * 10     2 451   2 457   2 468
+ * 11     2 451   2 462   2 473
+ * 12     2 456   2 467   2 478
+ * 13     2 461   2 472   2 483
+ *
  * @author RobertoEstrada
  */
-public class ChannelCalculator {    
-    
+public class ChannelCalculator {
+
     /**
      * Returns the channel number associated with the imput frequency. Android
      * framework returns the frequency values for the center frequency.
-     * 
+     *
      * @param frequency The frequency to calculate the channel.
      * @return The channel number associated with the imput frequency
      */

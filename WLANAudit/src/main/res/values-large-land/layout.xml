@@ -2,5 +2,5 @@
 <resources>
     <bool name="screen_large">true</bool>
     <bool name="portrait">false</bool>
-    
+
 </resources>

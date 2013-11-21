@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * Default key generator for DLink routers. Documentation about the algorithm
  * can be found at: http://lixei.me/codigo-fonte-wpa-dlink-php-c/
- * 
+ *
  * @author Roberto Estrada
  */
 public class DlinkKeyCalculator implements IKeyCalculator {

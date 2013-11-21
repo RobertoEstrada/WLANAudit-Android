@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/selectable_background_wlanaudit"
     android:orientation="vertical"
-    tools:ignore="HardcodedText" >
+    tools:ignore="HardcodedText">
 
     <ImageView
         android:id="@+id/networkSecurityIcon"
@@ -17,8 +17,7 @@
         android:paddingBottom="5dip"
         android:paddingLeft="10dip"
         android:paddingTop="5dip"
-        android:src="@drawable/wifi_signal" >
-    </ImageView>
+        android:src="@drawable/wifi_signal"></ImageView>
 
     <TextView
         android:id="@+id/networkName"
@@ -30,8 +29,7 @@
         android:paddingTop="5dip"
         android:text="TextView"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        tools:ignore="HardcodedText" >
-    </TextView>
+        tools:ignore="HardcodedText"></TextView>
 
     <TextView
         android:id="@+id/networkDetails"
@@ -41,7 +39,6 @@
         android:layout_below="@+id/networkName"
         android:paddingBottom="5dip"
         android:paddingLeft="12dip"
-        android:text="TextView" >
-    </TextView>
+        android:text="TextView"></TextView>
 
 </RelativeLayout>

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
      File created by the Android Action Bar Style Generator
 
      Copyright (C) 2012 readyState Software Ltd
@@ -20,8 +19,8 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- <item android:drawable="@drawable/spinner_disabled_holo_dark" android:state_enabled="false"/> -->
-    <item android:drawable="@color/lightblue" android:state_pressed="true"/>
-    <item android:drawable="@color/lightblue" android:state_focused="true" android:state_pressed="false"/>
-    <item android:drawable="@color/white"/>
+    <item android:drawable="@color/lightblue" android:state_pressed="true" />
+    <item android:drawable="@color/lightblue" android:state_focused="true" android:state_pressed="false" />
+    <item android:drawable="@color/white" />
 
 </selector>

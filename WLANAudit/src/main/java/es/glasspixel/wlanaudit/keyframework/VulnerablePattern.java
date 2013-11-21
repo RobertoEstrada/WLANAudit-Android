@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 
 /**
  * Data structure to represent a vulnerable combination of ssid and bssid
- * 
+ *
  * @author Roberto Estrada
  */
 class VulnerablePattern {
@@ -36,8 +36,8 @@ class VulnerablePattern {
     private final Pattern mBssidPattern;
 
     public VulnerablePattern(String ssidPattern, String bssidPattern) {
-        mSsidPattern = Pattern.compile(ssidPattern,Pattern.CASE_INSENSITIVE);
-        mBssidPattern = Pattern.compile(bssidPattern,Pattern.CASE_INSENSITIVE);
+        mSsidPattern = Pattern.compile(ssidPattern, Pattern.CASE_INSENSITIVE);
+        mBssidPattern = Pattern.compile(bssidPattern, Pattern.CASE_INSENSITIVE);
     }
 
     public boolean isVulnerable(NetData network) {

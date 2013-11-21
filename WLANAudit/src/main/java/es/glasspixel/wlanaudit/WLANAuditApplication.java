@@ -27,27 +27,27 @@ import org.orman.util.logging.Log;
 import es.glasspixel.wlanaudit.database.entities.Network;
 
 public class WLANAuditApplication extends Application {
-	/**
-	 * App package name
-	 */
-	public static final String PACKAGE_NAME = "es.glasspixel.wlanaudit";
-	/**
-	 * Database name on disk
-	 */
-	public static final String DATABASE_NAME = "networksDB.db";
-	/**
-	 * Database name on disk
-	 */
-	public static final int DATABASE_VERSION = 1;
+    /**
+     * App package name
+     */
+    public static final String PACKAGE_NAME = "es.glasspixel.wlanaudit";
+    /**
+     * Database name on disk
+     */
+    public static final String DATABASE_NAME = "networksDB.db";
+    /**
+     * Database name on disk
+     */
+    public static final int DATABASE_VERSION = 1;
 
-	@Override
-	public void onCreate() {
-		super.onCreate();
-		Database db = new SQLiteAndroid(getApplicationContext(), DATABASE_NAME,
-				DATABASE_VERSION);
-		MappingSession.registerDatabase(db);
-		MappingSession.registerEntity(Network.class);
-		Log.setLogger(new AndroidLogger(PACKAGE_NAME));
-		MappingSession.start();
-	}
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        Database db = new SQLiteAndroid(getApplicationContext(), DATABASE_NAME,
+                DATABASE_VERSION);
+        MappingSession.registerDatabase(db);
+        MappingSession.registerEntity(Network.class);
+        Log.setLogger(new AndroidLogger(PACKAGE_NAME));
+        MappingSession.start();
+    }
 }

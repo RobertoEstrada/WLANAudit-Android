@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2008 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2008 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -16,8 +15,7 @@
      Modified by Roberto Estrada
 -->
 
-<selector xmlns:android="http://schemas.android.com/apk/res/android"
-		  xmlns:app="http://schemas.android.com/apk/res/es.glasspixel.wlanaudit">
+<selector xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res/es.glasspixel.wlanaudit">
     <item app:state_encrypted="true" android:drawable="@drawable/wifi_signal_lock" />
     <item app:state_encrypted="false" android:drawable="@drawable/wifi_signal_open" />
 </selector>

@@ -23,6 +23,9 @@ import com.actionbarsherlock.app.SherlockActivity;
 import com.google.inject.Inject;
 import com.google.inject.Key;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import roboguice.RoboGuice;
 import roboguice.activity.event.OnActivityResultEvent;
 import roboguice.activity.event.OnConfigurationChangedEvent;
@@ -40,16 +43,13 @@ import roboguice.inject.ContentViewListener;
 import roboguice.inject.RoboInjector;
 import roboguice.util.RoboContext;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * An example of how to make your own Robo-enabled Sherlock activity. Feel free
  * to do with with any of the other Sherlock activity types!
  */
 public class RoboSherlockActivity extends SherlockActivity implements RoboContext {
     protected EventManager eventManager;
-    protected HashMap<Key<?>,Object> scopedObjects = new HashMap<Key<?>,Object>();
+    protected HashMap<Key<?>, Object> scopedObjects = new HashMap<Key<?>, Object>();
 
     @Inject
     ContentViewListener ignored; // BUG find a better place to put this
@@ -88,7 +88,7 @@ public class RoboSherlockActivity extends SherlockActivity implements RoboContex
     }
 
     @Override
-    protected void onNewIntent( Intent intent ) {
+    protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         eventManager.fire(new OnNewIntentEvent());
     }

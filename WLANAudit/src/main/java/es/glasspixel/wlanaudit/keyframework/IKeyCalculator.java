@@ -20,15 +20,14 @@ import java.util.List;
 
 
 public interface IKeyCalculator {
-	/**
-	 * Returns a possible default key or list of them for the passed network
-	 * only derived from publicly available data, like the SSID
-	 * 
-	 * @param network
-	 *            The network from which to derive a possible default key
-	 * @return The derived default key or keys, it is guaranteed to match the
-	 *         network key if and only if the default key has not been changed
-	 *         and if the right algorithm is beign used
-	 */
-	public List<String> getKey(NetData network);
+    /**
+     * Returns a possible default key or list of them for the passed network
+     * only derived from publicly available data, like the SSID
+     *
+     * @param network The network from which to derive a possible default key
+     * @return The derived default key or keys, it is guaranteed to match the
+     * network key if and only if the default key has not been changed
+     * and if the right algorithm is beign used
+     */
+    public List<String> getKey(NetData network);
 }

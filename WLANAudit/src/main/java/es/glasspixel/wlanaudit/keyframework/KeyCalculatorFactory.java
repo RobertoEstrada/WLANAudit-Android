@@ -16,10 +16,10 @@
 
 package es.glasspixel.wlanaudit.keyframework;
 
+import android.util.Log;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import android.util.Log;
 
 public class KeyCalculatorFactory {
     private static final String TAG = "KeyCalculatorFactory";
@@ -42,7 +42,7 @@ public class KeyCalculatorFactory {
 
     /**
      * Returns the appropiate key calculator implementation
-     * 
+     *
      * @param network The network to find an appropiate key calculator
      * @return A key calculator or null if an appropriate one is not found
      */
@@ -67,17 +67,18 @@ public class KeyCalculatorFactory {
         }
         return null;
     }
-    
+
     /**
      * Registers a new vulnerable pattern in the system
-     * @param ssidPattern The vulnerable SSID
+     *
+     * @param ssidPattern  The vulnerable SSID
      * @param bssidPattern The vulnerable BSSID
-     * @param calculator The calculator that can handle  the key calculation for the pattern
+     * @param calculator   The calculator that can handle  the key calculation for the pattern
      */
     private void addPattern(String ssidPattern, String bssidPattern, Class<? extends IKeyCalculator> calculator) {
         mCalculatorDict.put(new VulnerablePattern(ssidPattern, bssidPattern), calculator);
     }
-    
+
     /**
      * Add in this method the pattern-calculator combinations to instance the appropriate calculator
      */
@@ -99,10 +100,10 @@ public class KeyCalculatorFactory {
         addPattern("(?:WLAN|JAZZTEL)_([0-9a-fA-F]{4})", "(D0:AE:EC:[0-9A-Fa-f:]{8})", WLANXXXXKeyCalculator.class);
         addPattern("(?:WLAN|JAZZTEL)_([0-9a-fA-F]{4})", "(00:19:15:[0-9A-Fa-f:]{8})", WLANXXXXKeyCalculator.class);
         addPattern("(?:WLAN|JAZZTEL)_([0-9a-fA-F]{4})", "(00:1A:2B:[0-9A-Fa-f:]{8})", WLANXXXXKeyCalculator.class);
-        
+
         //WiFi6X Patterns
-        addPattern("(?:WLAN|YACOM|WiFi)([0-9a-fA-F]{6})","([0-9A-Fa-f:]{17})", WiFiXXXXXXKeyCalculator.class);
-        
+        addPattern("(?:WLAN|YACOM|WiFi)([0-9a-fA-F]{6})", "([0-9A-Fa-f:]{17})", WiFiXXXXXXKeyCalculator.class);
+
         //HWei Patterns
         addPattern("(.*)", "(F4:C7:14:[0-9A-Fa-f:]{8})", HWeiKeyCalculator.class);
         addPattern("(.*)", "(64:16:F0:[0-9A-Fa-f:]{8})", HWeiKeyCalculator.class);
@@ -131,10 +132,10 @@ public class KeyCalculatorFactory {
         addPattern("(.*)", "(00:18:82:[0-9A-Fa-f:]{8})", HWeiKeyCalculator.class);
         addPattern("(.*)", "(00:11:F5:[0-9A-Fa-f:]{8})", HWeiKeyCalculator.class);
         addPattern("(.*)", "(00:0F:E2:[0-9A-Fa-f:]{8})", HWeiKeyCalculator.class);
-        
+
         // Discus Patterns
         addPattern("Discus--([0-9a-fA-F]{6})", "([0-9A-Fa-f:]{17})", DiscusKeyCalculator.class);
-        
+
         // DLink Patterns
         addPattern("DLink-([0-9a-fA-F]{6})", "([0-9A-Fa-f:]{17})", DlinkKeyCalculator.class);
     }

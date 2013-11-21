@@ -1,30 +1,39 @@
 package com.github.rtyley.android.sherlock.roboguice.activity;
 
+import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
-
-import roboguice.RoboGuice;
-import roboguice.activity.event.*;
-import roboguice.event.EventManager;
-import roboguice.inject.ContentViewListener;
-import roboguice.inject.RoboInjector;
-import roboguice.util.RoboContext;
-
-import android.content.Intent;
-import android.content.res.Configuration;
-
 import com.google.inject.Inject;
 import com.google.inject.Key;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import roboguice.RoboGuice;
+import roboguice.activity.event.OnActivityResultEvent;
+import roboguice.activity.event.OnConfigurationChangedEvent;
+import roboguice.activity.event.OnContentChangedEvent;
+import roboguice.activity.event.OnCreateEvent;
+import roboguice.activity.event.OnDestroyEvent;
+import roboguice.activity.event.OnNewIntentEvent;
+import roboguice.activity.event.OnPauseEvent;
+import roboguice.activity.event.OnRestartEvent;
+import roboguice.activity.event.OnResumeEvent;
+import roboguice.activity.event.OnStartEvent;
+import roboguice.activity.event.OnStopEvent;
+import roboguice.event.EventManager;
+import roboguice.inject.ContentViewListener;
+import roboguice.inject.RoboInjector;
+import roboguice.util.RoboContext;
+
 public class RoboSherlockFragmentActivity extends SherlockFragmentActivity implements RoboContext {
     protected EventManager eventManager;
     protected HashMap<Key<?>, Object> scopedObjects = new HashMap<Key<?>, Object>();
 
-    @Inject ContentViewListener ignored; // BUG find a better place to put this
+    @Inject
+    ContentViewListener ignored; // BUG find a better place to put this
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +69,7 @@ public class RoboSherlockFragmentActivity extends SherlockFragmentActivity imple
     }
 
     @Override
-    protected void onNewIntent( Intent intent ) {
+    protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         eventManager.fire(new OnNewIntentEvent());
     }

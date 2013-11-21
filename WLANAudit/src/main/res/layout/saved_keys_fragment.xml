@@ -3,13 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/grey_background_pattern"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-    </ListView>
+        android:layout_height="match_parent"></ListView>
 
     <TextView
         android:id="@android:id/empty"

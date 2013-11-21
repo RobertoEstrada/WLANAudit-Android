@@ -3,12 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/viewHeaderLayout"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/networkIcon"
@@ -17,8 +17,7 @@
             android:layout_marginBottom="10dip"
             android:layout_marginLeft="10dip"
             android:layout_marginTop="15dip"
-            android:src="@drawable/wifi_signal" >
-        </ImageView>
+            android:src="@drawable/wifi_signal"></ImageView>
 
         <TextView
             android:id="@+id/networkName"
@@ -30,8 +29,7 @@
             android:paddingTop="3dip"
             android:text="TextView"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            tools:ignore="HardcodedText" >
-        </TextView>
+            tools:ignore="HardcodedText"></TextView>
 
         <LinearLayout
             android:id="@+id/buttonsLayout"
@@ -40,14 +38,13 @@
             android:layout_marginLeft="20dip"
             android:layout_marginRight="20dip"
             android:layout_marginTop="10dip"
-            android:gravity="right" >
+            android:gravity="right">
 
             <Button
                 android:id="@+id/copyPasswordButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/copy_pass_button" >
-            </Button>
+                android:text="@string/copy_pass_button"></Button>
         </LinearLayout>
     </LinearLayout>
 
@@ -55,8 +52,9 @@
         android:id="@+id/detail_contents"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
-
+        android:orientation="vertical">
+
+
         <!-- <View -->
         <!-- android:id="@+id/divider" -->
         <!-- android:layout_width="fill_parent" -->
@@ -69,20 +67,20 @@
             android:layout_width="match_parent"
             android:layout_height="0dip"
             android:layout_weight="1"
-            android:scrollbarAlwaysDrawVerticalTrack="true" >
+            android:scrollbarAlwaysDrawVerticalTrack="true">
 
             <TableLayout
                 android:id="@+id/networkParamsLayout"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dip" >
+                android:layout_marginTop="15dip">
 
                 <TableRow
                     android:id="@+id/bssidRow"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingBottom="10dip"
-                    android:paddingLeft="20dip" >
+                    android:paddingLeft="20dip">
 
                     <TextView
                         android:id="@+id/bssid_label"
@@ -105,7 +103,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingBottom="10dip"
-                    android:paddingLeft="20dip" >
+                    android:paddingLeft="20dip">
 
                     <TextView
                         android:id="@+id/encryption_label"
@@ -128,7 +126,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingBottom="10dip"
-                    android:paddingLeft="20dip" >
+                    android:paddingLeft="20dip">
 
                     <TextView
                         android:id="@+id/frequency_label"
@@ -151,7 +149,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingBottom="10dip"
-                    android:paddingLeft="20dip" >
+                    android:paddingLeft="20dip">
 
                     <TextView
                         android:id="@+id/channel_label"
@@ -174,7 +172,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingBottom="10dip"
-                    android:paddingLeft="20dip" >
+                    android:paddingLeft="20dip">
 
                     <TextView
                         android:id="@+id/intensity_label"
@@ -197,7 +195,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingBottom="10dip"
-                    android:paddingLeft="18dip" >
+                    android:paddingLeft="18dip">
 
                     <TextView
                         android:id="@+id/password_label"
@@ -217,7 +215,8 @@
                 </TableRow>
             </TableLayout>
         </ScrollView>
-
+
+
         <!-- <View -->
         <!-- android:id="@+id/divider2" -->
         <!-- android:layout_width="fill_parent" -->

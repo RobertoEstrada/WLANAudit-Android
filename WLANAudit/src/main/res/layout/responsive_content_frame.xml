@@ -3,20 +3,18 @@
     xmlns:showcase="http://schemas.android.com/apk/lib/res-auto"
     android:id="@+id/frame_layout_container"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="fill_parent">
 
-    <FrameLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/content_frame"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-    </FrameLayout>
+        android:layout_height="match_parent"></FrameLayout>
 
     <com.github.espiandev.showcaseview.ShowcaseView
         android:id="@+id/showcase"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        showcase:backgroundColor="#3333B5E5" >
+        showcase:backgroundColor="#3333B5E5">
 
         <TextView
             android:id="@+id/textView"

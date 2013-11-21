@@ -72,7 +72,7 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
     /**
      * GMaps V2 map fragment
      */
-    private SupportMapFragment mMapFragment;    
+    private SupportMapFragment mMapFragment;
     /**
      * GMaps V2 map controller
      */
@@ -85,7 +85,7 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
      * Client to the Google Play Services location service
      */
     private LocationClient mLocationClient;
-    
+
     @Inject
     private LocationManager mLocationManager;
 
@@ -145,7 +145,7 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
         }
 
         // Location client setup
-        mLocationServicesWrapper = new GMSLocationServicesWrapper(this,this);
+        mLocationServicesWrapper = new GMSLocationServicesWrapper(this, this);
         mLocationClient = mLocationServicesWrapper.getLocationClient();
 
         // Set the map fragment
@@ -159,7 +159,7 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
         // customize the SlidingMenu
         SlidingMenu sm = getSlidingMenu();
         setUpSlidingMenu(sm);
-        
+
         // Set up the showcase view
         setUpShowCaseView(sm);
     }
@@ -187,7 +187,7 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
         mLocationClient.disconnect();
         super.onStop();
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -201,7 +201,7 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
      * {@inheritDoc}
      */
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {           
+    public boolean onCreateOptionsMenu(Menu menu) {
         if (getSlidingMenu().isSlidingEnabled()) {
             menu.add(0, SHOW_MENU, 1, show_keys_list);
             menu.getItem(0).setIcon(ic_menu_account_list);
@@ -259,7 +259,7 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
                 .tilt(45.0f)
                 .build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(camPos));
-    }    
+    }
 
     private void setUpSlidingMenu(SlidingMenu sm) {
         sm.setBehindOffsetRes(R.dimen.slidingmenu_offset);
@@ -268,7 +268,7 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
         sm.setBehindScrollScale(0.25f);
         sm.setFadeDegree(0.25f);
     }
-    
+
     @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void setUpShowCaseView(SlidingMenu sm) {
@@ -311,17 +311,17 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
             });
         }
     }
-    
+
     /**
      * Sets up the map if it is possible to do so (i.e., the Google Play services APK is correctly
      * installed) and the map has not already been instantiated.. This will ensure that we only ever
      * call {@link #setUpMap()} once when {@link #mMap} is not null.
-     * <p>
+     * <p/>
      * If it isn't installed {@link SupportMapFragment} (and
      * {@link com.google.android.gms.maps.MapView
      * MapView}) will show a prompt for the user to install/update the Google Play services APK on
      * their device.
-     * <p>
+     * <p/>
      * A user can return to this Activity after following the prompt and correctly
      * installing/updating/enabling the Google Play services. Since the Activity may not have been
      * completely destroyed during this process (it is likely that it would only be stopped or
@@ -339,18 +339,18 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
             }
         }
     }
-    
+
     /**
      * This is where we can add markers or lines, add listeners or move the camera. In this case, we
      * just add a marker near Africa.
-     * <p>
+     * <p/>
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
         mMap.setMyLocationEnabled(true);
         mMap.setIndoorEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
-        
+
         List<Network> savedNetworks = Model.fetchAll(Network.class);
         for (Network savedNetwork : savedNetworks) {
             mMap.addMarker(new MarkerOptions()
@@ -358,7 +358,7 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
                     .title(savedNetwork.mSSID).snippet(savedNetwork.mBSSID));
         }
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -376,7 +376,7 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
     @Override
     public void onConnected(Bundle bundle) {
         Location loc = null;
-        if(mLocationServicesWrapper.servicesConnected()) {
+        if (mLocationServicesWrapper.servicesConnected()) {
             loc = mLocationClient.getLastLocation();
         }
 

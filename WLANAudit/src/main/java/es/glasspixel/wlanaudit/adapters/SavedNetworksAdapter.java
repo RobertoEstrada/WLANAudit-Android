@@ -15,45 +15,46 @@
  */
 package es.glasspixel.wlanaudit.adapters;
 
-import java.util.List;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
+import java.util.List;
+
 import es.glasspixel.wlanaudit.R;
 import es.glasspixel.wlanaudit.database.entities.Network;
 
 public class SavedNetworksAdapter extends ArrayAdapter<Network> {
 
-	/**
-	 * Handle to the layout that has to be inflated
-	 */
+    /**
+     * Handle to the layout that has to be inflated
+     */
     private int mTextViewResourceId;
-	
+
     public SavedNetworksAdapter(Context context, int textViewResourceId, List<Network> networks) {
-		super(context, textViewResourceId, networks);
-		mTextViewResourceId = textViewResourceId;
-	}
+        super(context, textViewResourceId, networks);
+        mTextViewResourceId = textViewResourceId;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public View getView(int position, View convertView, ViewGroup parent) {
-		View listItem = convertView;
-		// If the view is null, we need to inflate it from XML layout
-		if (listItem == null) {
-			LayoutInflater inflater = LayoutInflater.from(getContext());
-			listItem = inflater.inflate(mTextViewResourceId, null);
-		}
-		((TextView) listItem.findViewById(R.id.networkName)).setText(getItem(
-				position).mSSID);
-		((TextView) listItem.findViewById(R.id.networkAddress)).setText(getItem(
-				position).mBSSID);
+    /**
+     * {@inheritDoc}
+     */
+    public View getView(int position, View convertView, ViewGroup parent) {
+        View listItem = convertView;
+        // If the view is null, we need to inflate it from XML layout
+        if (listItem == null) {
+            LayoutInflater inflater = LayoutInflater.from(getContext());
+            listItem = inflater.inflate(mTextViewResourceId, null);
+        }
+        ((TextView) listItem.findViewById(R.id.networkName)).setText(getItem(
+                position).mSSID);
+        ((TextView) listItem.findViewById(R.id.networkAddress)).setText(getItem(
+                position).mBSSID);
 
-		return listItem;
-	}
+        return listItem;
+    }
 
 }

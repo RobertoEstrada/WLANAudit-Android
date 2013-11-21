@@ -16,13 +16,13 @@
 
 package es.glasspixel.wlanaudit.database.entities;
 
-import java.io.Serializable;
-import java.util.List;
-
 import org.orman.mapper.Model;
 import org.orman.mapper.annotation.Entity;
 import org.orman.mapper.annotation.Index;
 import org.orman.mapper.annotation.PrimaryKey;
+
+import java.io.Serializable;
+import java.util.List;
 
 import es.glasspixel.wlanaudit.keyframework.IKeyCalculator;
 import es.glasspixel.wlanaudit.keyframework.KeyCalculatorFactory;
@@ -33,7 +33,7 @@ import es.glasspixel.wlanaudit.keyframework.NetData;
  */
 @Entity
 public class Network extends Model<Network> implements Serializable {
-    
+
     private transient static final long serialVersionUID = 8043495355710840188L;
     @PrimaryKey(autoIncrement = true)
     public int id;

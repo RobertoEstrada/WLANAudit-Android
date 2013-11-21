@@ -29,21 +29,23 @@ import com.google.android.gms.maps.SupportMapFragment;
  * menu. Hack is documented here: http://goo.gl/pBACa
  */
 public class GMapsMapFragment extends SupportMapFragment {
-    
+
     public GMapsMapFragment() {
         super();
     }
-    
+
     public static GMapsMapFragment newInstance() {
         return new GMapsMapFragment();
     }
-  
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
         setMapTransparent((ViewGroup) view);
         return view;
-    };   
+    }
+
+    ;
 
     private void setMapTransparent(ViewGroup group) {
         int childCount = group.getChildCount();

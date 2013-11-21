@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <ImageView
         android:id="@+id/keyIcon"
@@ -12,8 +12,7 @@
         android:layout_marginTop="10dip"
         android:paddingBottom="5dip"
         android:paddingLeft="10dip"
-        android:src="@android:drawable/ic_lock_lock" >
-    </ImageView>
+        android:src="@android:drawable/ic_lock_lock"></ImageView>
 
     <TextView
         android:id="@+id/keyString"
@@ -25,7 +24,6 @@
         android:paddingTop="5dip"
         android:text="TextView"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        tools:ignore="HardcodedText" >
-    </TextView>
+        tools:ignore="HardcodedText"></TextView>
 
 </RelativeLayout>

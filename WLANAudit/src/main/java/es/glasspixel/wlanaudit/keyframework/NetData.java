@@ -19,7 +19,7 @@ package es.glasspixel.wlanaudit.keyframework;
 /**
  * Structure to group the network relevant data for keeping key calculation
  * decoupled from android framework but keeping a similar API
- * 
+ *
  * @author Roberto Estrada
  */
 public class NetData {

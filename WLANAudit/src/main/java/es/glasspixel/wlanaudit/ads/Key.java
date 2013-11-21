@@ -16,5 +16,5 @@
 package es.glasspixel.wlanaudit.ads;
 
 public final class Key {
-	public static final String ADMOB_KEY = "";
+    public static final String ADMOB_KEY = "";
 }

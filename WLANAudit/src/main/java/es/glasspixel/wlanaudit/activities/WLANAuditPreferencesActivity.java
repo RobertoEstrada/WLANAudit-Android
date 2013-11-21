@@ -25,12 +25,12 @@ import com.actionbarsherlock.view.MenuItem;
 
 import es.glasspixel.wlanaudit.R;
 
-/***
+/**
  * PreferenceActivity is a built-in Activity for preferences management
- * 
+ * <p/>
  * To retrieve the values stored by this activity in other activities use the
  * following snippet:
- * 
+ * <p/>
  * SharedPreferences sharedPreferences =
  * PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
  * <Preference Type> preferenceValue = sharedPreferences.get<Preference
@@ -38,33 +38,33 @@ import es.glasspixel.wlanaudit.R;
  */
 public class WLANAuditPreferencesActivity extends SherlockPreferenceActivity {
 
-	@SuppressWarnings("deprecation")
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		ActionBar actionBar = getSupportActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(true);
-		addPreferencesFromResource(R.xml.app_preferences);
-	}
+    @SuppressWarnings("deprecation")
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        addPreferencesFromResource(R.xml.app_preferences);
+    }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case android.R.id.home:
-			// app icon in action bar clicked; go home
-			NavUtils.navigateUpFromSameTask(this);
-			overridePendingTransition(R.anim.slide_in_from_left,
-					R.anim.slide_out_to_right);
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
-		}
-	}
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // app icon in action bar clicked; go home
+                NavUtils.navigateUpFromSameTask(this);
+                overridePendingTransition(R.anim.slide_in_from_left,
+                        R.anim.slide_out_to_right);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
-	@Override
-	public void onBackPressed() {
-		finish();
-		overridePendingTransition(R.anim.slide_in_from_left,
-				R.anim.slide_out_to_right);
-	}
+    @Override
+    public void onBackPressed() {
+        finish();
+        overridePendingTransition(R.anim.slide_in_from_left,
+                R.anim.slide_out_to_right);
+    }
 }

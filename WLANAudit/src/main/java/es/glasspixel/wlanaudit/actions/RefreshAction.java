@@ -28,13 +28,13 @@ public class RefreshAction implements Action {
      */
     private final Context mContext;
 
-	public RefreshAction(Context context) {
-		mContext = context;
-	}
+    public RefreshAction(Context context) {
+        mContext = context;
+    }
 
-	public void performAction() {
-		WifiManager wifiManager = (WifiManager) mContext
-				.getSystemService(Context.WIFI_SERVICE);
-		wifiManager.startScan();
-	}
+    public void performAction() {
+        WifiManager wifiManager = (WifiManager) mContext
+                .getSystemService(Context.WIFI_SERVICE);
+        wifiManager.startScan();
+    }
 }

@@ -5,12 +5,12 @@
     android:layout_height="wrap_content"
     android:background="@drawable/activated_background_light"
     android:paddingRight="6dp"
-    tools:ignore="HardcodedText" >
+    tools:ignore="HardcodedText">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/networkName"
@@ -21,8 +21,7 @@
             android:paddingTop="5dip"
             android:text="TextView"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            tools:ignore="HardcodedText" >
-        </TextView>
+            tools:ignore="HardcodedText"></TextView>
 
         <TextView
             android:id="@+id/networkAddress"
@@ -32,8 +31,7 @@
             android:layout_below="@+id/networkName"
             android:paddingBottom="5dip"
             android:paddingLeft="12dip"
-            android:text="TextView" >
-        </TextView>
+            android:text="TextView"></TextView>
     </LinearLayout>
 
 </RelativeLayout>

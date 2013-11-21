@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
      File created by the Android Action Bar Style Generator
 
      Copyright (C) 2012 readyState Software Ltd
@@ -22,7 +21,7 @@
     <style name="Theme.Styled" parent="Theme.Sherlock.Light.DarkActionBar">
         <item name="actionBarStyle">@style/Widget.Styled.ActionBar</item>
         <item name="android:actionBarStyle">@style/Widget.Styled.ActionBar</item>
-        
+
     </style>
 
     <style name="Widget.Styled.ActionBar" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
@@ -86,7 +85,8 @@
     </style>
 
     <style name="WlanAudit.Widget.Holo.DropDownItem" parent="Widget">
-        <item name="android:textAppearance">@style/TextAppearance.WlanAudit.Widget.DropDownItem</item>
+        <item name="android:textAppearance">@style/TextAppearance.WlanAudit.Widget.DropDownItem
+        </item>
         <item name="android:paddingLeft">8dp</item>
         <item name="android:paddingRight">8dp</item>
         <item name="android:gravity">center_vertical</item>

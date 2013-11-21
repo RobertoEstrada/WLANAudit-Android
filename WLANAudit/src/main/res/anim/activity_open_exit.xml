@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
 /*
 ** Copyright 2009, The Android Open Source Project
 **
@@ -18,9 +17,14 @@
 -->
 
 <set xmlns:android="http://schemas.android.com/apk/res/android"
-        android:background="#ff000000" android:zAdjustment="normal">
-    <alpha android:fromAlpha="1.0" android:toAlpha="0.0"
-            android:fillEnabled="true" android:fillBefore="false" android:fillAfter="true"
-            android:interpolator="@interpolator/decelerate_quint"
-            android:duration="300"/>
+    android:background="#ff000000"
+    android:zAdjustment="normal">
+    <alpha
+        android:fromAlpha="1.0"
+        android:toAlpha="0.0"
+        android:fillEnabled="true"
+        android:fillBefore="false"
+        android:fillAfter="true"
+        android:interpolator="@interpolator/decelerate_quint"
+        android:duration="300" />
 </set>

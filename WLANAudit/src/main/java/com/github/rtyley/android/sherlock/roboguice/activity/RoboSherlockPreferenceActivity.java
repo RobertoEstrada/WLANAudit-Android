@@ -15,6 +15,18 @@
  */
 package com.github.rtyley.android.sherlock.roboguice.activity;
 
+import android.content.Intent;
+import android.content.res.Configuration;
+import android.os.Bundle;
+import android.preference.PreferenceScreen;
+
+import com.actionbarsherlock.app.SherlockPreferenceActivity;
+import com.google.inject.Inject;
+import com.google.inject.Key;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import roboguice.RoboGuice;
 import roboguice.activity.event.OnActivityResultEvent;
 import roboguice.activity.event.OnConfigurationChangedEvent;
@@ -33,17 +45,6 @@ import roboguice.inject.ContextScope;
 import roboguice.inject.PreferenceListener;
 import roboguice.inject.RoboInjector;
 import roboguice.util.RoboContext;
-import android.content.Intent;
-import android.content.res.Configuration;
-import android.os.Bundle;
-import android.preference.PreferenceScreen;
-
-import com.actionbarsherlock.app.SherlockPreferenceActivity;
-import com.google.inject.Inject;
-import com.google.inject.Key;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * An example of how to make your own Robo-enabled Sherlock activity. Feel free
@@ -108,7 +109,7 @@ public class RoboSherlockPreferenceActivity extends SherlockPreferenceActivity i
     }
 
     @Override
-    protected void onNewIntent( Intent intent ) {
+    protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         eventManager.fire(new OnNewIntentEvent());
     }

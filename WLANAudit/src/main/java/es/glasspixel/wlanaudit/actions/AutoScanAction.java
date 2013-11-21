@@ -16,8 +16,6 @@
 
 package es.glasspixel.wlanaudit.actions;
 
-import es.glasspixel.wlanaudit.R;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.wifi.WifiManager;
@@ -27,6 +25,8 @@ import android.widget.Toast;
 
 import java.util.Timer;
 import java.util.TimerTask;
+
+import es.glasspixel.wlanaudit.R;
 
 /**
  * Implements the action bar autoscan toggle logic
@@ -53,7 +53,7 @@ public class AutoScanAction implements Action {
 
     /**
      * Constructor
-     * 
+     *
      * @param context
      */
     public AutoScanAction(Context context) {
@@ -64,7 +64,7 @@ public class AutoScanAction implements Action {
      * Constructor meant for restoring the state of this action when the app
      * state is recovered.
      *
-     * @param context Activity context
+     * @param context              Activity context
      * @param autoScanInitialState The state of the autoscan
      */
     public AutoScanAction(Context context, boolean autoScanInitialState) {
@@ -84,7 +84,7 @@ public class AutoScanAction implements Action {
         mIsAutoScanEnabled = true;
         mAutoScanTimer = new Timer();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
-        mAutoScanTimer.scheduleAtFixedRate(new AutoScanTask(), TIME_BEFORE_START, prefs.getInt("autoscan_interval", 30)*1000);        
+        mAutoScanTimer.scheduleAtFixedRate(new AutoScanTask(), TIME_BEFORE_START, prefs.getInt("autoscan_interval", 30) * 1000);
     }
 
     /**
@@ -95,7 +95,7 @@ public class AutoScanAction implements Action {
         if (mAutoScanTimer != null) {
             mAutoScanTimer.cancel();
         }
-    }    
+    }
 
     /**
      * {@inheritDoc}
@@ -112,7 +112,7 @@ public class AutoScanAction implements Action {
 
     /**
      * Displays a notification toast with the specified message
-     * 
+     *
      * @param message The message to display
      */
     private void showToast(String message) {

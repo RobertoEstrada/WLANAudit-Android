@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2008 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2008 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -15,9 +14,17 @@
 -->
 
 <level-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:maxLevel="0" android:drawable="@drawable/ic_wifi_signal_1_new" />
-    <item android:maxLevel="1" android:drawable="@drawable/ic_wifi_signal_2_new" />
-    <item android:maxLevel="2" android:drawable="@drawable/ic_wifi_signal_3_new" />
-    <item android:maxLevel="3" android:drawable="@drawable/ic_wifi_signal_4_new" />
+    <item
+        android:maxLevel="0"
+        android:drawable="@drawable/ic_wifi_signal_1_new" />
+    <item
+        android:maxLevel="1"
+        android:drawable="@drawable/ic_wifi_signal_2_new" />
+    <item
+        android:maxLevel="2"
+        android:drawable="@drawable/ic_wifi_signal_3_new" />
+    <item
+        android:maxLevel="3"
+        android:drawable="@drawable/ic_wifi_signal_4_new" />
 </level-list>
 

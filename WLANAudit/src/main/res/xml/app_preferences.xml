@@ -1,17 +1,15 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:picker="http://schemas.android.com/apk/res/es.glasspixel.wlanaudit" >
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
         android:key="scan_prefs"
-        android:title="@string/scan_pref_group_name" >
+        android:title="@string/scan_pref_group_name">
         <CheckBoxPreference
             android:defaultValue="true"
             android:disableDependentsState="true"
             android:key="wifi_autostart"
             android:summaryOff="@string/wifi_autostart_inactive_summary"
             android:summaryOn="@string/wifi_autostart_active_summary"
-            android:title="@string/wifi_autostart" >
-        </CheckBoxPreference>
+            android:title="@string/wifi_autostart"></CheckBoxPreference>
 
         <com.michaelnovakjr.numberpicker.NumberPickerPreference
             android:defaultValue="30"
@@ -27,12 +25,11 @@
     </PreferenceCategory>
     <PreferenceCategory
         android:key="about_app_prefs"
-        android:title="@string/app_info_pref_group_name" >
+        android:title="@string/app_info_pref_group_name">
         <Preference
             android:summary="@string/about_app_summary"
-            android:title="@string/about_app" >
-            <intent android:action="com.glasspixel.wlanaudit.ABOUT" >
-            </intent>
+            android:title="@string/about_app">
+            <intent android:action="com.glasspixel.wlanaudit.ABOUT"></intent>
         </Preference>
     </PreferenceCategory>
 

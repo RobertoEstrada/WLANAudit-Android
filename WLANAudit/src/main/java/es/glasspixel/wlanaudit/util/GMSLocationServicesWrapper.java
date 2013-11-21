@@ -64,7 +64,7 @@ public class GMSLocationServicesWrapper implements GooglePlayServicesClient.Conn
 
     @Override
     public void onDisconnected() {
-        Log.i(TAG,"Disconnected from Google Play Services");
+        Log.i(TAG, "Disconnected from Google Play Services");
     }
 
     @Override
