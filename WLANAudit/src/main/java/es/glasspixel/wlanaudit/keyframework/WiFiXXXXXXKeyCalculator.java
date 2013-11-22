@@ -121,8 +121,12 @@ public class WiFiXXXXXXKeyCalculator implements IKeyCalculator {
             result = ssid.replace("WLAN", "").toUpperCase(Locale.getDefault());
         } else if (ssid.contains("YaCOM")) {
             result = ssid.replace("YaCOM", "").toUpperCase(Locale.getDefault());
+        } else if (ssid.contains("YaCom")) {
+            result = ssid.replace("YaCom", "").toUpperCase(Locale.getDefault());
         } else if (ssid.contains("WiFi")) {
             result = ssid.replace("WiFi", "").toUpperCase(Locale.getDefault());
+        } else if (ssid.contains("WIFI")) {
+            result = ssid.replace("WIFI", "").toUpperCase(Locale.getDefault());
         }
         return result;
     }
