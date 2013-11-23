@@ -43,6 +43,10 @@ android {
             runProguard true
             proguardFile getDefaultProguardFile('proguard-android-optimize.txt')
             proguardFile 'proguard-project.txt'
+            storeFile file(System.console().readLine("\n\$ Enter keystore path: "))
+            storePassword System.console().readLine("\n\$ Enter keystore password: ")
+            keyAlias System.console().readLine("\n\$ Enter key alias: ")
+            keyPassword System.console().readLine("\n\$ Enter key password: ")
         }
     }
 }
