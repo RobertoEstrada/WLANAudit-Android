@@ -38,15 +38,41 @@ android {
         testInstrumentationRunner "android.test.InstrumentationTestRunner"
     }
 
+    signingConfigs {
+        release {
+            storeFile file(".")
+            storePassword " "
+            keyAlias " "
+            keyPassword " "
+        }
+    }
+
     buildTypes {
         release {
             runProguard true
             proguardFile getDefaultProguardFile('proguard-android-optimize.txt')
             proguardFile 'proguard-project.txt'
-            storeFile file(System.console().readLine("\n\$ Enter keystore path: "))
-            storePassword System.console().readLine("\n\$ Enter keystore password: ")
-            keyAlias System.console().readLine("\n\$ Enter key alias: ")
-            keyPassword System.console().readLine("\n\$ Enter key password: ")
+            signingConfig signingConfigs.release
         }
+    }
+}
+
+task askForPasswords << {
+    // Must create String because System.readPassword() returns char[]
+    // (and assigning that below fails silently)
+    def storePath = new String(System.console().readLine("\nKeystore Path: "))
+    def storePw = new String(System.console().readPassword("Keystore password: "))
+    def keyAlias = new String(System.console().readLine("Key Alias: "))
+    def keyPw  = new String(System.console().readPassword("Key password: "))
+
+    android.signingConfigs.release.storeFile = file(storePath)
+    android.signingConfigs.release.storePassword = storePw
+    android.signingConfigs.release.keyAlias = keyAlias
+    android.signingConfigs.release.keyPassword = keyPw
+}
+
+tasks.whenTaskAdded { theTask -> 
+    if (theTask.name.equals("packageRelease")) {
+        theTask.dependsOn "askForPasswords"
     }
 }
