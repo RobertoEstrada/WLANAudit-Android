@@ -81,10 +81,6 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
      * Wrapper to deal with all the pain of Google Play Services setup
      */
     private GMSLocationServicesWrapper mLocationServicesWrapper;
-    /**
-     * Client to the Google Play Services location service
-     */
-    private LocationClient mLocationClient;
 
     @Inject
     private LocationManager mLocationManager;
@@ -145,8 +141,7 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
         }
 
         // Location client setup
-        mLocationServicesWrapper = new GMSLocationServicesWrapper(this, this);
-        mLocationClient = mLocationServicesWrapper.getLocationClient();
+        mLocationServicesWrapper = new GMSLocationServicesWrapper(this);
 
         // Set the map fragment
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, mMapFragment)
@@ -174,7 +169,7 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
          * Connect the client. Don't re-start any requests here;
          * instead, wait for onResume()
          */
-        mLocationClient.connect();
+        mLocationServicesWrapper.connect();
     }
 
     /*
@@ -184,7 +179,7 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
     @Override
     public void onStop() {
         // After disconnect() is called, the client is considered "dead".
-        mLocationClient.disconnect();
+        mLocationServicesWrapper.disconnect();
         super.onStop();
     }
 
@@ -377,7 +372,7 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
     public void onConnected(Bundle bundle) {
         Location loc = null;
         if (mLocationServicesWrapper.servicesConnected()) {
-            loc = mLocationClient.getLastLocation();
+            loc = mLocationServicesWrapper.getLastLocation();
         }
 
         if (loc != null) {

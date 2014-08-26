@@ -17,6 +17,7 @@ package es.glasspixel.wlanaudit.util;
 
 import android.app.Dialog;
 import android.content.IntentSender;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
@@ -24,12 +25,12 @@ import android.util.Log;
 
 import com.example.android.location.LocationUtils;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.location.LocationClient;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 
-public class GMSLocationServicesWrapper implements GooglePlayServicesClient.ConnectionCallbacks,
-        GooglePlayServicesClient.OnConnectionFailedListener {
+public class GMSLocationServicesWrapper implements GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener {
 
     private static String TAG = GMSLocationServicesWrapper.class.getName();
 
@@ -39,32 +40,53 @@ public class GMSLocationServicesWrapper implements GooglePlayServicesClient.Conn
     private FragmentActivity mActivity;
 
     /**
-     * Location client for Google Play Services Location
+     * API Client for Google Play Services Location Services
      */
-    private LocationClient mLocationClient;
+    private GoogleApiClient mGoogleApiClient;
+
+    /**
+     * Flag to indicate if we're connected to Google Play Services
+     */
+    private boolean mConnectedToGms = false;
 
     public GMSLocationServicesWrapper(FragmentActivity activity) {
         mActivity = activity;
-        mLocationClient = new LocationClient(activity, this, this);
+        mGoogleApiClient = new GoogleApiClient.Builder(activity).addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
     }
 
-    public GMSLocationServicesWrapper(FragmentActivity activity, GooglePlayServicesClient.ConnectionCallbacks callbacks) {
-        mActivity = activity;
-        mLocationClient = new LocationClient(activity, callbacks, this);
+    /**
+     * Gives the last known location from the Fused Location Provider
+     * @return The last known location if there is any in the provider, null otherwise
+     */
+    public Location getLastLocation() {
+        if (mConnectedToGms) {
+            return LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        } else {
+            return null;
+        }
     }
 
-    public LocationClient getLocationClient() {
-        return mLocationClient;
+    public void connect() {
+        mGoogleApiClient.connect();
+    }
+
+    public void disconnect() {
+        mGoogleApiClient.disconnect();
     }
 
     @Override
     public void onConnected(Bundle bundle) {
         Log.i(TAG, "Connected to Google Play Services");
+        mConnectedToGms = true;
     }
 
     @Override
-    public void onDisconnected() {
+    public void onConnectionSuspended(int i) {
         Log.i(TAG, "Disconnected from Google Play Services");
+        mConnectedToGms = false;
     }
 
     @Override

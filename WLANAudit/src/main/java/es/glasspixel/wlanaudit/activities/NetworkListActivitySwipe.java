@@ -32,9 +32,9 @@ import android.widget.LinearLayout;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockFragmentActivity;
-import com.google.ads.AdRequest;
-import com.google.ads.AdSize;
-import com.google.ads.AdView;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.location.LocationClient;
 import com.google.inject.Inject;
 
@@ -43,9 +43,9 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import es.glasspixel.wlanaudit.BuildConfig;
 import es.glasspixel.wlanaudit.R;
 import es.glasspixel.wlanaudit.actions.AutoScanAction;
-import es.glasspixel.wlanaudit.ads.Key;
 import es.glasspixel.wlanaudit.database.entities.Network;
 import es.glasspixel.wlanaudit.dialogs.NetworkDetailsDialogFragment;
 import es.glasspixel.wlanaudit.dialogs.SavedNetworkDetailsDialogFragment;
@@ -123,11 +123,6 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity
     private GMSLocationServicesWrapper mLocationServicesWrapper;
 
     /**
-     * Client to the Google Play Services location service
-     */
-    private LocationClient mLocationClient;
-
-    /**
      * Lifecycle management: Activity is being created
      */
     @Override
@@ -183,11 +178,15 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity
 
         // Location client setup
         mLocationServicesWrapper = new GMSLocationServicesWrapper(this);
-        mLocationClient = mLocationServicesWrapper.getLocationClient();
 
         // Adview setup
-        mAdView = new AdView(this, AdSize.SMART_BANNER, Key.ADMOB_KEY);
+        mAdView = new AdView(this);
+        mAdView.setAdUnitId(BuildConfig.ADMOB_KEY);
+        mAdView.setAdSize(AdSize.SMART_BANNER);
         mAdLayout.addView(mAdView);
+
+        // Adview request
+        mAdView.loadAd(new AdRequest.Builder().build());
     }
 
     /**
@@ -311,7 +310,13 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity
          * Connect the client. Don't re-start any requests here;
          * instead, wait for onResume()
          */
-        mLocationClient.connect();
+        mLocationServicesWrapper.connect();
+    }
+
+    @Override
+    public void onPause() {
+        mAdView.pause();
+        super.onPause();
     }
 
     /*
@@ -321,8 +326,14 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity
     @Override
     public void onStop() {
         // After disconnect() is called, the client is considered "dead".
-        mLocationClient.disconnect();
+        mLocationServicesWrapper.disconnect();
         super.onStop();
+    }
+
+    @Override
+    public void onDestroy() {
+       mAdView.destroy();
+       super.onDestroy();
     }
 
     /**
@@ -331,7 +342,7 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity
      */
     protected void onResume() {
         super.onResume();
-        mAdView.loadAd(new AdRequest());
+        mAdView.resume();
     }
 
     /**
@@ -343,7 +354,7 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity
         Location networkLocation = null;
 
         if (mLocationServicesWrapper.servicesConnected()) {
-            networkLocation = mLocationClient.getLastLocation();
+            networkLocation = mLocationServicesWrapper.getLastLocation();
         }
 
         NetworkDetailsDialogFragment detailsDlg = NetworkDetailsDialogFragment

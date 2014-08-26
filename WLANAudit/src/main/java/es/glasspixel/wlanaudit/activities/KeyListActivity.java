@@ -29,15 +29,15 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.MenuItem;
-import com.google.ads.AdRequest;
-import com.google.ads.AdSize;
-import com.google.ads.AdView;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import es.glasspixel.wlanaudit.BuildConfig;
 import es.glasspixel.wlanaudit.R;
-import es.glasspixel.wlanaudit.ads.Key;
+
 
 @SuppressWarnings("deprecation")
 public class KeyListActivity extends SherlockListActivity {
@@ -56,7 +56,7 @@ public class KeyListActivity extends SherlockListActivity {
     /**
      * Advertisement
      */
-    private AdView mAd;
+    private AdView mAdView;
 
     /**
      * @see android.app.Activity#onCreate(Bundle)
@@ -83,20 +83,37 @@ public class KeyListActivity extends SherlockListActivity {
 
         // Ads Initialization
         LinearLayout layout = (LinearLayout) findViewById(R.id.keyListAdLayout);
-        mAd = new AdView(this, AdSize.SMART_BANNER, Key.ADMOB_KEY);
-        layout.addView(mAd);
+        mAdView = new AdView(this);
+        mAdView.setAdUnitId(BuildConfig.ADMOB_KEY);
+        mAdView.setAdSize(com.google.android.gms.ads.AdSize.SMART_BANNER);
+        layout.addView(mAdView);
+        // Adview request
+        mAdView.loadAd(new AdRequest.Builder().build());
 
         // List display
         setListAdapter(new ArrayAdapter<String>(this,
                 R.layout.key_list_element_layout, R.id.keyString, mKeyList));
     }
 
+    @Override
+    public void onPause() {
+        mAdView.pause();
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        mAdView.destroy();
+        super.onDestroy();
+    }
+
     /**
-     * Lifecycle management: Activity is about to be started/resumed
+     * Lifecycle management: Activity is being resumed, we need to refresh its
+     * contents
      */
     protected void onResume() {
         super.onResume();
-        mAd.loadAd(new AdRequest());
+        mAdView.resume();
     }
 
     /**

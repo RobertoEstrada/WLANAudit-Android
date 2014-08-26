@@ -38,3 +38,4 @@ proguard/
 *.iws
 .idea/
 /.gradle
+/local.properties
