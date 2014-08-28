@@ -12,6 +12,8 @@
         <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Wlanaudit</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:fitsSystemWindows">true</item>
+        <item name="android:clipToPadding">false</item>
 
         <!-- Light.DarkActionBar specific -->
         <item name="android:actionBarWidgetTheme">@style/Theme.Wlanaudit.Widget</item>

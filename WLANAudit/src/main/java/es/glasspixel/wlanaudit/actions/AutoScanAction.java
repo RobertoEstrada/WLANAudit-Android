@@ -117,6 +117,7 @@ public class AutoScanAction implements Action {
      */
     private void showToast(String message) {
         Toast notificationToast = Toast.makeText(mContext, message, Toast.LENGTH_SHORT);
+        notificationToast.getView().setFitsSystemWindows(false);
         notificationToast.setGravity(Gravity.CENTER, 0, 0);
         notificationToast.show();
     }

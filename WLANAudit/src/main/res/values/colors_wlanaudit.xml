@@ -18,5 +18,5 @@
 <resources>
     <color name="pressed_wlanaudit">#CC0099CC</color>
     <color name="wlanaudit_material">#03a9f4</color>
-    <color name="wlanaudit_material_accent">#00e5ff</color>
+    <color name="wlanaudit_material_accent">#00b8d4</color>
 </resources>

@@ -48,6 +48,10 @@ public class GMSLocationServicesWrapper implements GoogleApiClient.ConnectionCal
      * Flag to indicate if we're connected to Google Play Services
      */
     private boolean mConnectedToGms = false;
+    /**
+     * Connection callback listener to which callbacks will be forwarded
+     */
+    private GoogleApiClient.ConnectionCallbacks mConnectionCallbacksListener;
 
     public GMSLocationServicesWrapper(FragmentActivity activity) {
         mActivity = activity;
@@ -55,6 +59,11 @@ public class GMSLocationServicesWrapper implements GoogleApiClient.ConnectionCal
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build();
+    }
+
+    public GMSLocationServicesWrapper(FragmentActivity activity, GoogleApiClient.ConnectionCallbacks connectionListener) {
+        this(activity);
+        mConnectionCallbacksListener = connectionListener;
     }
 
     /**
@@ -81,12 +90,16 @@ public class GMSLocationServicesWrapper implements GoogleApiClient.ConnectionCal
     public void onConnected(Bundle bundle) {
         Log.i(TAG, "Connected to Google Play Services");
         mConnectedToGms = true;
+        if(mConnectionCallbacksListener != null)
+            mConnectionCallbacksListener.onConnected(bundle);
     }
 
     @Override
     public void onConnectionSuspended(int i) {
         Log.i(TAG, "Disconnected from Google Play Services");
         mConnectedToGms = false;
+        if(mConnectionCallbacksListener != null)
+            mConnectionCallbacksListener.onConnectionSuspended(i);
     }
 
     @Override

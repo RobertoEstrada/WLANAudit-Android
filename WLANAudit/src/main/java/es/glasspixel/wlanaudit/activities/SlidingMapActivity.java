@@ -32,6 +32,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.github.espiandev.showcaseview.ShowcaseView;
 import com.google.android.gms.common.GooglePlayServicesClient;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -61,7 +62,7 @@ import roboguice.inject.InjectView;
 import roboguice.util.RoboContext;
 
 public class SlidingMapActivity extends SlidingFragmentActivity implements
-        OnSavedKeySelectedListener, RoboContext, ShowcaseView.OnShowcaseEventListener, GooglePlayServicesClient.ConnectionCallbacks {
+        OnSavedKeySelectedListener, RoboContext, ShowcaseView.OnShowcaseEventListener, GoogleApiClient.ConnectionCallbacks {
     /**
      * Key to store and recover the map fragment in/from the saved state bundle
      */
@@ -148,7 +149,7 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
         }
 
         // Location client setup
-        mLocationServicesWrapper = new GMSLocationServicesWrapper(this);
+        mLocationServicesWrapper = new GMSLocationServicesWrapper(this, this);
 
         // Set the map fragment
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, mMapFragment)
@@ -391,6 +392,6 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
     }
 
     @Override
-    public void onDisconnected() {
+    public void onConnectionSuspended(int i) {
     }
 }

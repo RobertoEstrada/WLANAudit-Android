@@ -9,7 +9,7 @@
             android:key="wifi_autostart"
             android:summaryOff="@string/wifi_autostart_inactive_summary"
             android:summaryOn="@string/wifi_autostart_active_summary"
-            android:title="@string/wifi_autostart"></CheckBoxPreference>
+            android:title="@string/wifi_autostart"/>
 
         <com.michaelnovakjr.numberpicker.NumberPickerPreference
             android:defaultValue="30"
