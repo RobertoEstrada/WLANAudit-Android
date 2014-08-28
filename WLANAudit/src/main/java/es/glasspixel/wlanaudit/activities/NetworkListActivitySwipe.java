@@ -87,8 +87,8 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity
     @Nullable
     private ViewPager mViewPager;
 
-    @InjectView(R.id.adLayout)
-    private LinearLayout mAdLayout;
+    @InjectView(R.id.activity_swipe_layout)
+    private LinearLayout mActivityLayout;
 
     private AdView mAdView;
 
@@ -190,7 +190,7 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity
         mAdView = new AdView(this);
         mAdView.setAdUnitId(BuildConfig.ADMOB_KEY);
         mAdView.setAdSize(AdSize.SMART_BANNER);
-        mAdLayout.addView(mAdView);
+        mActivityLayout.addView(mAdView);
 
         // Adview request
         mAdView.loadAd(new AdRequest.Builder().build());

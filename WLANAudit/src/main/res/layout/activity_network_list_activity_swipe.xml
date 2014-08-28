@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:weightSum="1.0"
+    android:id="@+id/activity_swipe_layout">
 
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/pager">
+        android:layout_height="fill_parent"
+        android:layout_below="@id/pager"
+        android:layout_weight="0.905">
 
         <!--
              This title strip will display the currently visible page title, as 
@@ -26,12 +29,4 @@
             android:textColor="#fff" />
     </android.support.v4.view.ViewPager>
 
-    <LinearLayout
-        android:id="@+id/adLayout"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:gravity="center_horizontal"
-        android:orientation="vertical" />
-
-</RelativeLayout>
+</LinearLayout>
