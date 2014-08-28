@@ -16,12 +16,16 @@
 
 package es.glasspixel.wlanaudit.activities;
 
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.widget.ListView;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockPreferenceActivity;
 import com.actionbarsherlock.view.MenuItem;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import es.glasspixel.wlanaudit.R;
 
@@ -38,6 +42,7 @@ import es.glasspixel.wlanaudit.R;
  */
 public class WLANAuditPreferencesActivity extends SherlockPreferenceActivity {
 
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     @SuppressWarnings("deprecation")
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,6 +50,14 @@ public class WLANAuditPreferencesActivity extends SherlockPreferenceActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         addPreferencesFromResource(R.xml.app_preferences);
+
+        // create our manager instance after the content view is set
+        SystemBarTintManager tintManager = new SystemBarTintManager(this);
+        // enable status bar tint
+        tintManager.setStatusBarTintEnabled(true);
+        tintManager.setTintColor(getResources().getColor(R.color.wlanaudit_material));
+
+        getListView().setFitsSystemWindows(true);
     }
 
     @Override

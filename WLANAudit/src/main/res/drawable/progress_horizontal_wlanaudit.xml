@@ -1,5 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?><!-- File created by the Android Action Bar Style Generator
+<?xml version="1.0" encoding="utf-8"?>
+<!-- File created by the Android Action Bar Style Generator
 
+     Copyright (C) 2011 The Android Open Source Project
      Copyright (C) 2012 readyState Software Ltd
 
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,20 +19,17 @@
 
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item
-        android:id="@android:id/background"
-        android:drawable="@drawable/progress_bg_wlanaudit" />
+    <item android:id="@android:id/background"
+          android:drawable="@drawable/progress_bg_wlanaudit" />
 
     <item android:id="@android:id/secondaryProgress">
-        <scale
-            android:scaleWidth="100%"
-            android:drawable="@drawable/progress_secondary_wlanaudit" />
+        <scale android:scaleWidth="100%"
+               android:drawable="@drawable/progress_secondary_wlanaudit" />
     </item>
 
     <item android:id="@android:id/progress">
-        <scale
-            android:scaleWidth="100%"
-            android:drawable="@drawable/progress_primary_wlanaudit" />
+        <scale android:scaleWidth="100%"
+               android:drawable="@drawable/progress_primary_wlanaudit" />
     </item>
 
 </layer-list>

@@ -17,6 +17,7 @@ dependencies {
     compile 'com.android.support:support-v4:20.0.0'
     compile 'org.roboguice:roboguice:2.0'
     compile 'com.google.code.findbugs:jsr305:3.0.0'
+    compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'
     compile project(':Vendor:SlidingMenu:library')
     compile project(':Vendor:ShowcaseView:library')
     compile project(':Vendor:NumberPicker:lib')
@@ -32,7 +33,7 @@ android {
     buildToolsVersion "20"
 
     defaultConfig {
-        minSdkVersion 9
+        minSdkVersion 10
         targetSdkVersion 20
         versionCode 13
         versionName "3.0.5"

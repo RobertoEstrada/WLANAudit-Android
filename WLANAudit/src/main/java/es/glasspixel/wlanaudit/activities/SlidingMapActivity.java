@@ -40,6 +40,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.inject.Inject;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.slidingmenu.lib.SlidingMenu;
 import com.slidingmenu.lib.SlidingMenu.OnOpenListener;
 
@@ -116,6 +117,12 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
         setTitle(ab_title);
         setContentView(R.layout.responsive_content_frame);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        // create our manager instance after the content view is set
+        SystemBarTintManager tintManager = new SystemBarTintManager(this);
+        // enable status bar tint
+        tintManager.setStatusBarTintEnabled(true);
+        tintManager.setTintColor(getResources().getColor(R.color.wlanaudit_material));
 
         // UI form factor check
         if (findViewById(R.id.menu_frame) == null) {

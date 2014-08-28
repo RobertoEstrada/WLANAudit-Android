@@ -3,7 +3,9 @@
     android:id="@+id/networkListActivityLayout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:fitsSystemWindows="true"
+    android:clipToPadding="false">
 
     <LinearLayout
         android:id="@+id/keyListAdLayout"

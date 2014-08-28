@@ -34,6 +34,7 @@ import android.widget.TextView;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.MenuItem;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import es.glasspixel.wlanaudit.R;
 
@@ -72,6 +73,11 @@ public class AboutActivity extends SherlockActivity {
         setContentView(R.layout.about_layout);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+        // create our manager instance after the content view is set
+        SystemBarTintManager tintManager = new SystemBarTintManager(this);
+        // enable status bar tint
+        tintManager.setStatusBarTintEnabled(true);
+        tintManager.setTintColor(getResources().getColor(R.color.wlanaudit_material));
         mVersionValueLabel = (TextView) findViewById(R.id.versionValue);
         mReleaseValueLabel = (TextView) findViewById(R.id.releaseValue);
         mOssLicensesButton = (Button) findViewById(R.id.oss_button);

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.Wlanaudit" parent="@style/Theme.Sherlock.Light.DarkActionBar">
+        <item name="android:actionBarItemBackground">@drawable/selectable_background_wlanaudit</item>
+        <item name="android:popupMenuStyle">@style/PopupMenu.Wlanaudit</item>
+        <item name="android:dropDownListViewStyle">@style/DropDownListView.Wlanaudit</item>
+        <item name="android:actionBarTabStyle">@style/ActionBarTabStyle.Wlanaudit</item>
+        <item name="android:actionDropDownStyle">@style/DropDownNav.Wlanaudit</item>
+        <item name="android:actionBarStyle">@style/ActionBar.Solid.Wlanaudit</item>
+        <item name="android:actionModeBackground">@drawable/cab_background_top_wlanaudit</item>
+        <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_wlanaudit</item>
+        <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Wlanaudit</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowTranslucentStatus">true</item>
+
+        <!-- Light.DarkActionBar specific -->
+        <item name="android:actionBarWidgetTheme">@style/Theme.Wlanaudit.Widget</item>
+
+    </style>
+
+    <style name="ActionBar.Solid.Wlanaudit" parent="@style/Widget.Sherlock.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">@drawable/ab_solid_wlanaudit</item>
+        <item name="android:backgroundStacked">@drawable/ab_stacked_solid_wlanaudit</item>
+        <item name="android:backgroundSplit">@drawable/ab_bottom_solid_wlanaudit</item>
+        <item name="android:progressBarStyle">@style/ProgressBar.Wlanaudit</item>
+    </style>
+
+    <style name="ActionBar.Transparent.Wlanaudit" parent="@style/Widget.Sherlock.ActionBar">
+        <item name="android:background">@drawable/ab_transparent_wlanaudit</item>
+        <item name="android:progressBarStyle">@style/ProgressBar.Wlanaudit</item>
+    </style>
+
+    <!-- this style is only referenced in a Light.DarkActionBar based theme -->
+    <style name="Theme.Wlanaudit.Widget" parent="@style/Theme.Sherlock">
+        <item name="android:popupMenuStyle">@style/PopupMenu.Wlanaudit</item>
+        <item name="android:dropDownListViewStyle">@style/DropDownListView.Wlanaudit</item>
+    </style>
+</resources>
