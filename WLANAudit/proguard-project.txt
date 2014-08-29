@@ -67,3 +67,4 @@
 -dontwarn roboguice.**
 -dontwarn com.google.vending.**
 -dontwarn com.android.vending.**
+-dontwarn net.sf.cglib.**

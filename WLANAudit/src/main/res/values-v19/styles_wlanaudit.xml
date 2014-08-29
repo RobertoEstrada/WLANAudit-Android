@@ -14,6 +14,7 @@
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:fitsSystemWindows">true</item>
         <item name="android:clipToPadding">false</item>
+        <item name="android:windowBackground">@color/wlanaudit_material</item>
 
         <!-- Light.DarkActionBar specific -->
         <item name="android:actionBarWidgetTheme">@style/Theme.Wlanaudit.Widget</item>
