@@ -15,10 +15,11 @@
  */
 package es.glasspixel.wlanaudit.test;
 
+import junit.framework.TestCase;
+
 import java.util.HashMap;
 import java.util.Map;
 
-import junit.framework.TestCase;
 import es.glasspixel.wlanaudit.keyframework.NetData;
 import es.glasspixel.wlanaudit.keyframework.WLANXXXXKeyCalculator;
 

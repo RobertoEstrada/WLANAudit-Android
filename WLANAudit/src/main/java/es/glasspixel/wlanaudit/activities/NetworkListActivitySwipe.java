@@ -22,8 +22,6 @@ import android.content.res.Resources;
 import android.location.Location;
 import android.net.wifi.ScanResult;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.ColorRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -35,7 +33,6 @@ import android.widget.LinearLayout;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockFragmentActivity;
-import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
@@ -162,13 +159,17 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity
             mViewPager.setAdapter(mSectionsPagerAdapter);
             mViewPager.setOnPageChangeListener(new OnPageChangeListener() {
                 @Override
-                public void onPageSelected(int arg0) {}
+                public void onPageSelected(int arg0) {
+                }
+
                 @Override
                 public void onPageScrolled(int arg0, float arg1, int arg2) {
                     checkMenuItems();
                 }
+
                 @Override
-                public void onPageScrollStateChanged(int arg0) {}
+                public void onPageScrollStateChanged(int arg0) {
+                }
             });
         } else {
             getSupportFragmentManager().beginTransaction()
@@ -341,8 +342,8 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity
 
     @Override
     public void onDestroy() {
-       mAdView.destroy();
-       super.onDestroy();
+        mAdView.destroy();
+        super.onDestroy();
     }
 
     /**
