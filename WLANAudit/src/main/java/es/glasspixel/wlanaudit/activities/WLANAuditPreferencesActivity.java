@@ -54,7 +54,7 @@ public class WLANAuditPreferencesActivity extends SherlockPreferenceActivity {
         SystemBarTintManager tintManager = new SystemBarTintManager(this);
         // enable status bar tint
         tintManager.setStatusBarTintEnabled(true);
-        tintManager.setTintColor(getResources().getColor(R.color.wlanaudit_material));
+        tintManager.setStatusBarTintResource(R.color.wlanaudit_material);
     }
 
     @Override

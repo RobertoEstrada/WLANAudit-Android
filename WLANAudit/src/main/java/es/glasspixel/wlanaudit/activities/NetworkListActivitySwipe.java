@@ -136,7 +136,7 @@ public class NetworkListActivitySwipe extends RoboSherlockFragmentActivity
         SystemBarTintManager tintManager = new SystemBarTintManager(this);
         // enable status bar tint
         tintManager.setStatusBarTintEnabled(true);
-        tintManager.setTintColor(getResources().getColor(R.color.wlanaudit_material));
+        tintManager.setStatusBarTintResource(R.color.wlanaudit_material);
 
         if (savedInstanceState != null
                 && savedInstanceState.getBoolean("autoscan_state")) {

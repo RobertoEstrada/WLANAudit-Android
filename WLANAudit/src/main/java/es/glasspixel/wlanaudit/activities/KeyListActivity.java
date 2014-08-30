@@ -30,6 +30,7 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
@@ -38,6 +39,7 @@ import java.util.List;
 
 import es.glasspixel.wlanaudit.BuildConfig;
 import es.glasspixel.wlanaudit.R;
+import es.glasspixel.wlanaudit.ads.AdManager;
 
 
 @SuppressWarnings("deprecation")
@@ -74,7 +76,7 @@ public class KeyListActivity extends SherlockListActivity {
         SystemBarTintManager tintManager = new SystemBarTintManager(this);
         // enable status bar tint
         tintManager.setStatusBarTintEnabled(true);
-        tintManager.setTintColor(getResources().getColor(R.color.wlanaudit_material));
+        tintManager.setStatusBarTintResource(R.color.wlanaudit_material);
 
         // If a previous instance state was saved
         if (savedInstanceState != null
@@ -89,17 +91,24 @@ public class KeyListActivity extends SherlockListActivity {
         }
 
         // Ads Initialization
-        LinearLayout layout = (LinearLayout) findViewById(R.id.keyListAdLayout);
-        mAdView = new AdView(this);
-        mAdView.setAdUnitId(BuildConfig.ADMOB_KEY);
-        mAdView.setAdSize(com.google.android.gms.ads.AdSize.SMART_BANNER);
-        layout.addView(mAdView);
-        // Adview request
-        mAdView.loadAd(new AdRequest.Builder().build());
+        setupAds ((LinearLayout) findViewById(R.id.keyListAdLayout));
 
         // List display
         setListAdapter(new ArrayAdapter<String>(this,
                 R.layout.key_list_element_layout, R.id.keyString, mKeyList));
+    }
+
+    private void setupAds(LinearLayout layout) {
+        mAdView = new AdView(this);
+        mAdView.setTag(mAdView.getClass().getName());
+        mAdView.setAdUnitId(BuildConfig.ADMOB_KEY);
+        mAdView.setAdSize(AdSize.SMART_BANNER);
+        mAdView.setVisibility(View.GONE);
+        mAdView.setAdListener(new AdManager(mAdView));
+
+        // Adview request
+        mAdView.loadAd(new AdRequest.Builder().build());
+        layout.addView(mAdView);
     }
 
     @Override

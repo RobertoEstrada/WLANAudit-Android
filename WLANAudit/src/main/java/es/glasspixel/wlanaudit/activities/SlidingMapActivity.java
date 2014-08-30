@@ -121,7 +121,7 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
         SystemBarTintManager tintManager = new SystemBarTintManager(this);
         // enable status bar tint
         tintManager.setStatusBarTintEnabled(true);
-        tintManager.setTintColor(getResources().getColor(R.color.wlanaudit_material));
+        tintManager.setStatusBarTintResource(R.color.wlanaudit_material);
 
         // UI form factor check
         if (findViewById(R.id.menu_frame) == null) {
@@ -253,7 +253,7 @@ public class SlidingMapActivity extends SlidingFragmentActivity implements
      */
     @Override
     public void onSavedKeySelected(Network s) {
-        getSlidingMenu().showBehind();
+        getSlidingMenu().showContent();
         CameraPosition camPos = CameraPosition.builder()
                 .target(new LatLng(s.mLatitude, s.mLongitude))
                 .zoom(18).bearing(0.0f)

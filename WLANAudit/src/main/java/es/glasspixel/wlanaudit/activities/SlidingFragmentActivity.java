@@ -164,13 +164,18 @@ public class SlidingFragmentActivity extends RoboSherlockFragmentActivity
     }
 
     @Override
-    public void showAbove() {
-        mHelper.showAbove();
+    public void showContent() {
+        mHelper.showContent();
     }
 
     @Override
-    public void showBehind() {
-        mHelper.showBehind();
+    public void showMenu() {
+        mHelper.showMenu();
+    }
+
+    @Override
+    public void showSecondaryMenu() {
+
     }
 
     /*
